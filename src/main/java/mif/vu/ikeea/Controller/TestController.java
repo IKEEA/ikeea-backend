@@ -1,7 +1,7 @@
 package mif.vu.ikeea.Controller;
 
-import mif.vu.ikeea.Entity.Repository.UserRepository;
-import mif.vu.ikeea.Entity.User;
+import mif.vu.ikeea.Entity.Employee;
+import mif.vu.ikeea.Entity.Repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,19 +14,17 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequestMapping(path="/demo")
 public class TestController {
     @Autowired
-    private UserRepository userRepository;
+    private EmployeeRepository userRepository;
 
     @PostMapping(path="/add")
     public @ResponseBody String addNewUser (@RequestParam String name, @RequestParam String email) {
-        User n = new User();
-        n.setName(name);
-        n.setEmail(email);
+        Employee n = new Employee();
         userRepository.save(n);
         return "Saved";
     }
 
     @GetMapping(path="/all")
-    public @ResponseBody Iterable<User> getAllUsers() {
+    public @ResponseBody Iterable<Employee> getAllUsers() {
         return userRepository.findAll();
     }
 }
