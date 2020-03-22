@@ -4,7 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -23,5 +24,5 @@ public class Restriction {
     private String description;
 
     @ManyToMany
-    private Set<User> users;
+    private List<User> users = new ArrayList<>();
 }

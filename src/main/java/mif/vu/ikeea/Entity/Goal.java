@@ -26,4 +26,8 @@ public class Goal {
     @ManyToOne
     @JoinColumn(name="user_id", nullable = false)
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name="topic_id", nullable = false)
+    private Topic topic;
 }

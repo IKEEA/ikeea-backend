@@ -27,10 +27,4 @@ public class Topic {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "topic")
     private List<Subtopic> subtopics = new ArrayList<>();
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "topic")
-    private List<LearningDay> learningDays = new ArrayList<>();
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "topic")
-    private List<Goal> goals = new ArrayList<>();
 }
