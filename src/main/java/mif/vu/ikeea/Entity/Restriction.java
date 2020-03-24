@@ -23,6 +23,6 @@ public class Restriction {
     @Column(name = "description")
     private String description;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "restrictions")
     private List<User> users = new ArrayList<>();
 }

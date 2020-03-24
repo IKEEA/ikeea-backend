@@ -2,6 +2,7 @@ package mif.vu.ikeea.Entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import mif.vu.ikeea.Enums.Role;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,7 @@ public class User {
     private String email;
 
     @Enumerated(EnumType.STRING)
-    private String role;
+    private Role role;
 
     @Column(name = "enabled")
     private Boolean enabled = true;
@@ -36,15 +37,14 @@ public class User {
     @JoinColumn(name = "team_id", nullable = false)
     private Team team;
 
-    @ManyToOne
-    @JoinColumn(name="manager_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
     private User manager;
 
     @ManyToMany
     @JoinTable(name = "restriction",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "restriction_id"))
-    private Set<Restriction> restrictions;
+    private List<Restriction> restrictions;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
     private List<Goal> goals = new ArrayList<>();
