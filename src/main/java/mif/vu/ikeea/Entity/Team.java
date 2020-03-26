@@ -24,6 +24,6 @@ public class Team {
     private List<User> users = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name="manager_id", nullable = false)
+    @JoinColumn(name="manager_id")
     private User manager;
 }
