@@ -50,7 +50,7 @@ public class UserController {
 
     @PutMapping(path = "/update/{id}")
     public @ResponseBody User updateEmail(@PathVariable Long id, @RequestParam String email){
-        User user = userService.find(id);
+        User user = userService.findOneById(id);
         user.setEmail(email);
         userService.update(user);
 

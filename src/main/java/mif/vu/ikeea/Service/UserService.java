@@ -15,9 +15,10 @@ public class UserService implements UserServiceInterface {
     private UserRepository userRepository;
 
     public List<User> getAll(){
-        Iterable<User> source = userRepository.findAll();
+        Iterable<User> userIterable = userRepository.findAll();
         List<User> users = new ArrayList<>();
-        source.forEach(users::add);
+        userIterable.forEach(users::add);
+
         return users;
     }
 
@@ -25,7 +26,7 @@ public class UserService implements UserServiceInterface {
         userRepository.save(user);
     }
 
-    public void delete(long id){
+    public void delete(Long id){
         userRepository.deleteById(id);
     }
 
@@ -33,7 +34,7 @@ public class UserService implements UserServiceInterface {
         userRepository.save(user);
     }
 
-    public User find(long id){
+    public User findOneById(Long id){
         return userRepository.findById(id).get();
     }
 }

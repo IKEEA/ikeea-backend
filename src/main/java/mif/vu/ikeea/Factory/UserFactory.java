@@ -8,6 +8,7 @@ public class UserFactory {
 
     public static User createUser(String email, String first_name, String last_name, Role role, String password, User manager, Team team){
         User user = new User();
+
         user.setEmail(email);
         user.setFirstName(first_name);
         user.setLastName(last_name);
@@ -15,6 +16,7 @@ public class UserFactory {
         user.setPassword(password);
         user.setManager(manager);
         user.setTeam(team);
+
         return user;
     }
 }
