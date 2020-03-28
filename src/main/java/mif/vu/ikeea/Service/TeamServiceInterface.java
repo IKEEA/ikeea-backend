@@ -7,8 +7,12 @@ import java.util.List;
 public interface TeamServiceInterface {
 
     void add(Team team);
-    void delete(long id);
-    List<Team> getAll();
+
     void update(Team team);
-    Team find(long id);
+
+    void delete(Long id);
+
+    List<Team> getAll();
+
+    Team findOneById(Long id);
 }

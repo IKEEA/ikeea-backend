@@ -15,9 +15,10 @@ public class TeamService implements TeamServiceInterface {
     private TeamRepository teamRepository;
 
     public List<Team> getAll(){
-        Iterable<Team> source = teamRepository.findAll();
+        Iterable<Team> teamIterable = teamRepository.findAll();
         List<Team> teams = new ArrayList<>();
-        source.forEach(teams::add);
+        teamIterable.forEach(teams::add);
+
         return teams;
     }
 
@@ -25,7 +26,7 @@ public class TeamService implements TeamServiceInterface {
         teamRepository.save(team);
     }
 
-    public void delete(long id){
+    public void delete(Long id){
         teamRepository.deleteById(id);
     }
 
@@ -33,7 +34,7 @@ public class TeamService implements TeamServiceInterface {
         teamRepository.save(team);
     }
 
-    public Team find(long id){
+    public Team findOneById(Long id){
         return teamRepository.findById(id).get();
     }
 }
