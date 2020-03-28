@@ -1,5 +1,6 @@
 package mif.vu.ikeea.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,6 +24,7 @@ public class Team {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "team")
     private List<User> users = new ArrayList<>();
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="manager_id")
     private User manager;

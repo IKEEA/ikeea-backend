@@ -1,5 +1,6 @@
 package mif.vu.ikeea.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import mif.vu.ikeea.Enums.Role;
@@ -33,10 +34,12 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "team_id")
     private Team team;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     private User manager;
 
