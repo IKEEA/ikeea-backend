@@ -26,16 +26,19 @@ public class UserServiceImpl implements UserService{
         userRepository.save(user);
     }
 
-    public void deleteUserById(Long id){
+    public void deleteUserById(long id){
         userRepository.deleteById(id);
     }
 
-    public void updateUser(String id, User user){
+    public void updateUser(long id, User user){
         userRepository.save(user);
     }
 
-    public Optional<User> getUser(Long id){
+    public Optional<User> getUser(long id){
         return userRepository.findById(id);
     }
 
+    public User findUserById(long id){
+        return userRepository.findById(id).get();
+    }
 }
