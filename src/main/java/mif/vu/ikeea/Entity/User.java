@@ -40,6 +40,9 @@ public class User {
     @NotBlank
     private String password;
 
+    @Column(name = "token")
+    private String token;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -47,8 +50,8 @@ public class User {
     private Set<Role> roles = new HashSet<>();
 
     @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "team_id")
+    @ManyToOne()
+    @JoinColumn(name = "team_id", columnDefinition="integer")
     private Team team;
 
     @JsonIgnore

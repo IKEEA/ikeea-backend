@@ -9,7 +9,7 @@ import java.util.Collections;
 
 public class UserFactory {
 
-    public static User createUser(String email, String firstName, String lastName, Role role, String password, User manager, Team team){
+    public static User createUser(String email, String firstName, String lastName, Role role, String password, User manager, Team team, String token) {
         User user = new User();
 
         user.setEmail(email);
@@ -18,6 +18,7 @@ public class UserFactory {
         user.setRoles(Collections.singleton(role));
         user.setPassword(password);
         user.setManager(manager);
+        user.setToken(token);
         user.setTeam(team);
 
         return user;

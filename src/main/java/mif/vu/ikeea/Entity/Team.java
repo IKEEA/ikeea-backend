@@ -26,6 +26,6 @@ public class Team {
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name="manager_id")
+    @JoinColumn(name="manager_id", columnDefinition="integer")
     private User manager;
 }
