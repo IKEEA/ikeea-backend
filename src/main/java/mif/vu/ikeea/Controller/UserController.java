@@ -12,14 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Optional;
 
-@Controller
-@RequestMapping(path="/user")
+@RestController
+@RequestMapping(path="/api/user")
 public class UserController {
 
     @Autowired
@@ -38,7 +37,10 @@ public class UserController {
                     HttpStatus.BAD_REQUEST);
         }
 
-        User manager = (User) authentication.getDetails();
+        //TODO uncomment in future
+        //User manager = (User) authentication.getDetails();
+        User manager = userRepository.findByEmail("my@email.com").get();
+
         User user = userCreationManager.create(registrationRequest, manager);
         String message = MessageFactory.verifyEmail(user.getToken());
         emailService.sendSimpleMessage(user.getEmail(), "Verify your account", message);

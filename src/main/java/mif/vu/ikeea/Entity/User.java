@@ -19,7 +19,7 @@ import java.util.Set;
 @Getter @Setter
 public class User {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "first_name", length = 50)
@@ -50,8 +50,8 @@ public class User {
     private Set<Role> roles = new HashSet<>();
 
     @JsonIgnore
-    @ManyToOne()
-    @JoinColumn(name = "team_id", columnDefinition="integer")
+    @ManyToOne
+    @JoinColumn(name = "team_id")
     private Team team;
 
     @JsonIgnore

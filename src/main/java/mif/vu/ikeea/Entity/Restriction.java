@@ -11,7 +11,7 @@ import java.util.List;
 @Getter @Setter
 public class Restriction {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "days", nullable = false)

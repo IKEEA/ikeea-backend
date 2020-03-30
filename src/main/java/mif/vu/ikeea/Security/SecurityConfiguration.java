@@ -77,11 +77,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/**/*.html",
                         "/**/*.css",
                         "/**/*.js")
-                .permitAll()
-                .antMatchers("/api/login/")
+                    .permitAll()
+                .antMatchers("/api/login", "/api/verify/**")
+                    .permitAll()
+                .antMatchers("/api/user/**")
                     .permitAll()
                 .anyRequest()
-                    .authenticated();
+                .authenticated();
 
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
