@@ -12,7 +12,7 @@ import java.util.List;
 @Getter @Setter
 public class Team {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "title", unique = true, nullable = false)
@@ -26,6 +26,6 @@ public class Team {
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name="manager_id")
+    @JoinColumn(name="manager_id", columnDefinition="bigint")
     private User manager;
 }

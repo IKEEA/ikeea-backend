@@ -1,58 +1,74 @@
 package mif.vu.ikeea.Controller;
 
-import mif.vu.ikeea.Entity.Team;
+import mif.vu.ikeea.Entity.Repository.UserRepository;
 import mif.vu.ikeea.Entity.User;
+import mif.vu.ikeea.Exceptions.BadRequestHttpException;
+import mif.vu.ikeea.Factory.MessageFactory;
+import mif.vu.ikeea.Mailer.EmailService;
 import mif.vu.ikeea.Manager.UserCreationManager;
-import mif.vu.ikeea.Service.TeamService;
-import mif.vu.ikeea.Service.UserService;
+import mif.vu.ikeea.Payload.ApiResponse;
+import mif.vu.ikeea.Payload.RegistrationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 
-@Controller
-@RequestMapping(path="/user")
+import javax.validation.Valid;
+import java.util.Optional;
+
+@RestController
+@RequestMapping(path="/api/user")
 public class UserController {
-    @Autowired
-    private UserService userService;
 
     @Autowired
-    private TeamService teamService;
+    UserRepository userRepository;
 
     @Autowired
     private UserCreationManager userCreationManager;
 
-    @PostMapping(path = "/add")
-    @ResponseStatus(HttpStatus.CREATED)
-    public @ResponseBody ResponseEntity<User> add(@RequestParam String first_name, @RequestParam String last_name,  @RequestParam String role, @RequestParam String email, @RequestParam String password, @RequestParam Long manager_id, @RequestParam Long team_id){
-        if (email == null || password == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    @Autowired
+    EmailService emailService;
+
+    @PostMapping("/register")
+    public ResponseEntity<?> registerUser(@Valid @RequestBody RegistrationRequest registrationRequest, Authentication authentication) {
+        if(userRepository.existsByEmail(registrationRequest.getEmail())) {
+            return new ResponseEntity(new ApiResponse(false, "Username is already taken!"),
+                    HttpStatus.BAD_REQUEST);
         }
 
-        Team team = teamService.findOneById(team_id);
-        User user = userCreationManager.create(email, first_name, last_name, role, password, manager_id, team);
+        //TODO uncomment in future
+        //User manager = (User) authentication.getDetails();
+        User manager = userRepository.findByEmail("my@email.com").get();
 
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        User user = userCreationManager.create(registrationRequest, manager);
+        String message = MessageFactory.verifyEmail(user.getToken());
+        emailService.sendSimpleMessage(user.getEmail(), "Verify your account", message);
+
+        return ResponseEntity.ok(new ApiResponse(true, "User registered successfully"));
     }
 
     @GetMapping(path = "/list")
-    public @ResponseBody List<User> list(){
-        return userService.getAll();
+    public @ResponseBody Iterable<User> list(){
+        return userRepository.findAll();
     }
 
     @DeleteMapping(path = "/delete/{id}")
     public @ResponseBody void delete(@PathVariable Long id) {
-        userService.delete(id);
+        userRepository.deleteById(id);
     }
 
-
     @PutMapping(path = "/update/{id}")
-    public @ResponseBody User updateEmail(@PathVariable Long id, @RequestParam String email){
-        User user = userService.findOneById(id);
+    public @ResponseBody User updateEmail(@PathVariable Long id, @RequestParam String email) {
+        Optional<User> optionalUser = userRepository.findById(id);
+
+        if (optionalUser.isEmpty()) {
+            throw new BadRequestHttpException("Very bad");
+        }
+
+        User user = optionalUser.get();
         user.setEmail(email);
-        userService.update(user);
+        userRepository.save(user);
 
         return user;
     }

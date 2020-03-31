@@ -1,6 +1,6 @@
 package mif.vu.ikeea.Enums;
 
-public enum Role {
+public enum ERole {
     DEVELOPER,
     LEADER
 }

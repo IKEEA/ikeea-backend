@@ -3,17 +3,23 @@ package mif.vu.ikeea.Entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
-import mif.vu.ikeea.Enums.Role;
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Entity
+@Table(name = "user",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "email")
+        })
 @Getter @Setter
 public class User {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "first_name", length = 50)
@@ -23,16 +29,25 @@ public class User {
     private String lastName;
 
     @Column(name = "email", length = 50, nullable = false, unique = true)
+    @NotBlank
+    @Email
     private String email;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
-
     @Column(name = "enabled")
-    private Boolean enabled = true;
+    private Boolean enabled = false;
 
     @Column(name = "password", nullable = false)
+    @NotBlank
     private String password;
+
+    @Column(name = "token")
+    private String token;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
 
     @JsonIgnore
     @ManyToOne
