@@ -72,4 +72,22 @@ public class UserController {
 
         return user;
     }
+
+    @PutMapping(path = "/updatePassword/{id}")
+    public @ResponseBody User updatePassword(@PathVariable Long id, @RequestParam String password, @RequestParam String oldPassword) {
+        Optional<User> optionalUser = userRepository.findById(id);
+
+        if (optionalUser.isEmpty()) {
+            throw new BadRequestHttpException("Empty User");
+        }
+
+        User user = optionalUser.get();
+        if (!userCreationManager.checkIfValidOldPassword(user, oldPassword)) {
+            throw new BadRequestHttpException("Very bad");
+        }
+
+        userCreationManager.updatePassword(user, password);
+
+        return user;
+    }
 }
