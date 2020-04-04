@@ -73,7 +73,7 @@ public class UserController {
         return user;
     }
 
-    @PutMapping(path = "/updatePassword/{id}")
+    @PutMapping(path = "/update-password/{id}")
     public @ResponseBody User updatePassword(@PathVariable Long id, @RequestParam String password, @RequestParam String oldPassword) {
         Optional<User> optionalUser = userRepository.findById(id);
 
