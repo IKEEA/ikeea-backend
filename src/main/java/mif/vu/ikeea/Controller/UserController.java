@@ -53,12 +53,12 @@ public class UserController {
         return userRepository.findAll();
     }
 
-    @DeleteMapping(path = "/delete/{id}")
+    @DeleteMapping(path = "/{id}/delete")
     public @ResponseBody void delete(@PathVariable Long id) {
         userRepository.deleteById(id);
     }
 
-    @PutMapping(path = "/update/{id}")
+    @PutMapping(path = "/{id}/update")
     public @ResponseBody User updateEmail(@PathVariable Long id, @RequestParam String email) {
         Optional<User> optionalUser = userRepository.findById(id);
 
@@ -73,7 +73,7 @@ public class UserController {
         return user;
     }
 
-    @PutMapping(path = "/update-password/{id}")
+    @PutMapping(path = "/{id}/update-password")
     public @ResponseBody User updatePassword(@PathVariable Long id, @RequestParam String password, @RequestParam String oldPassword) {
         Optional<User> optionalUser = userRepository.findById(id);
 
