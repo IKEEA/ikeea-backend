@@ -90,4 +90,10 @@ public class UserController {
 
         return user;
     }
+
+    @GetMapping(path = "/{id}/get")
+    public @ResponseBody User get(@PathVariable Long id){
+        return userRepository.findById(id).get();
+    }
+
 }
