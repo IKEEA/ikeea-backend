@@ -2,6 +2,7 @@ package mif.vu.ikeea.Controller;
 
 import mif.vu.ikeea.Entity.Repository.UserRepository;
 import mif.vu.ikeea.Entity.User;
+import mif.vu.ikeea.Enums.ERole;
 import mif.vu.ikeea.Exceptions.BadRequestHttpException;
 import mif.vu.ikeea.Factory.MessageFactory;
 import mif.vu.ikeea.Mailer.EmailService;
@@ -37,10 +38,9 @@ public class UserController {
                     HttpStatus.BAD_REQUEST);
         }
 
-        //TODO uncomment in future
-        //User manager = (User) authentication.getDetails();
-        User manager = userRepository.findByEmail("my@email.com").get();
+        User manager = (User) authentication.getDetails();
 
+        //TODO add check if this user has manager role
         User user = userCreationManager.create(registrationRequest, manager);
         String message = MessageFactory.verifyEmail(user.getToken());
         emailService.sendSimpleMessage(user.getEmail(), "Verify your account", message);
