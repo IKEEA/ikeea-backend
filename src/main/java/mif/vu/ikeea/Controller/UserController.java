@@ -53,12 +53,12 @@ public class UserController {
         return userRepository.findAll();
     }
 
-    @DeleteMapping(path = "/delete/{id}")
+    @DeleteMapping(path = "/{id}/delete")
     public @ResponseBody void delete(@PathVariable Long id) {
         userRepository.deleteById(id);
     }
 
-    @PutMapping(path = "/update/{id}")
+    @PutMapping(path = "/{id}/update")
     public @ResponseBody User updateEmail(@PathVariable Long id, @RequestParam String email) {
         Optional<User> optionalUser = userRepository.findById(id);
 
@@ -69,6 +69,24 @@ public class UserController {
         User user = optionalUser.get();
         user.setEmail(email);
         userRepository.save(user);
+
+        return user;
+    }
+
+    @PutMapping(path = "/{id}/update-password")
+    public @ResponseBody User updatePassword(@PathVariable Long id, @RequestParam String password, @RequestParam String oldPassword) {
+        Optional<User> optionalUser = userRepository.findById(id);
+
+        if (optionalUser.isEmpty()) {
+            throw new BadRequestHttpException("Empty User");
+        }
+
+        User user = optionalUser.get();
+        if (!userCreationManager.checkIfValidOldPassword(user, oldPassword)) {
+            throw new BadRequestHttpException("Very bad");
+        }
+
+        userCreationManager.updatePassword(user, password);
 
         return user;
     }

@@ -46,4 +46,17 @@ public class UserCreationManager
 
         return result;
     }
+
+    public User updatePassword(User user, String password) {
+        String userPassword = passwordEncoder.encode(password);
+
+        user.setPassword(userPassword);
+        User result = userRepository.save(user);
+
+        return result;
+    }
+
+    public boolean checkIfValidOldPassword(User user, String oldPassword){
+        return passwordEncoder.matches(oldPassword, user.getPassword());
+    }
 }
