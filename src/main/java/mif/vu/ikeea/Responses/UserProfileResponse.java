@@ -1,9 +1,7 @@
 package mif.vu.ikeea.Responses;
 
-import mif.vu.ikeea.Entity.LearningDay;
 import mif.vu.ikeea.Entity.Role;
 import mif.vu.ikeea.Entity.User;
-import mif.vu.ikeea.Enums.ERole;
 
 import java.util.*;
 
@@ -15,9 +13,9 @@ public class UserProfileResponse {
     private String email;
     private Boolean enabled;
     private Set<Role> roles;
-    private Long team_id;
-    private String manager_firstName;
-    private String manager_lastName;
+    private Long teamId;
+    private String managerFirstName;
+    private String managerLastName;
     private Integer learningDays;
 
     public UserProfileResponse(User user){
@@ -27,9 +25,9 @@ public class UserProfileResponse {
         this.email = user.getEmail();
         this.enabled = user.getEnabled();
         this.roles = user.getRoles();
-        this.team_id = user.getTeam().getId();
-        this.manager_firstName = user.getManager().getFirstName();
-        this.manager_lastName = user.getManager().getLastName();
+        this.teamId = user.getTeam().getId();
+        this.managerFirstName = user.getManager().getFirstName();
+        this.managerLastName = user.getManager().getLastName();
         //learning days from restriction
     }
 
@@ -81,28 +79,28 @@ public class UserProfileResponse {
         return learningDays;
     }
 
-    public void setTeam_id(Long team_id) {
-        this.team_id = team_id;
+    public void setTeamId(Long teamId) {
+        this.teamId = teamId;
     }
 
-    public Long getTeam_id() {
-        return team_id;
+    public Long getTeamId() {
+        return teamId;
     }
 
-    public void setManager_lastName(String manager_lastName) {
-        this.manager_lastName = manager_lastName;
+    public void setManagerLastName(String managerLastName) {
+        this.managerLastName = managerLastName;
     }
 
-    public String getManager_lastName() {
-        return manager_lastName;
+    public String getManagerLastName() {
+        return managerLastName;
     }
 
-    public void setManager_firstName(String manager_firstName) {
-        this.manager_firstName = manager_firstName;
+    public void setManagerFirstName(String managerFirstName) {
+        this.managerFirstName = managerFirstName;
     }
 
-    public String getManager_firstName() {
-        return manager_firstName;
+    public String getManagerFirstName() {
+        return managerFirstName;
     }
 
     public void setRoles(Set<Role> roles) {
