@@ -2,12 +2,14 @@ package mif.vu.ikeea.Controller;
 
 import mif.vu.ikeea.Entity.Repository.UserRepository;
 import mif.vu.ikeea.Entity.User;
+import mif.vu.ikeea.Enums.ERole;
 import mif.vu.ikeea.Exceptions.BadRequestHttpException;
 import mif.vu.ikeea.Factory.MessageFactory;
 import mif.vu.ikeea.Mailer.EmailService;
 import mif.vu.ikeea.Manager.UserCreationManager;
-import mif.vu.ikeea.Payload.ApiResponse;
+import mif.vu.ikeea.Responses.ApiResponse;
 import mif.vu.ikeea.Payload.RegistrationRequest;
+import mif.vu.ikeea.Responses.UserProfileResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,10 +39,9 @@ public class UserController {
                     HttpStatus.BAD_REQUEST);
         }
 
-        //TODO uncomment in future
-        //User manager = (User) authentication.getDetails();
-        User manager = userRepository.findByEmail("my@email.com").get();
+        User manager = (User) authentication.getDetails();
 
+        //TODO add check if this user has manager role
         User user = userCreationManager.create(registrationRequest, manager);
         String message = MessageFactory.verifyEmail(user.getToken());
         emailService.sendSimpleMessage(user.getEmail(), "Verify your account", message);
@@ -54,12 +55,18 @@ public class UserController {
     }
 
     @DeleteMapping(path = "/{id}/delete")
-    public @ResponseBody void delete(@PathVariable Long id) {
+    public @ResponseBody ResponseEntity delete(@PathVariable Long id) {
+        Optional<User> optionalUser = userRepository.findById(id);
+
+        if (optionalUser.isEmpty()) {
+            throw new BadRequestHttpException("Empty User");
+        }
         userRepository.deleteById(id);
+        return ResponseEntity.ok(new ApiResponse(true,"User deleted successfully"));
     }
 
     @PutMapping(path = "/{id}/update")
-    public @ResponseBody User updateEmail(@PathVariable Long id, @RequestParam String email) {
+    public @ResponseBody ResponseEntity updateEmail(@PathVariable Long id, @RequestParam String email) {
         Optional<User> optionalUser = userRepository.findById(id);
 
         if (optionalUser.isEmpty()) {
@@ -70,11 +77,11 @@ public class UserController {
         user.setEmail(email);
         userRepository.save(user);
 
-        return user;
+        return ResponseEntity.ok(new ApiResponse(true, "User e-mail updated successfully"));
     }
 
     @PutMapping(path = "/{id}/update-password")
-    public @ResponseBody User updatePassword(@PathVariable Long id, @RequestParam String password, @RequestParam String oldPassword) {
+    public @ResponseBody ResponseEntity updatePassword(@PathVariable Long id, @RequestParam String password, @RequestParam String oldPassword) {
         Optional<User> optionalUser = userRepository.findById(id);
 
         if (optionalUser.isEmpty()) {
@@ -88,6 +95,16 @@ public class UserController {
 
         userCreationManager.updatePassword(user, password);
 
-        return user;
+        return ResponseEntity.ok(new ApiResponse(true, "User password updated successfully"));
     }
+
+    @GetMapping(path = "/{id}/get")
+    public @ResponseBody UserProfileResponse get(@PathVariable Long id){
+    Optional<User> optionalUser = userRepository.findById(id);
+        if (optionalUser.isEmpty()) {
+            throw new BadRequestHttpException("Empty User");
+        }
+        return new UserProfileResponse(optionalUser.get());
+    }
+
 }
