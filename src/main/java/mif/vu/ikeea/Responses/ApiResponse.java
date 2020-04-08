@@ -1,4 +1,4 @@
-package mif.vu.ikeea.Payload;
+package mif.vu.ikeea.Responses;
 
 public class ApiResponse {
     private Boolean success;
