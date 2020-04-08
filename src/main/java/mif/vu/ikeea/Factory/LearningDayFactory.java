@@ -8,7 +8,7 @@ import java.util.Date;
 
 public class LearningDayFactory {
 
-    public static LearningDay addLearningDay(String title, Date date, Topic topic, User user) {
+    public static LearningDay createLearningDay(String title, Date date, Topic topic, User user) {
         LearningDay learningDay = new LearningDay();
 
         learningDay.setTitle(title);

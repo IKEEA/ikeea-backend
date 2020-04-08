@@ -13,9 +13,9 @@ public class LearningDayManager {
     @Autowired
     private LearningDayRepository learningDayRepository;
 
-    public LearningDay add(LearningDayRequest learningDayRequest) {
+    public LearningDay create(LearningDayRequest learningDayRequest) {
 
-        LearningDay learningDay = LearningDayFactory.addLearningDay(
+        LearningDay learningDay = LearningDayFactory.createLearningDay(
                 learningDayRequest.getTitle(),
                 learningDayRequest.getDate(),
                 learningDayRequest.getTopic(),

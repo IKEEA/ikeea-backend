@@ -29,9 +29,9 @@ public class LearningDayController {
     UserRepository userRepository;
 
     @PostMapping("/add")
-    public ResponseEntity<?> addLearningDay(@Valid @RequestBody LearningDayRequest learningDayRequest) {
+    public ResponseEntity<?> createLearningDay(@Valid @RequestBody LearningDayRequest learningDayRequest) {
 
-        LearningDay learningDay = learningDayManager.add(learningDayRequest);
+        LearningDay learningDay = learningDayManager.create(learningDayRequest);
 
         return ResponseEntity.ok(new ApiResponse(true, "Learning day added successfully"));
     }
@@ -46,21 +46,21 @@ public class LearningDayController {
         learningDayRepository.deleteById(id);
     }
 
-    @PutMapping(path = "/{id}/update")
+    /*@PutMapping(path = "/{id}/update")
     public @ResponseBody LearningDay updateLearningDay(@PathVariable Long id, @RequestParam User user) {
-        Optional<LearningDay> optionalLearningDay = learningDayRepository.findById(id);
+        Optional<LearningDay> LearningDay = learningDayRepository.findById(id);
 
-        if (optionalLearningDay.isEmpty()) {
+        if (LearningDay.isEmpty()) {
             throw new BadRequestHttpException("Learning day not found");
         }
 
         Optional<User> optionalUser = userRepository.findById(user.getId());
         User user1 = optionalUser.get();
 
-        LearningDay learningDay = optionalLearningDay.get();
+        LearningDay learningDay = LearningDay.get();
         learningDay.setUser(user1);
         learningDayRepository.save(learningDay);
 
         return learningDay;
-    }
+    }*/
 }

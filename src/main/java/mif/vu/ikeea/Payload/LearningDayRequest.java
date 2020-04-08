@@ -1,9 +1,11 @@
 package mif.vu.ikeea.Payload;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import mif.vu.ikeea.Entity.Topic;
 import mif.vu.ikeea.Entity.User;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -15,19 +17,19 @@ import java.util.Date;
 public class LearningDayRequest {
 
     @NotBlank
-    @Size(min = 1, max = 50)
+    @Size(min = 1, max = 100)
     private String title;
 
     @NotBlank
-    @Size(min = 3, max = 15)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private Date date;
 
     @NotBlank
-    @Size(max = 40)
+    @Size(max = 4000)
     @Email
     private Topic topic;
 
     @NotBlank
-    @Size(min = 6, max = 20)
     private User user;
 }
