@@ -49,13 +49,13 @@ public class LearningDayController {
     @PutMapping(path = "/{id}/update")
     public @ResponseBody ResponseEntity updateLearningDay(@PathVariable Long id, @RequestBody LearningDayRequest learningDayRequest) {
 
-        Optional<LearningDay> LearningDay = learningDayRepository.findById(id);
+        Optional<LearningDay> optionalLearningDay = learningDayRepository.findById(id);
 
-        if (LearningDay.isEmpty()) {
+        if (optionalLearningDay.isEmpty()) {
             throw new BadRequestHttpException("Learning day not found");
         }
 
-        LearningDay learningDay = LearningDay.get();
+        LearningDay learningDay = optionalLearningDay.get();
         learningDay.setDate(learningDayRequest.getDate());
         learningDayRepository.save(learningDay);
 

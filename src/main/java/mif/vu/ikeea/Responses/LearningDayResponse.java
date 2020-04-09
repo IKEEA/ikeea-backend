@@ -11,7 +11,6 @@ public class LearningDayResponse {
     private String title;
     private Long topicId;
     private Long userId;
-    private String comment;
 
     public LearningDayResponse(LearningDay learningDay){
         this.id = learningDay.getId();
@@ -19,7 +18,6 @@ public class LearningDayResponse {
         this.title = learningDay.getTitle();
         this.topicId = learningDay.getTopic().getId();
         this.userId = learningDay.getUser().getId();
-        this.comment = learningDay.getComment();
     }
 
     public Long getId() { return id; }
@@ -41,9 +39,5 @@ public class LearningDayResponse {
     public Long getUserId() { return userId; }
 
     public void setUserId(Long userId) { this.userId = userId; }
-
-    public String getComment() { return comment; }
-
-    public void setComment(String comment) { this.comment = comment; }
 
 }

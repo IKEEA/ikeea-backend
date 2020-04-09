@@ -8,14 +8,13 @@ import java.util.Date;
 
 public class LearningDayFactory {
 
-    public static LearningDay createLearningDay(String title, Date date, Topic topic, User user, String comment) {
+    public static LearningDay createLearningDay(String title, Date date, Topic topic, User user) {
         LearningDay learningDay = new LearningDay();
 
         learningDay.setTitle(title);
         learningDay.setDate(date);
         learningDay.setTopic(topic);
         learningDay.setUser(user);
-        learningDay.setComment(comment);
 
         return learningDay;
     }
