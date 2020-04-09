@@ -2,12 +2,13 @@ package mif.vu.ikeea.Controller;
 
 import mif.vu.ikeea.Entity.LearningDay;
 import mif.vu.ikeea.Entity.Repository.LearningDayRepository;
+import mif.vu.ikeea.Entity.Repository.TopicRepository;
 import mif.vu.ikeea.Entity.Repository.UserRepository;
-import mif.vu.ikeea.Entity.User;
 import mif.vu.ikeea.Exceptions.BadRequestHttpException;
 import mif.vu.ikeea.Manager.LearningDayManager;
-import mif.vu.ikeea.Payload.ApiResponse;
 import mif.vu.ikeea.Payload.LearningDayRequest;
+import mif.vu.ikeea.Responses.ApiResponse;
+import mif.vu.ikeea.Responses.LearningDayResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,39 +29,46 @@ public class LearningDayController {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    TopicRepository topicRepository;
+
     @PostMapping("/add")
     public ResponseEntity<?> createLearningDay(@Valid @RequestBody LearningDayRequest learningDayRequest) {
 
-        LearningDay learningDay = learningDayManager.create(learningDayRequest);
+        learningDayManager.create(learningDayRequest);
 
         return ResponseEntity.ok(new ApiResponse(true, "Learning day added successfully"));
     }
 
     @GetMapping(path = "/list")
-    public @ResponseBody Iterable<LearningDay> list(){
-        return learningDayRepository.findAll();
-    }
+    public @ResponseBody Iterable<LearningDay> list() { return learningDayRepository.findAll(); }
 
     @DeleteMapping(path = "/{id}/delete")
-    public @ResponseBody void delete(@PathVariable Long id) {
-        learningDayRepository.deleteById(id);
-    }
+    public @ResponseBody void delete(@PathVariable Long id) { learningDayRepository.deleteById(id); }
 
-    /*@PutMapping(path = "/{id}/update")
-    public @ResponseBody LearningDay updateLearningDay(@PathVariable Long id, @RequestParam User user) {
+    @PutMapping(path = "/{id}/update")
+    public @ResponseBody ResponseEntity updateLearningDay(@PathVariable Long id, @RequestBody LearningDayRequest learningDayRequest) {
+
         Optional<LearningDay> LearningDay = learningDayRepository.findById(id);
 
         if (LearningDay.isEmpty()) {
             throw new BadRequestHttpException("Learning day not found");
         }
 
-        Optional<User> optionalUser = userRepository.findById(user.getId());
-        User user1 = optionalUser.get();
-
         LearningDay learningDay = LearningDay.get();
-        learningDay.setUser(user1);
+        learningDay.setDate(learningDayRequest.getDate());
         learningDayRepository.save(learningDay);
 
-        return learningDay;
-    }*/
+        return ResponseEntity.ok(new ApiResponse(true, "Learning day updated successfully"));
+    }
+
+    @GetMapping(path = "/{id}/get")
+    public @ResponseBody
+    LearningDayResponse get(@PathVariable Long id){
+        Optional<LearningDay> optionalLearningDay = learningDayRepository.findById(id);
+        if (optionalLearningDay.isEmpty()) {
+            throw new BadRequestHttpException("Empty Learning Day");
+        }
+        return new LearningDayResponse(optionalLearningDay.get());
+    }
 }

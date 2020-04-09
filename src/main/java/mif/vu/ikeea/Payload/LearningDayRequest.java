@@ -7,6 +7,7 @@ import mif.vu.ikeea.Entity.Topic;
 import mif.vu.ikeea.Entity.User;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -20,16 +21,14 @@ public class LearningDayRequest {
     @Size(min = 1, max = 100)
     private String title;
 
-    @NotBlank
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    @JsonFormat(pattern = "dd/MM/yyyy")
+    //Reikia patikrinti
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date date;
 
-    @NotBlank
-    @Size(max = 4000)
-    @Email
-    private Topic topic;
+    private Long topic_id;
 
-    @NotBlank
-    private User user;
+    private Long user_id;
+
+    @Size(min = 0, max = 1000)
+    private String comment;
 }
