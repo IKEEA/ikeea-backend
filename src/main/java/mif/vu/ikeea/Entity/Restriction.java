@@ -24,5 +24,5 @@ public class Restriction {
     private String description;
 
     @ManyToMany(mappedBy = "restrictions")
-    private List<User> users = new ArrayList<>();
+    private List<ApplicationUser> users = new ArrayList<>();
 }

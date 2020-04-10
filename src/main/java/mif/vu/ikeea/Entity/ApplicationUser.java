@@ -17,7 +17,7 @@ import java.util.Set;
                 @UniqueConstraint(columnNames = "email")
         })
 @Getter @Setter
-public class User {
+public class ApplicationUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -56,7 +56,7 @@ public class User {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    private User manager;
+    private ApplicationUser manager;
 
     @ManyToMany
     @JoinTable(name = "restriction",

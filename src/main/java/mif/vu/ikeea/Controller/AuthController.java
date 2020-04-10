@@ -1,7 +1,7 @@
 package mif.vu.ikeea.Controller;
 
 import mif.vu.ikeea.Entity.Repository.UserRepository;
-import mif.vu.ikeea.Entity.User;
+import mif.vu.ikeea.Entity.ApplicationUser;
 import mif.vu.ikeea.Manager.UserCreationManager;
 import mif.vu.ikeea.Responses.ApiResponse;
 import mif.vu.ikeea.Responses.JwtAuthenticationResponse;
@@ -52,14 +52,14 @@ public class AuthController {
 
     @PostMapping("/verify/{token}")
     public ResponseEntity<?> verifyUser(@PathVariable String token) {
-        Optional<User> optionalUser = userRepository.findByToken(token);
+        Optional<ApplicationUser> optionalUser = userRepository.findByToken(token);
 
         if (optionalUser.isEmpty()) {
             return new ResponseEntity(new ApiResponse(false, "User with that token doesn't exist"),
                     HttpStatus.BAD_REQUEST);
         }
 
-        User user = optionalUser.get();
+        ApplicationUser user = optionalUser.get();
         user.setEnabled(true);
         userRepository.save(user);
 

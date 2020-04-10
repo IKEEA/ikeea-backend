@@ -1,7 +1,7 @@
 package mif.vu.ikeea.Responses;
 
 import mif.vu.ikeea.Entity.Role;
-import mif.vu.ikeea.Entity.User;
+import mif.vu.ikeea.Entity.ApplicationUser;
 
 import java.util.*;
 
@@ -18,7 +18,7 @@ public class UserProfileResponse {
     private String managerLastName;
     private Integer learningDays;
 
-    public UserProfileResponse(User user){
+    public UserProfileResponse(ApplicationUser user){
         this.id = user.getId();
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();

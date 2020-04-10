@@ -2,15 +2,14 @@ package mif.vu.ikeea.Factory;
 
 import mif.vu.ikeea.Entity.Role;
 import mif.vu.ikeea.Entity.Team;
-import mif.vu.ikeea.Entity.User;
-import mif.vu.ikeea.Enums.ERole;
+import mif.vu.ikeea.Entity.ApplicationUser;
 
 import java.util.Collections;
 
 public class UserFactory {
 
-    public static User createUser(String email, String firstName, String lastName, Role role, String password, User manager, Team team, String token) {
-        User user = new User();
+    public static ApplicationUser createUser(String email, String firstName, String lastName, Role role, String password, ApplicationUser manager, Team team, String token) {
+        ApplicationUser user = new ApplicationUser();
 
         user.setEmail(email);
         user.setFirstName(firstName);

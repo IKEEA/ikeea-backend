@@ -1,8 +1,7 @@
 package mif.vu.ikeea.Controller;
 
 import mif.vu.ikeea.Entity.Repository.UserRepository;
-import mif.vu.ikeea.Entity.User;
-import mif.vu.ikeea.Enums.ERole;
+import mif.vu.ikeea.Entity.ApplicationUser;
 import mif.vu.ikeea.Exceptions.BadRequestHttpException;
 import mif.vu.ikeea.Factory.MessageFactory;
 import mif.vu.ikeea.Mailer.EmailService;
@@ -39,10 +38,10 @@ public class UserController {
                     HttpStatus.BAD_REQUEST);
         }
 
-        User manager = (User) authentication.getDetails();
+        ApplicationUser manager = (ApplicationUser) authentication.getPrincipal();
 
         //TODO add check if this user has manager role
-        User user = userCreationManager.create(registrationRequest, manager);
+        ApplicationUser user = userCreationManager.create(registrationRequest, manager);
         String message = MessageFactory.verifyEmail(user.getToken());
         emailService.sendSimpleMessage(user.getEmail(), "Verify your account", message);
 
@@ -50,13 +49,13 @@ public class UserController {
     }
 
     @GetMapping(path = "/list")
-    public @ResponseBody Iterable<User> list(){
+    public @ResponseBody Iterable<ApplicationUser> list(){
         return userRepository.findAll();
     }
 
     @DeleteMapping(path = "/{id}/delete")
     public @ResponseBody ResponseEntity delete(@PathVariable Long id) {
-        Optional<User> optionalUser = userRepository.findById(id);
+        Optional<ApplicationUser> optionalUser = userRepository.findById(id);
 
         if (optionalUser.isEmpty()) {
             throw new BadRequestHttpException("Empty User");
@@ -67,13 +66,13 @@ public class UserController {
 
     @PutMapping(path = "/{id}/update")
     public @ResponseBody ResponseEntity updateEmail(@PathVariable Long id, @RequestParam String email) {
-        Optional<User> optionalUser = userRepository.findById(id);
+        Optional<ApplicationUser> optionalUser = userRepository.findById(id);
 
         if (optionalUser.isEmpty()) {
             throw new BadRequestHttpException("Very bad");
         }
 
-        User user = optionalUser.get();
+        ApplicationUser user = optionalUser.get();
         user.setEmail(email);
         userRepository.save(user);
 
@@ -82,13 +81,13 @@ public class UserController {
 
     @PutMapping(path = "/{id}/update-password")
     public @ResponseBody ResponseEntity updatePassword(@PathVariable Long id, @RequestParam String password, @RequestParam String oldPassword) {
-        Optional<User> optionalUser = userRepository.findById(id);
+        Optional<ApplicationUser> optionalUser = userRepository.findById(id);
 
         if (optionalUser.isEmpty()) {
             throw new BadRequestHttpException("Empty User");
         }
 
-        User user = optionalUser.get();
+        ApplicationUser user = optionalUser.get();
         if (!userCreationManager.checkIfValidOldPassword(user, oldPassword)) {
             throw new BadRequestHttpException("Very bad");
         }
@@ -100,7 +99,7 @@ public class UserController {
 
     @GetMapping(path = "/{id}/get")
     public @ResponseBody UserProfileResponse get(@PathVariable Long id){
-    Optional<User> optionalUser = userRepository.findById(id);
+    Optional<ApplicationUser> optionalUser = userRepository.findById(id);
         if (optionalUser.isEmpty()) {
             throw new BadRequestHttpException("Empty User");
         }

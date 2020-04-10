@@ -22,10 +22,10 @@ public class Team {
     private String description;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "team")
-    private List<User> users = new ArrayList<>();
+    private List<ApplicationUser> users = new ArrayList<>();
 
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name="manager_id", columnDefinition="bigint")
-    private User manager;
+    private ApplicationUser manager;
 }
