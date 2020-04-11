@@ -47,8 +47,15 @@ public class UserController {
         return ResponseEntity.ok(new ApiResponse(true, "User registered successfully"));
     }
 
+    @GetMapping(path = "/profile")
+    public @ResponseBody UserProfileResponse profile(Authentication authentication) {
+        ApplicationUser user = (ApplicationUser) authentication.getPrincipal();
+
+        return new UserProfileResponse(user);
+    }
+
     @GetMapping(path = "/{id}/get")
-    public @ResponseBody UserProfileResponse get(@PathVariable Long id){
+    public @ResponseBody UserProfileResponse get(@PathVariable Long id) {
         Optional<ApplicationUser> optionalUser = userRepository.findById(id);
         if (optionalUser.isEmpty()) {
             throw new BadRequestHttpException("Empty User");
