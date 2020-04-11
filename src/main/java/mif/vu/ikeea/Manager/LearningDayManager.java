@@ -1,11 +1,11 @@
 package mif.vu.ikeea.Manager;
 
+import mif.vu.ikeea.Entity.ApplicationUser;
 import mif.vu.ikeea.Entity.LearningDay;
 import mif.vu.ikeea.Entity.Repository.LearningDayRepository;
 import mif.vu.ikeea.Entity.Repository.TopicRepository;
 import mif.vu.ikeea.Entity.Repository.UserRepository;
 import mif.vu.ikeea.Entity.Topic;
-import mif.vu.ikeea.Entity.User;
 import mif.vu.ikeea.Exceptions.BadRequestHttpException;
 import mif.vu.ikeea.Factory.LearningDayFactory;
 import mif.vu.ikeea.Payload.LearningDayRequest;
@@ -28,11 +28,12 @@ public class LearningDayManager {
 
     public LearningDay create(LearningDayRequest learningDayRequest) {
 
-        Optional<User> optionalUser = userRepository.findById(learningDayRequest.getUserId());
+        Optional<ApplicationUser> optionalUser = userRepository.findById(learningDayRequest.getUserId());
         if (optionalUser.isEmpty()) {
             throw new BadRequestHttpException("Empty User");
         }
-        User user = optionalUser.get();
+
+        ApplicationUser user = optionalUser.get();
 
         Optional<Topic> optionalTopic = topicRepository.findById(learningDayRequest.getTopicId());
         if (optionalTopic.isEmpty()) {
