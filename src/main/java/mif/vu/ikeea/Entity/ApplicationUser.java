@@ -46,7 +46,7 @@ public class ApplicationUser {
     @Column(name = "restriciton_days", columnDefinition = "integer default 0")
     private Integer restrictionDays;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -57,7 +57,6 @@ public class ApplicationUser {
     @JoinColumn(name = "team_id")
     private Team team;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     private ApplicationUser manager;
 
