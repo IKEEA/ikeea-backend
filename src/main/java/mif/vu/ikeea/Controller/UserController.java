@@ -104,4 +104,19 @@ public class UserController {
 
         return ResponseEntity.ok(new ApiResponse(true, "User password updated successfully"));
     }
+
+    @PutMapping(path = "/{id}/update-restriction-days")
+    public @ResponseBody ResponseEntity updateRestrictionDays(@PathVariable Long id, @RequestParam Integer restrictionDays) {
+        Optional<ApplicationUser> optionalUser = userRepository.findById(id);
+
+        if (optionalUser.isEmpty()) {
+            throw new BadRequestHttpException("User not found");
+        }
+
+        ApplicationUser user = optionalUser.get();
+        user.setRestrictionDays(restrictionDays);
+        userRepository.save(user);
+
+        return ResponseEntity.ok(new ApiResponse(true, "User restriction days updated successfully"));
+    }
 }
