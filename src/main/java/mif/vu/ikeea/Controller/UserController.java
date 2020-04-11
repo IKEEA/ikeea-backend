@@ -30,8 +30,8 @@ public class UserController {
     @Autowired
     EmailService emailService;
 
-    @PostMapping("/invite/{email}")
-    public ResponseEntity<?> inviteUser(@Valid @PathVariable String email, Authentication authentication) {
+    @PostMapping("/invite")
+    public ResponseEntity<?> inviteUser(@Valid @RequestParam String email, Authentication authentication) {
         if(userRepository.existsByEmail(email)) {
             return new ResponseEntity(new ApiResponse(false, "Username is already taken!"),
                     HttpStatus.BAD_REQUEST);
