@@ -2,7 +2,8 @@ package mif.vu.ikeea.Controller;
 
 import mif.vu.ikeea.Entity.Repository.UserRepository;
 import mif.vu.ikeea.Entity.ApplicationUser;
-import mif.vu.ikeea.Manager.UserCreationManager;
+import mif.vu.ikeea.Manager.UserManager;
+import mif.vu.ikeea.Payload.VerifyUserRequest;
 import mif.vu.ikeea.Responses.ApiResponse;
 import mif.vu.ikeea.Responses.JwtAuthenticationResponse;
 import mif.vu.ikeea.Payload.LoginRequest;
@@ -32,7 +33,7 @@ public class AuthController {
     UserRepository userRepository;
 
     @Autowired
-    UserCreationManager userCreationManager;
+    UserManager userManager;
 
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -51,17 +52,15 @@ public class AuthController {
     }
 
     @PostMapping("/verify/{token}")
-    public ResponseEntity<?> verifyUser(@PathVariable String token) {
-        Optional<ApplicationUser> optionalUser = userRepository.findByToken(token);
+    public ResponseEntity<?> verifyUser(@PathVariable String token, @Valid @RequestBody VerifyUserRequest verifyUserRequest) {
+        Optional<ApplicationUser> optionalUser = userRepository.findByTokenAndEmail(token, verifyUserRequest.getEmail());
 
         if (optionalUser.isEmpty()) {
-            return new ResponseEntity(new ApiResponse(false, "User with that token doesn't exist"),
+            return new ResponseEntity(new ApiResponse(false, "User with that credentials doesn't exist"),
                     HttpStatus.BAD_REQUEST);
         }
 
-        ApplicationUser user = optionalUser.get();
-        user.setEnabled(true);
-        userRepository.save(user);
+        userManager.verifyUser(optionalUser.get(), verifyUserRequest);
 
         return ResponseEntity.ok(new ApiResponse(true, "User was verified"));
     }

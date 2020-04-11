@@ -43,6 +43,9 @@ public class ApplicationUser {
     @Column(name = "token")
     private String token;
 
+    @Column(name = "restriciton_days", columnDefinition = "integer default 0")
+    private Integer restrictionDays;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -57,12 +60,6 @@ public class ApplicationUser {
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     private ApplicationUser manager;
-
-    @ManyToMany
-    @JoinTable(name = "restriction",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "restriction_id"))
-    private List<Restriction> restrictions;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
     private List<Goal> goals = new ArrayList<>();

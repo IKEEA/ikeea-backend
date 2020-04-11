@@ -8,13 +8,14 @@ import mif.vu.ikeea.Enums.ERole;
 import mif.vu.ikeea.Exceptions.BadRequestHttpException;
 import mif.vu.ikeea.Factory.UserFactory;
 import mif.vu.ikeea.Generator.TokenValueGenerator;
-import mif.vu.ikeea.Payload.RegistrationRequest;
+import mif.vu.ikeea.Payload.VerifyUserRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
-public class UserCreationManager
+public class UserManager
 {
     @Autowired
     private UserRepository userRepository;
@@ -25,21 +26,20 @@ public class UserCreationManager
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    public ApplicationUser create(RegistrationRequest registrationRequest, ApplicationUser manager) {
-        String password = passwordEncoder.encode(registrationRequest.getPassword());
+    public ApplicationUser create(String email, ApplicationUser manager) {
+        String generatedPassword = TokenValueGenerator.generate();
+        String password = passwordEncoder.encode(generatedPassword);
+
         Role role = roleRepository.findByName(ERole.DEVELOPER)
                 .orElseThrow(() -> new BadRequestHttpException("User Role not set."));
-        String token = TokenValueGenerator.generate();
 
         ApplicationUser user = UserFactory.createUser(
-                registrationRequest.getEmail(),
-                registrationRequest.getFirstName(),
-                registrationRequest.getLastName(),
+                email,
                 role,
                 password,
                 manager,
                 manager.getTeam(),
-                token
+                TokenValueGenerator.generate()
         );
 
         ApplicationUser result = userRepository.save(user);
@@ -47,6 +47,17 @@ public class UserCreationManager
         return result;
     }
 
+    public void verifyUser(ApplicationUser user, VerifyUserRequest verifyUserRequest) {
+        user.setEnabled(true);
+        user.setFirstName(verifyUserRequest.getFirstName());
+        user.setLastName(verifyUserRequest.getLastName());
+        String password = passwordEncoder.encode(verifyUserRequest.getPassword());
+        user.setPassword(password);
+
+        userRepository.save(user);
+    }
+
+    @Transactional
     public ApplicationUser updatePassword(ApplicationUser user, String password) {
         String userPassword = passwordEncoder.encode(password);
 

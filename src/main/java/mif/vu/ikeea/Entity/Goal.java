@@ -23,6 +23,9 @@ public class Goal {
     @Size(max = 3)
     private Integer difficulty;
 
+    @Column(name = "status", nullable = false)
+    private String status;
+
     @ManyToOne
     @JoinColumn(name="user_id", nullable = false)
     private ApplicationUser user;

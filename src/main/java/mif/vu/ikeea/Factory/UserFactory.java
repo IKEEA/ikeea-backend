@@ -8,12 +8,10 @@ import java.util.Collections;
 
 public class UserFactory {
 
-    public static ApplicationUser createUser(String email, String firstName, String lastName, Role role, String password, ApplicationUser manager, Team team, String token) {
+    public static ApplicationUser createUser(String email, Role role, String password, ApplicationUser manager, Team team, String token) {
         ApplicationUser user = new ApplicationUser();
 
         user.setEmail(email);
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
         user.setRoles(Collections.singleton(role));
         user.setPassword(password);
         user.setManager(manager);
