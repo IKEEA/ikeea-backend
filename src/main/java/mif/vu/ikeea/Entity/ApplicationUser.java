@@ -17,7 +17,7 @@ import java.util.Set;
                 @UniqueConstraint(columnNames = "email")
         })
 @Getter @Setter
-public class User {
+public class ApplicationUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -43,6 +43,9 @@ public class User {
     @Column(name = "token")
     private String token;
 
+    @Column(name = "restriciton_days", columnDefinition = "integer default 0")
+    private Integer restrictionDays;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -56,13 +59,7 @@ public class User {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    private User manager;
-
-    @ManyToMany
-    @JoinTable(name = "restriction",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "restriction_id"))
-    private List<Restriction> restrictions;
+    private ApplicationUser manager;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
     private List<Goal> goals = new ArrayList<>();

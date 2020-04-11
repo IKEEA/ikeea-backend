@@ -1,14 +1,14 @@
 package mif.vu.ikeea.Entity.Repository;
 
-import mif.vu.ikeea.Entity.User;
+import mif.vu.ikeea.Entity.ApplicationUser;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-public interface UserRepository extends CrudRepository<User, Long> {
-    Optional<User> findByEmail(String email);
+public interface UserRepository extends CrudRepository<ApplicationUser, Long> {
+    Optional<ApplicationUser> findByEmail(String email);
 
-    Optional<User> findByToken(String token);
+    Optional<ApplicationUser> findByTokenAndEmail(String token, String email);
 
     Boolean existsByEmail(String email);
 }

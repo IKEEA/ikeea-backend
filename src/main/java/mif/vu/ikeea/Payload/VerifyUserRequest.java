@@ -7,7 +7,7 @@ import javax.validation.constraints.*;
 
 @Getter
 @Setter
-public class RegistrationRequest {
+public class VerifyUserRequest {
     @NotBlank
     @Size(min = 3, max = 15)
     private String firstName;

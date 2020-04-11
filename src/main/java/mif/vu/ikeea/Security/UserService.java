@@ -1,9 +1,9 @@
-package mif.vu.ikeea.Security.Services;
+package mif.vu.ikeea.Security;
 
 import mif.vu.ikeea.Entity.Repository.UserRepository;
-import mif.vu.ikeea.Entity.User;
+import mif.vu.ikeea.Entity.ApplicationUser;
 import mif.vu.ikeea.Exceptions.BadRequestHttpException;
-import mif.vu.ikeea.Security.CustomUserDetails;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,28 +11,31 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
+
 @Service
-public class CustomUserDetailsService implements UserDetailsService {
+public class UserService implements UserDetailsService {
     @Autowired
     UserRepository userRepository;
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email)
+        ApplicationUser user = userRepository.findByEmail(email)
                 .orElseThrow(() ->
                         new UsernameNotFoundException("User not found with username or email : " + email)
                 );
 
-        return CustomUserDetails.create(user);
+        return new User(user.getEmail(), user.getPassword(), Collections.emptyList());
     }
 
     @Transactional
-    public UserDetails loadUserById(Long id) {
-        User user = userRepository.findById(id).orElseThrow(
-                () -> new BadRequestHttpException("Bad request")
-        );
+    public ApplicationUser loadByEmail(String email) throws UsernameNotFoundException {
+        ApplicationUser user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new UsernameNotFoundException("User not found with username or email : " + email)
+                );
 
-        return CustomUserDetails.create(user);
+        return user;
     }
 }
