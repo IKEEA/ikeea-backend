@@ -14,7 +14,7 @@ public class Comment {
     private Long id;
 
     @Column(name = "comment", nullable = false)
-    private String title;
+    private String comment;
 
     @Column(name = "date", nullable = false)
     private Date date;

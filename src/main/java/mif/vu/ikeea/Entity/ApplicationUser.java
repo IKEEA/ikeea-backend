@@ -66,7 +66,4 @@ public class ApplicationUser {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
     private List<LearningDay> learningDays = new ArrayList<>();
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
-    private List<LearningDay> comments = new ArrayList<>();
 }
