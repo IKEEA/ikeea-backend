@@ -3,7 +3,7 @@ package mif.vu.ikeea.Controller;
 import mif.vu.ikeea.Entity.Repository.UserRepository;
 import mif.vu.ikeea.Entity.ApplicationUser;
 import mif.vu.ikeea.Manager.UserManager;
-import mif.vu.ikeea.Payload.VerifyUserRequest;
+import mif.vu.ikeea.Payload.RegistrationRequest;
 import mif.vu.ikeea.Responses.ApiResponse;
 import mif.vu.ikeea.Responses.JwtAuthenticationResponse;
 import mif.vu.ikeea.Payload.LoginRequest;
@@ -52,16 +52,30 @@ public class AuthController {
     }
 
     @PostMapping("/verify/{token}")
-    public ResponseEntity<?> verifyUser(@PathVariable String token, @Valid @RequestBody VerifyUserRequest verifyUserRequest) {
-        Optional<ApplicationUser> optionalUser = userRepository.findByTokenAndEmail(token, verifyUserRequest.getEmail());
+    public ResponseEntity<?> verifyToken(@PathVariable String token) {
+        Optional<ApplicationUser> optionalUser = userRepository.findByToken(token);
+
+        if (optionalUser.isEmpty()) {
+            return new ResponseEntity(new ApiResponse(false, "User with this token doesn't exist"),
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        ApplicationUser user = optionalUser.get();
+
+        return ResponseEntity.ok(new ApiResponse(true, user.getEmail()));
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> registerUser(@Valid @RequestBody RegistrationRequest registrationRequest) {
+        Optional<ApplicationUser> optionalUser = userRepository.findByEmail(registrationRequest.getEmail());
 
         if (optionalUser.isEmpty()) {
             return new ResponseEntity(new ApiResponse(false, "User with that credentials doesn't exist"),
                     HttpStatus.BAD_REQUEST);
         }
 
-        userManager.verifyUser(optionalUser.get(), verifyUserRequest);
+        userManager.finishRegistration(optionalUser.get(), registrationRequest);
 
-        return ResponseEntity.ok(new ApiResponse(true, "User was verified"));
+        return ResponseEntity.ok(new ApiResponse(true, "User was register"));
     }
 }

@@ -8,7 +8,7 @@ import mif.vu.ikeea.Enums.ERole;
 import mif.vu.ikeea.Exceptions.BadRequestHttpException;
 import mif.vu.ikeea.Factory.UserFactory;
 import mif.vu.ikeea.Generator.TokenValueGenerator;
-import mif.vu.ikeea.Payload.VerifyUserRequest;
+import mif.vu.ikeea.Payload.RegistrationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -47,11 +47,11 @@ public class UserManager
         return result;
     }
 
-    public void verifyUser(ApplicationUser user, VerifyUserRequest verifyUserRequest) {
+    public void finishRegistration(ApplicationUser user, RegistrationRequest registrationRequest) {
         user.setEnabled(true);
-        user.setFirstName(verifyUserRequest.getFirstName());
-        user.setLastName(verifyUserRequest.getLastName());
-        String password = passwordEncoder.encode(verifyUserRequest.getPassword());
+        user.setFirstName(registrationRequest.getFirstName());
+        user.setLastName(registrationRequest.getLastName());
+        String password = passwordEncoder.encode(registrationRequest.getPassword());
         user.setPassword(password);
 
         userRepository.save(user);
