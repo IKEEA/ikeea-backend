@@ -2,6 +2,7 @@ package mif.vu.ikeea.Controller;
 
 import mif.vu.ikeea.Entity.Repository.UserRepository;
 import mif.vu.ikeea.Entity.ApplicationUser;
+import mif.vu.ikeea.Exceptions.BadRequestHttpException;
 import mif.vu.ikeea.Manager.UserManager;
 import mif.vu.ikeea.Payload.RegistrationRequest;
 import mif.vu.ikeea.Responses.ApiResponse;
@@ -74,8 +75,15 @@ public class AuthController {
                     HttpStatus.BAD_REQUEST);
         }
 
+        ApplicationUser user = optionalUser.get();
+
+        if (user.getToken() == null) {
+            return new ResponseEntity(new ApiResponse(false, "User is already registered"),
+                    HttpStatus.BAD_REQUEST);
+        }
+
         userManager.finishRegistration(optionalUser.get(), registrationRequest);
 
-        return ResponseEntity.ok(new ApiResponse(true, "User was register"));
+        return ResponseEntity.ok(new ApiResponse(true, "User register successfully"));
     }
 }
