@@ -9,12 +9,16 @@ import mif.vu.ikeea.Manager.LearningDayManager;
 import mif.vu.ikeea.Payload.LearningDayRequest;
 import mif.vu.ikeea.Responses.ApiResponse;
 import mif.vu.ikeea.Responses.LearningDayResponse;
+import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 @RestController
 @RequestMapping(path="/api/learning_day")
@@ -41,7 +45,15 @@ public class LearningDayController {
     }
 
     @GetMapping(path = "/list")
-    public @ResponseBody Iterable<LearningDay> list() { return learningDayRepository.findAll(); }
+    public @ResponseBody List<LearningDayResponse> list() {
+        Iterable<LearningDay> learningDayIterable = learningDayRepository.findAll();
+        List<LearningDay> learningDays = Lists.newArrayList(learningDayIterable);
+        List<LearningDayResponse> learningDayResponses = new ArrayList<>();
+        for (LearningDay learningDay : learningDays) {
+            learningDayResponses.add(new LearningDayResponse(learningDay));
+        }
+        return learningDayResponses;
+    }
 
     @DeleteMapping(path = "/{id}/delete")
     public @ResponseBody void delete(@PathVariable Long id) { learningDayRepository.deleteById(id); }

@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.Date;
 
 @Entity
 @Getter @Setter
@@ -13,18 +14,12 @@ public class Goal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "title", nullable = false)
-    private String title;
-
-    @Column(name = "description")
-    private String description;
-
-    @Column(name = "difficulty", nullable = false)
-    @Size(max = 3)
-    private Integer difficulty;
-
     @Column(name = "status", nullable = false)
     private String status;
+
+
+    @Column(name = "last_update", nullable = false)
+    private Date lastUpdate;
 
     @ManyToOne
     @JoinColumn(name="user_id", nullable = false)

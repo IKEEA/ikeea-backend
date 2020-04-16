@@ -20,8 +20,8 @@ public class Comment {
     private Date date;
 
     @ManyToOne
-    @JoinColumn(name="topic_id", nullable = false)
-    private Topic topic;
+    @JoinColumn(name="learning_day_id", nullable = false)
+    private LearningDay learningDay;
 
     @ManyToOne
     @JoinColumn(name="user_id", nullable = false)

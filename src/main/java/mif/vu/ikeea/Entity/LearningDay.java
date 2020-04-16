@@ -4,7 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter @Setter
@@ -19,9 +21,8 @@ public class LearningDay {
     @Column(name = "date", nullable = false)
     private Date date;
 
-    @ManyToOne
-    @JoinColumn(name="topic_id")
-    private Topic topic;
+    @ManyToMany(mappedBy = "learningDays")
+    private List<Topic> topics = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name="user_id", nullable = false)
