@@ -17,8 +17,9 @@ public class UserProfileResponse {
     private Boolean enabled;
     private List<String> roles;
     private Long teamId;
-    private String managerFirstName;
-    private String managerLastName;
+    private String managerFirstName = null;
+    private String managerLastName = null;
+    private String managerEmail = null;
     private Integer learningDays;
 
     public UserProfileResponse(ApplicationUser user) {
@@ -31,8 +32,13 @@ public class UserProfileResponse {
         this.teamId = user.getTeam().getId();
 
         ApplicationUser manager = user.getManager();
-        this.managerFirstName = manager != null ? manager.getFirstName() : null;
-        this.managerLastName = manager != null ? manager.getLastName() : null;
+
+        if (manager != null) {
+            this.managerFirstName = manager.getFirstName();
+            this.managerLastName = manager.getLastName();
+            this.managerEmail = manager.getEmail();
+        }
+
         //TODO learning days
     }
 
