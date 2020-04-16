@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -41,14 +43,22 @@ public class LearningDayController {
     }
 
     @GetMapping(path = "/list")
-    public @ResponseBody Iterable<LearningDay> list() { return learningDayRepository.findAll(); }
+    public @ResponseBody List<LearningDayResponse> list() {
+        Iterable<LearningDay> learningDayIterable = learningDayRepository.findAll();
+        List<LearningDayResponse> learningDayResponses = new ArrayList<>();
+
+        for (LearningDay learningDay : learningDayIterable) {
+            learningDayResponses.add(new LearningDayResponse(learningDay));
+        }
+
+        return learningDayResponses;
+    }
 
     @DeleteMapping(path = "/{id}/delete")
     public @ResponseBody void delete(@PathVariable Long id) { learningDayRepository.deleteById(id); }
 
     @PutMapping(path = "/{id}/update")
     public @ResponseBody ResponseEntity updateLearningDay(@PathVariable Long id, @RequestBody LearningDayRequest learningDayRequest) {
-
         Optional<LearningDay> optionalLearningDay = learningDayRepository.findById(id);
 
         if (optionalLearningDay.isEmpty()) {
@@ -66,9 +76,11 @@ public class LearningDayController {
     public @ResponseBody
     LearningDayResponse get(@PathVariable Long id){
         Optional<LearningDay> optionalLearningDay = learningDayRepository.findById(id);
+
         if (optionalLearningDay.isEmpty()) {
             throw new BadRequestHttpException("Empty Learning Day");
         }
+
         return new LearningDayResponse(optionalLearningDay.get());
     }
 }
