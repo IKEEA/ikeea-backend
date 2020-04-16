@@ -9,7 +9,6 @@ import mif.vu.ikeea.Manager.LearningDayManager;
 import mif.vu.ikeea.Payload.LearningDayRequest;
 import mif.vu.ikeea.Responses.ApiResponse;
 import mif.vu.ikeea.Responses.LearningDayResponse;
-import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
