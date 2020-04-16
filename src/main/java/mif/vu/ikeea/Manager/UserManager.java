@@ -53,6 +53,7 @@ public class UserManager
         user.setLastName(registrationRequest.getLastName());
         String password = passwordEncoder.encode(registrationRequest.getPassword());
         user.setPassword(password);
+        user.setToken(null);
 
         userRepository.save(user);
     }

@@ -44,7 +44,7 @@ public class UserController {
         String message = MessageFactory.verifyEmail(user.getToken());
         emailService.sendSimpleMessage(user.getEmail(), "Verify your account", message);
 
-        return ResponseEntity.ok(new ApiResponse(true, "User registered successfully"));
+        return ResponseEntity.ok(new ApiResponse(true, "User invited successfully"));
     }
 
     @GetMapping(path = "/profile")
