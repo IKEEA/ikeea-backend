@@ -43,8 +43,8 @@ public class ApplicationUser {
     @Column(name = "token")
     private String token;
 
-    @Column(name = "restriciton_days", columnDefinition = "integer default 0")
-    private Integer restrictionDays;
+    @Column(name = "restriciton_days", columnDefinition = "integer default 3")
+    private Integer restrictionDays = 3;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
