@@ -17,9 +17,9 @@ public class UserProfileResponse {
     private Boolean enabled;
     private List<String> roles;
     private Long teamId;
-    private String managerFirstName;
-    private String managerLastName;
-    private String managerEmail;
+    private String managerFirstName = null;
+    private String managerLastName = null;
+    private String managerEmail = null;
     private Integer learningDays;
 
     public UserProfileResponse(ApplicationUser user) {
