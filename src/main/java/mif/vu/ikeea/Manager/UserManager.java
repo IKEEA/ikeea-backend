@@ -4,6 +4,7 @@ import mif.vu.ikeea.Entity.Repository.RoleRepository;
 import mif.vu.ikeea.Entity.Repository.UserRepository;
 import mif.vu.ikeea.Entity.Role;
 import mif.vu.ikeea.Entity.ApplicationUser;
+import mif.vu.ikeea.Enums.ERestrictionDays;
 import mif.vu.ikeea.Enums.ERole;
 import mif.vu.ikeea.Exceptions.BadRequestHttpException;
 import mif.vu.ikeea.Factory.UserFactory;
@@ -53,6 +54,7 @@ public class UserManager
         user.setLastName(registrationRequest.getLastName());
         String password = passwordEncoder.encode(registrationRequest.getPassword());
         user.setPassword(password);
+        user.setRestrictionDays(ERestrictionDays.DEFAULT.getValue());
 
         userRepository.save(user);
     }
