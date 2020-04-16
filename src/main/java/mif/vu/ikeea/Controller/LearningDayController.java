@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(path="/api/learning_day")
+@RequestMapping(path="/api/learning-day")
 public class LearningDayController {
 
     @Autowired
