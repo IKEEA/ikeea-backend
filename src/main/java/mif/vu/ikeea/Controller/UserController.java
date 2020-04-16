@@ -6,6 +6,7 @@ import mif.vu.ikeea.Exceptions.BadRequestHttpException;
 import mif.vu.ikeea.Factory.MessageFactory;
 import mif.vu.ikeea.Mailer.EmailService;
 import mif.vu.ikeea.Manager.UserManager;
+import mif.vu.ikeea.Payload.UpdateProfileRequest;
 import mif.vu.ikeea.Responses.ApiResponse;
 import mif.vu.ikeea.Responses.UserProfileResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,7 +81,7 @@ public class UserController {
     }
 
     @PutMapping(path = "/{id}/update")
-    public @ResponseBody ResponseEntity updateEmail(@PathVariable Long id, @RequestParam String email) {
+    public @ResponseBody ResponseEntity updateEmail(@PathVariable Long id, @Valid @RequestBody UpdateProfileRequest updateProfileRequest) {
         Optional<ApplicationUser> optionalUser = userRepository.findById(id);
 
         if (optionalUser.isEmpty()) {
@@ -88,28 +89,9 @@ public class UserController {
         }
 
         ApplicationUser user = optionalUser.get();
-        user.setEmail(email);
-        userRepository.save(user);
+        userManager.update(user, updateProfileRequest);
 
         return ResponseEntity.ok(new ApiResponse(true, "User e-mail updated successfully"));
-    }
-
-    @PutMapping(path = "/{id}/update-password")
-    public @ResponseBody ResponseEntity updatePassword(@PathVariable Long id, @RequestParam String password, @RequestParam String oldPassword) {
-        Optional<ApplicationUser> optionalUser = userRepository.findById(id);
-
-        if (optionalUser.isEmpty()) {
-            throw new BadRequestHttpException("Empty User");
-        }
-
-        ApplicationUser user = optionalUser.get();
-        if (!userManager.checkIfValidOldPassword(user, oldPassword)) {
-            throw new BadRequestHttpException("Very bad");
-        }
-
-        userManager.updatePassword(user, password);
-
-        return ResponseEntity.ok(new ApiResponse(true, "User password updated successfully"));
     }
 
     @PutMapping(path = "/{id}/update-restriction-days")
