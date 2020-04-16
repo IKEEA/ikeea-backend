@@ -8,9 +8,9 @@ import mif.vu.ikeea.Entity.Topic;
 @Getter
 @Setter
 public class TopicResponse {
+    private Long id;
 
-    private long id;
-    public TopicResponse(Topic topic){
+    public TopicResponse(Topic topic) {
         this.id = topic.getId();
     }
 }
