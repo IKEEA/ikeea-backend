@@ -2,7 +2,6 @@ package mif.vu.ikeea.Responses;
 
 import lombok.Getter;
 import lombok.Setter;
-import mif.vu.ikeea.Entity.Role;
 import mif.vu.ikeea.Entity.ApplicationUser;
 import mif.vu.ikeea.Enums.ERole;
 
