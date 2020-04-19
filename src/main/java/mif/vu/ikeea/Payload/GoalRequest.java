@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Getter
@@ -14,7 +15,9 @@ public class GoalRequest {
     @Size(min = 1, max = 100)
     private String status;
 
+    @NotNull
     private Long topicId;
 
+    @NotNull
     private Long userId;
 }

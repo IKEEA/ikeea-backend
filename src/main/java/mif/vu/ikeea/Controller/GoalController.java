@@ -1,10 +1,13 @@
 package mif.vu.ikeea.Controller;
 
+import mif.vu.ikeea.Entity.ApplicationUser;
 import mif.vu.ikeea.Entity.Goal;
 import mif.vu.ikeea.Entity.Repository.GoalRepository;
 import mif.vu.ikeea.Exceptions.BadRequestHttpException;
 import mif.vu.ikeea.Manager.GoalManager;
 import mif.vu.ikeea.Payload.GoalRequest;
+import mif.vu.ikeea.Payload.UpdateGoalRequest;
+import mif.vu.ikeea.Payload.UpdateProfileRequest;
 import mif.vu.ikeea.Responses.ApiResponse;
 import mif.vu.ikeea.Responses.GoalResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +57,7 @@ public class GoalController {
     }
 
     @PutMapping(path = "/{id}/update")
-    public @ResponseBody ResponseEntity updateGoal(@PathVariable Long id, @RequestBody GoalRequest goalRequest) {
+    public @ResponseBody ResponseEntity updateGoal(@PathVariable Long id, @Valid @RequestBody UpdateGoalRequest updateGoalRequest) {
         Optional<Goal> optionalGoal = goalRepository.findById(id);
 
         if (optionalGoal.isEmpty()) {
@@ -63,11 +66,7 @@ public class GoalController {
 
         Goal goal = optionalGoal.get();
 
-        Date date = new Date();
-        goal.setLastUpdate(date);
-        goal.setStatus(goalRequest.getStatus());
-
-        goalRepository.save(goal);
+        goalManager.update(goal, updateGoalRequest);
 
         return ResponseEntity.ok(new ApiResponse(true, "Goal updated successfully"));
     }

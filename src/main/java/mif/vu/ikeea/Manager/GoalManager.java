@@ -9,8 +9,10 @@ import mif.vu.ikeea.Entity.Topic;
 import mif.vu.ikeea.Exceptions.BadRequestHttpException;
 import mif.vu.ikeea.Factory.GoalFactory;
 import mif.vu.ikeea.Payload.GoalRequest;
+import mif.vu.ikeea.Payload.UpdateGoalRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.Optional;
@@ -33,7 +35,6 @@ public class GoalManager {
         if (optionalUser.isEmpty()) {
             throw new BadRequestHttpException("User is empty");
         }
-
         ApplicationUser user = optionalUser.get();
 
         Optional<Topic> optionalTopic = topicRepository.findById(goalRequest.getTopicId());
@@ -50,6 +51,21 @@ public class GoalManager {
                 topic,
                 user
         );
+
+        Goal result = goalRepository.save(goal);
+
+        return result;
+    }
+
+    @Transactional
+    public Goal update(Goal goal, UpdateGoalRequest updateGoalRequest) {
+
+        if (updateGoalRequest.getStatus() != null) {
+            goal.setStatus(updateGoalRequest.getStatus());
+        }
+
+        Date date = new Date();
+        goal.setLastUpdate(date);
 
         Goal result = goalRepository.save(goal);
 
