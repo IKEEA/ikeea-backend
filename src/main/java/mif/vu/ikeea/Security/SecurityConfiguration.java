@@ -1,5 +1,6 @@
 package mif.vu.ikeea.Security;
 
+import mif.vu.ikeea.RepositoryService.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

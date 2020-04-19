@@ -1,11 +1,10 @@
 package mif.vu.ikeea.Controller;
 
 import mif.vu.ikeea.Entity.Goal;
-import mif.vu.ikeea.Entity.Repository.GoalRepository;
-import mif.vu.ikeea.Exceptions.BadRequestHttpException;
 import mif.vu.ikeea.Manager.GoalManager;
 import mif.vu.ikeea.Payload.GoalRequest;
 import mif.vu.ikeea.Payload.UpdateGoalRequest;
+import mif.vu.ikeea.RepositoryService.GoalService;
 import mif.vu.ikeea.Responses.ApiResponse;
 import mif.vu.ikeea.Responses.GoalResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(path="/api/goal")
@@ -25,7 +23,7 @@ public class GoalController {
     private GoalManager goalManager;
 
     @Autowired
-    private GoalRepository goalRepository;
+    private GoalService goalService;
 
     @PostMapping("/add")
     public ResponseEntity<?> createGoal(@Valid @RequestBody GoalRequest goalRequest) {
@@ -36,10 +34,10 @@ public class GoalController {
 
     @GetMapping(path = "/list")
     public @ResponseBody List<GoalResponse> list() {
-        Iterable<Goal> goalIterable = goalRepository.findAll();
+        List<Goal> goals = goalService.getAll();
         List<GoalResponse> goalResponses = new ArrayList<>();
 
-        for (Goal goal : goalIterable) {
+        for (Goal goal : goals) {
             goalResponses.add(new GoalResponse(goal));
         }
 
@@ -48,10 +46,10 @@ public class GoalController {
 
     @GetMapping(path = "/{userId}/list")
     public @ResponseBody List<GoalResponse> getUserLearningDaysList(@PathVariable Long userId) {
-        Iterable<Goal> goalIterable = goalRepository.findAllByUserId(userId);
+        List<Goal> goals = goalService.getAllByUserId(userId);
         List<GoalResponse> goalResponses = new ArrayList<>();
 
-        for (Goal goal : goalIterable) {
+        for (Goal goal : goals) {
             goalResponses.add(new GoalResponse(goal));
         }
 
@@ -60,31 +58,22 @@ public class GoalController {
 
     @DeleteMapping(path = "/{id}/delete")
     public @ResponseBody ResponseEntity delete(@PathVariable Long id) {
-        goalRepository.deleteById(id);
+        goalService.delete(id);
         return ResponseEntity.ok(new ApiResponse(true, "Goal deleted"));
     }
 
     @PutMapping(path = "/{id}/update")
     public @ResponseBody ResponseEntity updateGoal(@PathVariable Long id, @Valid @RequestBody UpdateGoalRequest updateGoalRequest) {
-        Optional<Goal> optionalGoal = goalRepository.findById(id);
-
-        if (optionalGoal.isEmpty()) {
-            throw new BadRequestHttpException("Goal not found");
-        }
-
-        goalManager.update(optionalGoal.get(), updateGoalRequest);
+        Goal goal = goalService.loadById(id);
+        goalManager.update(goal, updateGoalRequest);
 
         return ResponseEntity.ok(new ApiResponse(true, "Goal updated successfully"));
     }
 
     @GetMapping(path = "/{id}/get")
     public @ResponseBody GoalResponse get(@PathVariable Long id){
-        Optional<Goal> optionalGoal = goalRepository.findById(id);
+        Goal goal = goalService.loadById(id);
 
-        if (optionalGoal.isEmpty()) {
-            throw new BadRequestHttpException("Goal is empty");
-        }
-
-        return new GoalResponse(optionalGoal.get());
+        return new GoalResponse(goal);
     }
 }

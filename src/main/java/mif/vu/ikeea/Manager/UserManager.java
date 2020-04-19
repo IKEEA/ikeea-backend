@@ -1,15 +1,15 @@
 package mif.vu.ikeea.Manager;
 
 import mif.vu.ikeea.Entity.Repository.RoleRepository;
-import mif.vu.ikeea.Entity.Repository.UserRepository;
 import mif.vu.ikeea.Entity.Role;
 import mif.vu.ikeea.Entity.ApplicationUser;
 import mif.vu.ikeea.Enums.ERole;
-import mif.vu.ikeea.Exceptions.BadRequestHttpException;
+import mif.vu.ikeea.Exceptions.ResourceNotFoundException;
 import mif.vu.ikeea.Factory.UserFactory;
 import mif.vu.ikeea.Generator.TokenValueGenerator;
 import mif.vu.ikeea.Payload.RegistrationRequest;
 import mif.vu.ikeea.Payload.UpdateProfileRequest;
+import mif.vu.ikeea.RepositoryService.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserManager
 {
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
     private RoleRepository roleRepository;
@@ -33,7 +33,7 @@ public class UserManager
         String password = passwordEncoder.encode(generatedPassword);
 
         Role role = roleRepository.findByName(ERole.DEVELOPER)
-                .orElseThrow(() -> new BadRequestHttpException("User Role not set."));
+                .orElseThrow(() -> new ResourceNotFoundException("User Role not set."));
 
         ApplicationUser user = UserFactory.createUser(
                 email,
@@ -44,7 +44,7 @@ public class UserManager
                 TokenValueGenerator.generate()
         );
 
-        ApplicationUser result = userRepository.save(user);
+        ApplicationUser result = userService.add(user);
 
         return result;
     }
@@ -58,11 +58,11 @@ public class UserManager
         user.setPassword(password);
         user.setToken(null);
 
-        userRepository.save(user);
+        userService.update(user);
     }
 
     @Transactional
-    public ApplicationUser update(ApplicationUser user, UpdateProfileRequest userProfileRequest) {
+    public void update(ApplicationUser user, UpdateProfileRequest userProfileRequest) {
 
         if (userProfileRequest.getEmail() != null) {
             user.setEmail(userProfileRequest.getEmail());
@@ -81,9 +81,7 @@ public class UserManager
             user.setPassword(userPassword);
         }
 
-        ApplicationUser result = userRepository.save(user);
-
-        return result;
+        userService.update(user);
     }
 
     private boolean checkIfValidOldPassword(ApplicationUser user, String oldPassword) {
