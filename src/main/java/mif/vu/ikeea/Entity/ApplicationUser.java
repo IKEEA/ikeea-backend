@@ -3,6 +3,8 @@ package mif.vu.ikeea.Entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import mif.vu.ikeea.Enums.ERole;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -65,4 +67,14 @@ public class ApplicationUser {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
     private List<LearningDay> learningDays = new ArrayList<>();
+
+    public List<ERole> getRoleNames() {
+        List<ERole> roleNames = new ArrayList<>();
+
+        for (Role role : roles) {
+            roleNames.add(role.getName());
+        }
+
+        return roleNames;
+    }
 }
