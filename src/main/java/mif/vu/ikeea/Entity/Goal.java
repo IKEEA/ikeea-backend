@@ -2,9 +2,9 @@ package mif.vu.ikeea.Entity;
 
 import lombok.Getter;
 import lombok.Setter;
+import mif.vu.ikeea.Enums.EGoalStatus;
 
 import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Entity
@@ -15,7 +15,8 @@ public class Goal {
     private Long id;
 
     @Column(name = "status", nullable = false)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private EGoalStatus status;
 
 
     @Column(name = "last_update", nullable = false)
