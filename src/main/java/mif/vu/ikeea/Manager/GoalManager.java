@@ -3,6 +3,7 @@ package mif.vu.ikeea.Manager;
 import mif.vu.ikeea.Entity.ApplicationUser;
 import mif.vu.ikeea.Entity.Goal;
 import mif.vu.ikeea.Entity.Topic;
+import mif.vu.ikeea.Enums.EGoalStatus;
 import mif.vu.ikeea.Factory.GoalFactory;
 import mif.vu.ikeea.Payload.GoalRequest;
 import mif.vu.ikeea.Payload.UpdateGoalRequest;
@@ -34,7 +35,7 @@ public class GoalManager {
 
         Goal goal = GoalFactory.createGoal(
                 new Date(),
-                goalRequest.getStatus(),
+                EGoalStatus.ASSIGNED,
                 topic,
                 user
         );
