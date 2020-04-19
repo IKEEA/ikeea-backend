@@ -6,6 +6,7 @@ import mif.vu.ikeea.Entity.Repository.GoalRepository;
 import mif.vu.ikeea.Entity.Repository.TopicRepository;
 import mif.vu.ikeea.Entity.Repository.UserRepository;
 import mif.vu.ikeea.Entity.Topic;
+import mif.vu.ikeea.Enums.EGoalStatus;
 import mif.vu.ikeea.Exceptions.BadRequestHttpException;
 import mif.vu.ikeea.Factory.GoalFactory;
 import mif.vu.ikeea.Payload.GoalRequest;
@@ -46,7 +47,7 @@ public class GoalManager {
 
         Goal goal = GoalFactory.createGoal(
                 new Date(),
-                goalRequest.getStatus(),
+                EGoalStatus.ASSIGNED,
                 optionalTopic.get(),
                 optionalUser.get()
         );

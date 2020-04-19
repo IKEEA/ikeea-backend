@@ -3,6 +3,7 @@ package mif.vu.ikeea.Responses;
 import lombok.Getter;
 import lombok.Setter;
 import mif.vu.ikeea.Entity.Goal;
+import mif.vu.ikeea.Enums.EGoalStatus;
 
 import java.util.Date;
 
@@ -11,7 +12,7 @@ public class GoalResponse {
 
     private Long id;
     private Date lastUpdated;
-    private String status;
+    private EGoalStatus status;
     private Long topicId;
     private Long userId;
 
