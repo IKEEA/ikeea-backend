@@ -2,10 +2,8 @@ package mif.vu.ikeea.Responses;
 
 import lombok.Getter;
 import lombok.Setter;
-import mif.vu.ikeea.Entity.Repository.LearningDayRepository;
-import mif.vu.ikeea.Entity.Role;
 import mif.vu.ikeea.Entity.ApplicationUser;
-import org.springframework.beans.factory.annotation.Autowired;
+import mif.vu.ikeea.Enums.ERole;
 
 import java.util.*;
 
@@ -16,7 +14,7 @@ public class UserProfileResponse {
     private String lastName;
     private String email;
     private Boolean enabled;
-    private List<String> roles;
+    private List<ERole> roles;
     private Long teamId;
     private String managerFirstName = null;
     private String managerLastName = null;
@@ -29,7 +27,7 @@ public class UserProfileResponse {
         this.lastName = user.getLastName();
         this.email = user.getEmail();
         this.enabled = user.getEnabled();
-        this.roles = buildRolesName(user.getRoles());
+        this.roles = user.getRoleNames();
         this.teamId = user.getTeam().getId();
         this.restrictionDays = user.getRestrictionDays();
 
@@ -40,15 +38,5 @@ public class UserProfileResponse {
             this.managerLastName = manager.getLastName();
             this.managerEmail = manager.getEmail();
         }
-    }
-
-    private List<String> buildRolesName(Set<Role> roles) {
-        List<String> roleNames = new ArrayList<>();
-
-        for (Role role : roles) {
-            roleNames.add(role.getName().toString());
-        }
-
-        return roleNames;
     }
 }
