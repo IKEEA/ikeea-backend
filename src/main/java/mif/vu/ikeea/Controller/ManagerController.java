@@ -34,7 +34,7 @@ public class ManagerController {
             throw new BadRequestHttpException("Empty User");
         }
         ApplicationUser manager = optionalUser.get();
-        Team managerTeam = teamRepository.findTeamByManager_Id(manager.getId());
+        Team managerTeam = teamRepository.findTeamByManagerId(manager.getId());
 
         Iterable<ApplicationUser> users = managerTeam.getUsers();
         List<UserManagerResponse> userManagerResponses = new ArrayList<>();

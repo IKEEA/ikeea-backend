@@ -11,10 +11,6 @@ import java.util.*;
 
 @Getter @Setter
 public class UserProfileResponse {
-
-    @Autowired
-    LearningDayRepository learningDayRepository;
-
     private Long id;
     private String firstName;
     private String lastName;
@@ -25,7 +21,7 @@ public class UserProfileResponse {
     private String managerFirstName = null;
     private String managerLastName = null;
     private String managerEmail = null;
-    private Integer learningDays;
+    private Integer restrictionDays;
 
     public UserProfileResponse(ApplicationUser user) {
         this.id = user.getId();
@@ -35,7 +31,7 @@ public class UserProfileResponse {
         this.enabled = user.getEnabled();
         this.roles = buildRolesName(user.getRoles());
         this.teamId = user.getTeam().getId();
-        this.learningDays = user.getLearningDays().size();
+        this.restrictionDays = user.getRestrictionDays();
 
         ApplicationUser manager = user.getManager();
 
