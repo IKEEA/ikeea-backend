@@ -11,6 +11,7 @@ import mif.vu.ikeea.Factory.LearningDayFactory;
 import mif.vu.ikeea.Payload.LearningDayRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -26,6 +27,7 @@ public class LearningDayManager {
     @Autowired
     TopicRepository topicRepository;
 
+    @Transactional
     public LearningDay create(LearningDayRequest learningDayRequest) {
 
         Optional<ApplicationUser> optionalUser = userRepository.findById(learningDayRequest.getUserId());
@@ -33,19 +35,17 @@ public class LearningDayManager {
             throw new BadRequestHttpException("Empty User");
         }
 
-        ApplicationUser user = optionalUser.get();
-
         Optional<Topic> optionalTopic = topicRepository.findById(learningDayRequest.getTopicId());
+
         if (optionalTopic.isEmpty()) {
             throw new BadRequestHttpException("Empty Topic");
         }
-        Topic topic = optionalTopic.get();
 
         LearningDay learningDay = LearningDayFactory.createLearningDay(
                 learningDayRequest.getTitle(),
                 learningDayRequest.getDate(),
-                topic,
-                user
+                optionalTopic.get(),
+                optionalUser.get()
         );
 
         LearningDay result = learningDayRepository.save(learningDay);

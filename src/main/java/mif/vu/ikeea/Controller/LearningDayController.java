@@ -54,6 +54,18 @@ public class LearningDayController {
         return learningDayResponses;
     }
 
+    @GetMapping(path = "/{userId}/list")
+    public @ResponseBody List<LearningDayResponse> getUserLearningDaysList(@PathVariable Long userId) {
+        Iterable<LearningDay> learningDayIterable = learningDayRepository.findAllByUserId(userId);
+        List<LearningDayResponse> learningDayResponses = new ArrayList<>();
+
+        for (LearningDay learningDay : learningDayIterable) {
+            learningDayResponses.add(new LearningDayResponse(learningDay));
+        }
+
+        return learningDayResponses;
+    }
+
     @DeleteMapping(path = "/{id}/delete")
     public @ResponseBody void delete(@PathVariable Long id) { learningDayRepository.deleteById(id); }
 

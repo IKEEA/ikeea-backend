@@ -88,8 +88,7 @@ public class UserController {
             throw new BadRequestHttpException("Very bad");
         }
 
-        ApplicationUser user = optionalUser.get();
-        userManager.update(user, updateProfileRequest);
+        userManager.update(optionalUser.get(), updateProfileRequest);
 
         return ResponseEntity.ok(new ApiResponse(true, "User e-mail updated successfully"));
     }

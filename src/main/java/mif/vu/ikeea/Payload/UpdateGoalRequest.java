@@ -5,5 +5,5 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class UpdateGoalRequest extends GoalRequest{
+public class UpdateGoalRequest extends GoalRequest {
 }
