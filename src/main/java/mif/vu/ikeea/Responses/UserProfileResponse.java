@@ -2,14 +2,15 @@ package mif.vu.ikeea.Responses;
 
 import lombok.Getter;
 import lombok.Setter;
+import mif.vu.ikeea.Entity.Repository.LearningDayRepository;
 import mif.vu.ikeea.Entity.Role;
 import mif.vu.ikeea.Entity.ApplicationUser;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.*;
 
 @Getter @Setter
 public class UserProfileResponse {
-
     private Long id;
     private String firstName;
     private String lastName;
@@ -20,7 +21,7 @@ public class UserProfileResponse {
     private String managerFirstName = null;
     private String managerLastName = null;
     private String managerEmail = null;
-    private Integer learningDays;
+    private Integer restrictionDays;
 
     public UserProfileResponse(ApplicationUser user) {
         this.id = user.getId();
@@ -30,6 +31,7 @@ public class UserProfileResponse {
         this.enabled = user.getEnabled();
         this.roles = buildRolesName(user.getRoles());
         this.teamId = user.getTeam().getId();
+        this.restrictionDays = user.getRestrictionDays();
 
         ApplicationUser manager = user.getManager();
 
@@ -38,8 +40,6 @@ public class UserProfileResponse {
             this.managerLastName = manager.getLastName();
             this.managerEmail = manager.getEmail();
         }
-
-        //TODO learning days
     }
 
     private List<String> buildRolesName(Set<Role> roles) {
