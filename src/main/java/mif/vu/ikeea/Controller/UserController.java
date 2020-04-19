@@ -1,29 +1,28 @@
 package mif.vu.ikeea.Controller;
 
-import mif.vu.ikeea.Entity.Repository.UserRepository;
 import mif.vu.ikeea.Entity.ApplicationUser;
-import mif.vu.ikeea.Exceptions.BadRequestHttpException;
+import mif.vu.ikeea.Exceptions.DuplicateResourceException;
 import mif.vu.ikeea.Factory.MessageFactory;
 import mif.vu.ikeea.Mailer.EmailService;
 import mif.vu.ikeea.Manager.UserManager;
 import mif.vu.ikeea.Payload.UpdateProfileRequest;
+import mif.vu.ikeea.RepositoryService.UserService;
 import mif.vu.ikeea.Responses.ApiResponse;
 import mif.vu.ikeea.Responses.UserProfileResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Optional;
+import java.util.List;
 
 @RestController
 @RequestMapping(path="/api/user")
 public class UserController {
 
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
 
     @Autowired
     private UserManager userManager;
@@ -33,9 +32,8 @@ public class UserController {
 
     @PostMapping("/invite")
     public ResponseEntity<?> inviteUser(@Valid @RequestParam String email, Authentication authentication) {
-        if(userRepository.existsByEmail(email)) {
-            return new ResponseEntity(new ApiResponse(false, "Username is already taken!"),
-                    HttpStatus.BAD_REQUEST);
+        if (userService.existsByEmail(email)) {
+            throw new DuplicateResourceException("User with this email exist!");
         }
 
         ApplicationUser manager = (ApplicationUser) authentication.getPrincipal();
@@ -57,53 +55,36 @@ public class UserController {
 
     @GetMapping(path = "/{id}/get")
     public @ResponseBody UserProfileResponse get(@PathVariable Long id) {
-        Optional<ApplicationUser> optionalUser = userRepository.findById(id);
-        if (optionalUser.isEmpty()) {
-            throw new BadRequestHttpException("Empty User");
-        }
-        return new UserProfileResponse(optionalUser.get());
+        ApplicationUser user = userService.loadById(id);
+
+        return new UserProfileResponse(user);
     }
 
     @GetMapping(path = "/list")
-    public @ResponseBody Iterable<ApplicationUser> list(){
-        return userRepository.findAll();
+    public @ResponseBody List<ApplicationUser> list(){
+        return userService.getAll();
     }
 
     @DeleteMapping(path = "/{id}/delete")
     public @ResponseBody ResponseEntity delete(@PathVariable Long id) {
-        Optional<ApplicationUser> optionalUser = userRepository.findById(id);
+        userService.delete(id);
 
-        if (optionalUser.isEmpty()) {
-            throw new BadRequestHttpException("Empty User");
-        }
-        userRepository.deleteById(id);
         return ResponseEntity.ok(new ApiResponse(true,"User deleted successfully"));
     }
 
     @PutMapping(path = "/{id}/update")
     public @ResponseBody ResponseEntity updateEmail(@PathVariable Long id, @Valid @RequestBody UpdateProfileRequest updateProfileRequest) {
-        Optional<ApplicationUser> optionalUser = userRepository.findById(id);
-
-        if (optionalUser.isEmpty()) {
-            throw new BadRequestHttpException("Very bad");
-        }
-
-        userManager.update(optionalUser.get(), updateProfileRequest);
+        ApplicationUser user = userService.loadById(id);
+        userManager.update(user, updateProfileRequest);
 
         return ResponseEntity.ok(new ApiResponse(true, "User e-mail updated successfully"));
     }
 
     @PutMapping(path = "/{id}/update-restriction-days")
     public @ResponseBody ResponseEntity updateRestrictionDays(@PathVariable Long id, @RequestParam Integer restrictionDays) {
-        Optional<ApplicationUser> optionalUser = userRepository.findById(id);
-
-        if (optionalUser.isEmpty()) {
-            throw new BadRequestHttpException("User not found");
-        }
-
-        ApplicationUser user = optionalUser.get();
+        ApplicationUser user = userService.loadById(id);
         user.setRestrictionDays(restrictionDays);
-        userRepository.save(user);
+        userService.update(user);
 
         return ResponseEntity.ok(new ApiResponse(true, "User restriction days updated successfully"));
     }

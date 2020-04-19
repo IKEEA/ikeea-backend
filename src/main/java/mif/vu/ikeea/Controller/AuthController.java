@@ -1,15 +1,15 @@
 package mif.vu.ikeea.Controller;
 
-import mif.vu.ikeea.Entity.Repository.UserRepository;
 import mif.vu.ikeea.Entity.ApplicationUser;
+import mif.vu.ikeea.Exceptions.DuplicateResourceException;
 import mif.vu.ikeea.Manager.UserManager;
 import mif.vu.ikeea.Payload.RegistrationRequest;
+import mif.vu.ikeea.RepositoryService.UserService;
 import mif.vu.ikeea.Responses.ApiResponse;
 import mif.vu.ikeea.Responses.JwtAuthenticationResponse;
 import mif.vu.ikeea.Payload.LoginRequest;
 import mif.vu.ikeea.Security.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,7 +18,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/")
@@ -30,7 +29,7 @@ public class AuthController {
     JwtTokenProvider tokenProvider;
 
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
 
     @Autowired
     UserManager userManager;
@@ -53,35 +52,20 @@ public class AuthController {
 
     @PostMapping("/verify/{token}")
     public ResponseEntity<?> verifyToken(@PathVariable String token) {
-        Optional<ApplicationUser> optionalUser = userRepository.findByToken(token);
-
-        if (optionalUser.isEmpty()) {
-            return new ResponseEntity(new ApiResponse(false, "User with this token doesn't exist"),
-                    HttpStatus.BAD_REQUEST);
-        }
-
-        ApplicationUser user = optionalUser.get();
+        ApplicationUser user = userService.loadByToken(token);
 
         return ResponseEntity.ok(new ApiResponse(true, user.getEmail()));
     }
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody RegistrationRequest registrationRequest) {
-        Optional<ApplicationUser> optionalUser = userRepository.findByEmail(registrationRequest.getEmail());
-
-        if (optionalUser.isEmpty()) {
-            return new ResponseEntity(new ApiResponse(false, "User with that credentials doesn't exist"),
-                    HttpStatus.BAD_REQUEST);
-        }
-
-        ApplicationUser user = optionalUser.get();
+        ApplicationUser user = userService.findByEmail(registrationRequest.getEmail());
 
         if (user.getToken() == null) {
-            return new ResponseEntity(new ApiResponse(false, "User is already registered"),
-                    HttpStatus.BAD_REQUEST);
+            throw new DuplicateResourceException("User is already registered");
         }
 
-        userManager.finishRegistration(optionalUser.get(), registrationRequest);
+        userManager.finishRegistration(user, registrationRequest);
 
         return ResponseEntity.ok(new ApiResponse(true, "User register successfully"));
     }

@@ -8,8 +8,6 @@ import java.util.Optional;
 public interface UserRepository extends CrudRepository<ApplicationUser, Long> {
     Optional<ApplicationUser> findByEmail(String email);
 
-    Optional<ApplicationUser> findByTokenAndEmail(String token, String email);
-
     Optional<ApplicationUser> findByToken(String token);
 
     Boolean existsByEmail(String email);
