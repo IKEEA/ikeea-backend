@@ -2,6 +2,7 @@ package mif.vu.ikeea.Payload;
 
 import lombok.Getter;
 import lombok.Setter;
+import mif.vu.ikeea.Enums.EGoalStatus;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -13,7 +14,7 @@ public class GoalRequest {
 
     @NotBlank
     @Size(min = 1, max = 100)
-    private String status;
+    private EGoalStatus status;
 
     @NotNull
     private Long topicId;
