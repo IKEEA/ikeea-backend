@@ -7,7 +7,6 @@ import mif.vu.ikeea.Entity.ApplicationUser;
 import java.util.Collections;
 
 public class UserFactory {
-
     public static ApplicationUser createUser(String email, Role role, String password, ApplicationUser manager, Team team, String token) {
         ApplicationUser user = new ApplicationUser();
 

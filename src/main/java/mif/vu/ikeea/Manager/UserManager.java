@@ -27,6 +27,7 @@ public class UserManager
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    @Transactional
     public ApplicationUser create(String email, ApplicationUser manager) {
         String generatedPassword = TokenValueGenerator.generate();
         String password = passwordEncoder.encode(generatedPassword);
@@ -48,6 +49,7 @@ public class UserManager
         return result;
     }
 
+    @Transactional
     public void finishRegistration(ApplicationUser user, RegistrationRequest registrationRequest) {
         user.setEnabled(true);
         user.setFirstName(registrationRequest.getFirstName());
@@ -84,7 +86,8 @@ public class UserManager
         return result;
     }
 
-    public boolean checkIfValidOldPassword(ApplicationUser user, String oldPassword){
+    private boolean checkIfValidOldPassword(ApplicationUser user, String oldPassword) {
+        //TODO
         return passwordEncoder.matches(oldPassword, user.getPassword());
     }
 }

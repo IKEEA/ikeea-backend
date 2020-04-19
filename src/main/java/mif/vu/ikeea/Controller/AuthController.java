@@ -2,7 +2,6 @@ package mif.vu.ikeea.Controller;
 
 import mif.vu.ikeea.Entity.Repository.UserRepository;
 import mif.vu.ikeea.Entity.ApplicationUser;
-import mif.vu.ikeea.Exceptions.BadRequestHttpException;
 import mif.vu.ikeea.Manager.UserManager;
 import mif.vu.ikeea.Payload.RegistrationRequest;
 import mif.vu.ikeea.Responses.ApiResponse;

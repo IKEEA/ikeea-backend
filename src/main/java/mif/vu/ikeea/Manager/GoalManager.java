@@ -29,27 +29,26 @@ public class GoalManager {
     @Autowired
     private GoalRepository goalRepository;
 
+    @Transactional
     public Goal create(GoalRequest goalRequest) {
 
         Optional<ApplicationUser> optionalUser = userRepository.findById(goalRequest.getUserId());
+
         if (optionalUser.isEmpty()) {
             throw new BadRequestHttpException("User is empty");
         }
-        ApplicationUser user = optionalUser.get();
 
         Optional<Topic> optionalTopic = topicRepository.findById(goalRequest.getTopicId());
+
         if (optionalTopic.isEmpty()) {
             throw new BadRequestHttpException("Topic is empty");
         }
-        Topic topic = optionalTopic.get();
-
-        Date lastUpdated = new Date();
 
         Goal goal = GoalFactory.createGoal(
-                lastUpdated,
+                new Date(),
                 goalRequest.getStatus(),
-                topic,
-                user
+                optionalTopic.get(),
+                optionalUser.get()
         );
 
         Goal result = goalRepository.save(goal);

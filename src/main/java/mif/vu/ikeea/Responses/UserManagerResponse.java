@@ -20,6 +20,4 @@ public class UserManagerResponse {
         this.email = applicationUser.getEmail();
         this.restrictionDays = applicationUser.getRestrictionDays();
     }
-
-
 }

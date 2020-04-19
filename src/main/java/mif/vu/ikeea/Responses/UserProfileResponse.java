@@ -33,12 +33,10 @@ public class UserProfileResponse {
         this.teamId = user.getTeam().getId();
         this.restrictionDays = user.getRestrictionDays();
 
-        ApplicationUser manager = user.getManager();
-
-        if (manager != null) {
-            this.managerFirstName = manager.getFirstName();
-            this.managerLastName = manager.getLastName();
-            this.managerEmail = manager.getEmail();
+        if (user.getManager() != null) {
+            this.managerFirstName = user.getManager().getFirstName();
+            this.managerLastName = user.getManager().getLastName();
+            this.managerEmail = user.getManager().getEmail();
         }
     }
 

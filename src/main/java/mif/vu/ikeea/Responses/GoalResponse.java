@@ -6,8 +6,7 @@ import mif.vu.ikeea.Entity.Goal;
 
 import java.util.Date;
 
-@Setter
-@Getter
+@Setter @Getter
 public class GoalResponse {
 
     private Long id;
