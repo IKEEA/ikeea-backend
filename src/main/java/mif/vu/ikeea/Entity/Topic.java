@@ -21,12 +21,8 @@ public class Topic {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "difficulty", nullable = false)
-    @Size(max = 3)
-    private Integer difficulty;
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "topic")
-    private List<Subtopic> subtopics = new ArrayList<>();
+    @Column(name = "parent_id")
+    private Long parentId;
 
     @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinTable(name = "topic_learningday",

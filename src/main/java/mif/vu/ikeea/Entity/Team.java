@@ -18,9 +18,6 @@ public class Team {
     @Column(name = "title", unique = true, nullable = false)
     private String title;
 
-    @Column(name = "description")
-    private String description;
-
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "team")
     private List<ApplicationUser> users = new ArrayList<>();
 

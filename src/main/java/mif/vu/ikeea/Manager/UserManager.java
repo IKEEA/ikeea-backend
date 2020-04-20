@@ -4,12 +4,13 @@ import mif.vu.ikeea.Entity.Repository.RoleRepository;
 import mif.vu.ikeea.Entity.Role;
 import mif.vu.ikeea.Entity.ApplicationUser;
 import mif.vu.ikeea.Enums.ERole;
-import mif.vu.ikeea.Exceptions.ResourceNotFoundException;
+import mif.vu.ikeea.Exceptions.*;
 import mif.vu.ikeea.Factory.UserFactory;
 import mif.vu.ikeea.Generator.TokenValueGenerator;
 import mif.vu.ikeea.Payload.RegistrationRequest;
 import mif.vu.ikeea.Payload.UpdateProfileRequest;
 import mif.vu.ikeea.RepositoryService.UserService;
+import mif.vu.ikeea.Responses.UserProfileResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -62,7 +63,7 @@ public class UserManager
     }
 
     @Transactional
-    public void update(ApplicationUser user, UpdateProfileRequest userProfileRequest) {
+    public UserProfileResponse update(ApplicationUser user, UpdateProfileRequest userProfileRequest) {
 
         if (userProfileRequest.getEmail() != null) {
             user.setEmail(userProfileRequest.getEmail());
@@ -77,15 +78,23 @@ public class UserManager
         }
 
         if (userProfileRequest.getPassword() != null) {
-            String userPassword = passwordEncoder.encode(userProfileRequest.getPassword());
-            user.setPassword(userPassword);
+            if (userProfileRequest.getOldPassword() != null){
+                if(checkIfValidPassword(user, userProfileRequest.getOldPassword())) {
+                    String userPassword = passwordEncoder.encode(userProfileRequest.getPassword());
+                    if(!checkIfValidPassword(user, userProfileRequest.getPassword())) {
+                        user.setPassword(userPassword);
+                    } else throw new PasswordMatchException("You can't use old password!");
+                } else throw new PasswordDoesNotMatchException("Entered passwords doesn't match!");
+            }
         }
 
         userService.update(user);
+        return new UserProfileResponse(user);
     }
 
-    private boolean checkIfValidOldPassword(ApplicationUser user, String oldPassword) {
+    public boolean checkIfValidPassword(ApplicationUser user, String password) {
         //TODO
-        return passwordEncoder.matches(oldPassword, user.getPassword());
+        return passwordEncoder.matches(password, user.getPassword());
     }
+
 }
