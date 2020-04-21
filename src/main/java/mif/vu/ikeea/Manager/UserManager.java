@@ -41,7 +41,6 @@ public class UserManager
                 role,
                 password,
                 manager,
-                manager.getTeam(),
                 TokenValueGenerator.generate()
         );
 

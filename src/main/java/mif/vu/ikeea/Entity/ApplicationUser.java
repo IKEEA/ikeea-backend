@@ -14,10 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "user",
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = "email")
-        })
+@Table(name = "user")
 @Getter @Setter
 public class ApplicationUser {
     @Id
@@ -48,7 +45,7 @@ public class ApplicationUser {
     @Column(name = "restriciton_days", columnDefinition = "integer default 3")
     private Integer restrictionDays = 3;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -68,6 +65,9 @@ public class ApplicationUser {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
     private List<LearningDay> learningDays = new ArrayList<>();
 
+    @OneToMany(mappedBy="manager", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval=true)
+    private List<ApplicationUser> children = new ArrayList<>();
+
     public List<ERole> getRoleNames() {
         List<ERole> roleNames = new ArrayList<>();
 
@@ -76,5 +76,10 @@ public class ApplicationUser {
         }
 
         return roleNames;
+    }
+
+    public void setManagerWithChild(ApplicationUser manager) {
+        this.manager = manager;
+        manager.getChildren().add(this);
     }
 }
