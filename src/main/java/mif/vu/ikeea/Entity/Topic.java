@@ -21,12 +21,11 @@ public class Topic {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "difficulty", nullable = false)
-    @Size(max = 3)
-    private Integer difficulty;
+    @ManyToOne(fetch = FetchType.LAZY, optional=true)
+    private Topic parent;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "topic")
-    private List<Subtopic> subtopics = new ArrayList<>();
+    @OneToMany(mappedBy="parent", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval=true)
+    private List<Topic> children = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinTable(name = "topic_learningday",

@@ -14,6 +14,7 @@ public class GoalResponse {
     private Date lastUpdated;
     private EGoalStatus status;
     private Long topicId;
+    private String topicTitle;
     private Long userId;
 
     public GoalResponse(Goal goal) {
@@ -21,6 +22,7 @@ public class GoalResponse {
         this.lastUpdated = goal.getLastUpdate();
         this.status = goal.getStatus();
         this.topicId = goal.getTopic().getId();
+        this.topicTitle = goal.getTopic().getTitle();
         this.userId = goal.getUser().getId();
     }
 }

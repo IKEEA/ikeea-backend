@@ -2,6 +2,7 @@ package mif.vu.ikeea.Controller;
 
 import mif.vu.ikeea.Entity.ApplicationUser;
 import mif.vu.ikeea.Exceptions.DuplicateResourceException;
+import mif.vu.ikeea.Exceptions.ResourceNotFoundException;
 import mif.vu.ikeea.Factory.MessageFactory;
 import mif.vu.ikeea.Mailer.EmailService;
 import mif.vu.ikeea.Manager.UserManager;
@@ -60,11 +61,6 @@ public class UserController {
         return new UserProfileResponse(user);
     }
 
-    @GetMapping(path = "/list")
-    public @ResponseBody List<ApplicationUser> list(){
-        return userService.getAll();
-    }
-
     @DeleteMapping(path = "/{id}/delete")
     public @ResponseBody ResponseEntity delete(@PathVariable Long id) {
         userService.delete(id);
@@ -73,11 +69,10 @@ public class UserController {
     }
 
     @PutMapping(path = "/{id}/update")
-    public @ResponseBody ResponseEntity updateEmail(@PathVariable Long id, @Valid @RequestBody UpdateProfileRequest updateProfileRequest) {
+    public @ResponseBody UserProfileResponse update(@PathVariable Long id, @Valid @RequestBody UpdateProfileRequest updateProfileRequest) {
         ApplicationUser user = userService.loadById(id);
-        userManager.update(user, updateProfileRequest);
 
-        return ResponseEntity.ok(new ApiResponse(true, "User e-mail updated successfully"));
+        return userManager.update(user, updateProfileRequest);
     }
 
     @PutMapping(path = "/{id}/update-restriction-days")
