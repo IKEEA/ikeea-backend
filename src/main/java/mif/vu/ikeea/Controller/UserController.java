@@ -72,9 +72,6 @@ public class UserController {
     public @ResponseBody UserProfileResponse update(@PathVariable Long id, @Valid @RequestBody UpdateProfileRequest updateProfileRequest) {
         ApplicationUser user = userService.loadById(id);
 
-      //  userManager.update(user, updateProfileRequest);
-
-      //  return ResponseEntity.ok(new ApiResponse(true, "User updated successfully"));
         return userManager.update(user, updateProfileRequest);
     }
 

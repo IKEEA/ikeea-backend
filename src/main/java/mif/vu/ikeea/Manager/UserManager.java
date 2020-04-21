@@ -82,15 +82,20 @@ public class UserManager
         }
 
         userService.update(user);
+
         return new UserProfileResponse(user);
     }
 
-    public boolean checkIfValidPassword(ApplicationUser user, String password) {
+    private boolean checkIfValidPassword(ApplicationUser user, String password) {
         return passwordEncoder.matches(password, user.getPassword());
     }
 
     private void updatePassword(ApplicationUser user, UpdateProfileRequest profileRequest) {
         if (!checkIfValidPassword(user, profileRequest.getOldPassword())) {
+            throw new PasswordDoesNotMatchException("Your old password doesn't match!");
+        }
+
+        if (checkIfValidPassword(user, profileRequest.getPassword())) {
             throw new PasswordMatchException("You can't use old password!");
         }
 

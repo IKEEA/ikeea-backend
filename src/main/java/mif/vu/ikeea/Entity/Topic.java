@@ -21,8 +21,16 @@ public class Topic {
     @Column(name = "description")
     private String description;
 
+    @Transient
     @Column(name = "parent_id")
     private Long parentId;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional=true)
+    @JoinColumn(name="parent_id")
+    private Topic parent;
+
+    @OneToMany(mappedBy="parent", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval=true)
+    private List<Topic> childrenList = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinTable(name = "topic_learningday",
