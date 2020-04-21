@@ -77,15 +77,8 @@ public class UserManager
             user.setLastName(userProfileRequest.getLastName());
         }
 
-        if (userProfileRequest.getPassword() != null) {
-            if (userProfileRequest.getOldPassword() != null){
-                if(checkIfValidPassword(user, userProfileRequest.getOldPassword())) {
-                    String userPassword = passwordEncoder.encode(userProfileRequest.getPassword());
-                    if(!checkIfValidPassword(user, userProfileRequest.getPassword())) {
-                        user.setPassword(userPassword);
-                    } else throw new PasswordMatchException("You can't use old password!");
-                } else throw new PasswordDoesNotMatchException("Entered passwords doesn't match!");
-            }
+        if (userProfileRequest.getPassword() != null && userProfileRequest.getOldPassword() != null) {
+            updatePassword(user, userProfileRequest);
         }
 
         userService.update(user);
@@ -93,8 +86,15 @@ public class UserManager
     }
 
     public boolean checkIfValidPassword(ApplicationUser user, String password) {
-        //TODO
         return passwordEncoder.matches(password, user.getPassword());
     }
 
+    private void updatePassword(ApplicationUser user, UpdateProfileRequest profileRequest) {
+        if (!checkIfValidPassword(user, profileRequest.getOldPassword())) {
+            throw new PasswordMatchException("You can't use old password!");
+        }
+
+        String userPassword = passwordEncoder.encode(profileRequest.getPassword());
+        user.setPassword(userPassword);
+    }
 }
