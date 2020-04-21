@@ -17,14 +17,11 @@ public class TopicResponse {
     private String description;
     private List<TopicResponse> topicResponses;
 
-    @Autowired
-    private TopicService topicService;
-
     public TopicResponse(Topic topic) {
         this.id = topic.getId();
         this.title = topic.getTitle();
         this.description = topic.getDescription();
-        this.topicResponses = getTopicChildrenList(topic.getChildrenList());
+        this.topicResponses = getTopicChildrenList(topic.getChildren());
     }
 
     private List<TopicResponse> getTopicChildrenList(List<Topic> topics){
