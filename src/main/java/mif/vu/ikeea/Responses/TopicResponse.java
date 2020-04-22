@@ -3,8 +3,6 @@ package mif.vu.ikeea.Responses;
 import lombok.Getter;
 import lombok.Setter;
 import mif.vu.ikeea.Entity.Topic;
-import mif.vu.ikeea.RepositoryService.TopicService;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,16 +13,16 @@ public class TopicResponse {
     private Long id;
     private String title;
     private String description;
-    private List<TopicResponse> topicResponses;
+    private List<TopicResponse> children;
 
     public TopicResponse(Topic topic) {
         this.id = topic.getId();
         this.title = topic.getTitle();
         this.description = topic.getDescription();
-        this.topicResponses = getTopicChildrenList(topic.getChildren());
+        this.children = getChildrenList(topic.getChildren());
     }
 
-    private List<TopicResponse> getTopicChildrenList(List<Topic> topics){
+    private List<TopicResponse> getChildrenList(List<Topic> topics) {
         List<TopicResponse> topicResponses = new ArrayList<>();
 
         for (Topic topic : topics) {
