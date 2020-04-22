@@ -15,6 +15,5 @@ public class TopicRequest {
     @Size(min = 3, max = 255)
     private String description;
 
-    @Size(min = 1, max = 10)
     private Long parent;
 }
