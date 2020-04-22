@@ -3,12 +3,14 @@ package mif.vu.ikeea.Manager;
 import mif.vu.ikeea.Entity.Repository.RoleRepository;
 import mif.vu.ikeea.Entity.Role;
 import mif.vu.ikeea.Entity.ApplicationUser;
+import mif.vu.ikeea.Entity.Team;
 import mif.vu.ikeea.Enums.ERole;
 import mif.vu.ikeea.Exceptions.*;
 import mif.vu.ikeea.Factory.UserFactory;
 import mif.vu.ikeea.Generator.TokenValueGenerator;
 import mif.vu.ikeea.Payload.RegistrationRequest;
 import mif.vu.ikeea.Payload.UpdateProfileRequest;
+import mif.vu.ikeea.RepositoryService.TeamService;
 import mif.vu.ikeea.RepositoryService.UserService;
 import mif.vu.ikeea.Responses.UserProfileResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,9 @@ public class UserManager
     private UserService userService;
 
     @Autowired
+    private TeamService teamService;
+
+    @Autowired
     private RoleRepository roleRepository;
 
     @Autowired
@@ -32,6 +37,7 @@ public class UserManager
     public ApplicationUser create(String email, ApplicationUser manager) {
         String generatedPassword = TokenValueGenerator.generate();
         String password = passwordEncoder.encode(generatedPassword);
+        Team team = teamService.loadByManagerId(manager.getId());
 
         Role role = roleRepository.findByName(ERole.DEVELOPER)
                 .orElseThrow(() -> new ResourceNotFoundException("User Role not set."));
@@ -41,6 +47,7 @@ public class UserManager
                 role,
                 password,
                 manager,
+                team,
                 TokenValueGenerator.generate()
         );
 
