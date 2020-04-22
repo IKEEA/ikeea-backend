@@ -4,16 +4,17 @@ import lombok.Getter;
 import lombok.Setter;
 import mif.vu.ikeea.Enums.EGoalStatus;
 
-import javax.validation.constraints.NotBlank;
+import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 @Getter
 @Setter
 public class GoalRequest {
 
-    @NotBlank
-    @Size(min = 1, max = 100)
+    @Enumerated(EnumType.STRING)
+    @Column(length = 30)
     private EGoalStatus status;
 
     @NotNull
