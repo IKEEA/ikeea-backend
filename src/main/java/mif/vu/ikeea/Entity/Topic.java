@@ -21,13 +21,13 @@ public class Topic {
     @Column(name = "description")
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional=true)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Topic parent;
 
     @OneToMany(mappedBy="parent", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval=true)
     private List<Topic> children = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "topic_learningday",
                 joinColumns = {@JoinColumn(name = "topic_id")},
                 inverseJoinColumns = {@JoinColumn(name = "learning_day_id")},
