@@ -27,8 +27,8 @@ public class Topic {
     @OneToMany(mappedBy="parent", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval=true)
     private List<Topic> children = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "topic_learningday",
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "topic_learning_day",
                 joinColumns = {@JoinColumn(name = "topic_id")},
                 inverseJoinColumns = {@JoinColumn(name = "learning_day_id")},
             uniqueConstraints = {@UniqueConstraint(

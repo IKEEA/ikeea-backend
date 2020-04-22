@@ -1,8 +1,7 @@
 package mif.vu.ikeea.Controller;
 
 import mif.vu.ikeea.Entity.ApplicationUser;
-import mif.vu.ikeea.Entity.Team;
-import mif.vu.ikeea.RepositoryService.TeamService;
+import mif.vu.ikeea.Factory.UserManagerResponseFactory;
 import mif.vu.ikeea.RepositoryService.UserService;
 import mif.vu.ikeea.Responses.UserManagerResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +17,6 @@ public class ManagerController {
     @Autowired
     UserService userService;
 
-    @Autowired
-    TeamService teamService;
-
     @GetMapping(path = "/{id}/users")
     public @ResponseBody
     List<UserManagerResponse> list(@PathVariable Long id) {
@@ -28,13 +24,12 @@ public class ManagerController {
         //TODO add check if this user has manager role
 
         ApplicationUser manager = userService.loadById(id);
-        Team team = teamService.getTeamByManager(manager.getId());
-
-        List<ApplicationUser> users = team.getUsers();
+        List<ApplicationUser> childUsers = manager.getChildren();
         List<UserManagerResponse> userManagerResponses = new ArrayList<>();
 
-        for (ApplicationUser applicationUser : users) {
-            userManagerResponses.add(new UserManagerResponse(applicationUser));
+        for (ApplicationUser user : childUsers) {
+            UserManagerResponse response = UserManagerResponseFactory.create(user, user.getChildren());
+            userManagerResponses.add(response);
         }
 
         return userManagerResponses;

@@ -2,7 +2,6 @@ package mif.vu.ikeea.Controller;
 
 import mif.vu.ikeea.Entity.ApplicationUser;
 import mif.vu.ikeea.Exceptions.DuplicateResourceException;
-import mif.vu.ikeea.Exceptions.ResourceNotFoundException;
 import mif.vu.ikeea.Factory.MessageFactory;
 import mif.vu.ikeea.Mailer.EmailService;
 import mif.vu.ikeea.Manager.UserManager;
@@ -16,7 +15,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping(path="/api/user")
