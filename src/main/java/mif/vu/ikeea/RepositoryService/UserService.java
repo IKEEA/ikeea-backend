@@ -14,12 +14,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class UserService implements UserDetailsService {
     @Autowired
     UserRepository userRepository;
 
+    @Transactional
     public ApplicationUser add(ApplicationUser user) {
         return userRepository.save(user);
     }
@@ -32,6 +34,7 @@ public class UserService implements UserDetailsService {
         userRepository.deleteById(id);
     }
 
+    @Transactional
     public void update(ApplicationUser user) {
         userRepository.save(user);
     }
@@ -90,6 +93,13 @@ public class UserService implements UserDetailsService {
                 );
 
         return user;
+    }
+
+    @Transactional
+    public Integer updateRestrictionDays(Integer restrictionDays, Set<Long> ids) {
+        Integer updatedRows = userRepository.updateRestrictionDays(restrictionDays, ids);
+
+        return updatedRows;
     }
 
     public List<ApplicationUser> getAll() {
