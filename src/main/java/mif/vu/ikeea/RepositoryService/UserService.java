@@ -24,7 +24,11 @@ public class UserService implements UserDetailsService {
         return userRepository.save(user);
     }
 
+    @Transactional
     public void delete(Long id) {
+        ApplicationUser user = loadById(id);
+        ApplicationUser manager = user.getManager();
+        manager.getChildren().remove(user);
         userRepository.deleteById(id);
     }
 
