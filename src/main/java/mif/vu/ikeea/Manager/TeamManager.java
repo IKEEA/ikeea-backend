@@ -18,8 +18,7 @@ public class TeamManager {
 
     private final Set<Long> userIds = new HashSet<>();
 
-    public void updateRestrictionDay(Team team, Integer restrictionDays) {
-        List<ApplicationUser> users = team.getUsers();
+    public void updateRestrictionDay(List<ApplicationUser> users, Integer restrictionDays) {
         Set<Long> userIds = collectUserIds(users);
         userService.updateRestrictionDays(restrictionDays, userIds);
     }
