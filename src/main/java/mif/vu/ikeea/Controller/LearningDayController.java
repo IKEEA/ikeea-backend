@@ -32,9 +32,9 @@ public class LearningDayController {
         return ResponseEntity.ok(new ApiResponse(true, "Learning day added successfully"));
     }
 
-    @GetMapping(path = "/list")
-    public @ResponseBody List<LearningDayResponse> list() {
-        List<LearningDay> learningDays = learningDayService.getAll();
+    /*@GetMapping(path = "/{managerId}/list")
+    public @ResponseBody List<LearningDayResponse> getLearningDaysList(@PathVariable Long managerId) {
+        List<LearningDay> learningDays = learningDayService.getAllByManagerId(managerId);
         List<LearningDayResponse> learningDayResponses = new ArrayList<>();
 
         for (LearningDay learningDay : learningDays) {
@@ -42,7 +42,7 @@ public class LearningDayController {
         }
 
         return learningDayResponses;
-    }
+    }*/
 
     @GetMapping(path = "/{userId}/list")
     public @ResponseBody List<LearningDayResponse> getUserLearningDaysList(@PathVariable Long userId) {

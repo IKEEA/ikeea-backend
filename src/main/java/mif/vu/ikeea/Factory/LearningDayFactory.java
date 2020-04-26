@@ -7,14 +7,12 @@ import mif.vu.ikeea.Entity.Topic;
 import java.util.Date;
 
 public class LearningDayFactory {
-    public static LearningDay createLearningDay(String title, Date date, Topic topic, ApplicationUser user) {
+    public static LearningDay createLearningDay(String title, Date date, ApplicationUser user) {
         LearningDay learningDay = new LearningDay();
 
         learningDay.setTitle(title);
         learningDay.setDate(date);
         learningDay.setUser(user);
-        learningDay.getTopics().add(topic);
-        topic.getLearningDays().add(learningDay);
 
         return learningDay;
     }

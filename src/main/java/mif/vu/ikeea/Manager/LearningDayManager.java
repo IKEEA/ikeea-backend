@@ -2,7 +2,10 @@ package mif.vu.ikeea.Manager;
 
 import mif.vu.ikeea.Entity.ApplicationUser;
 import mif.vu.ikeea.Entity.LearningDay;
+import mif.vu.ikeea.Entity.Role;
 import mif.vu.ikeea.Entity.Topic;
+import mif.vu.ikeea.Enums.ERole;
+import mif.vu.ikeea.Exceptions.ResourceNotFoundException;
 import mif.vu.ikeea.Factory.LearningDayFactory;
 import mif.vu.ikeea.Payload.LearningDayRequest;
 import mif.vu.ikeea.Payload.UpdateLearningDayRequest;
@@ -37,19 +40,19 @@ public class LearningDayManager {
         List<Long> topicIds = learningDayRequest.getTopicIds();
         List<LearningDay> learningDayList = new ArrayList<>();
 
-        Topic topic = topicService.loadById(topicIds.get(0));
-
         LearningDay learningDay = LearningDayFactory.createLearningDay(
                 learningDayRequest.getTitle(),
                 learningDayRequest.getDate(),
-                topic,
                 user
         );
 
         LearningDay result = learningDayService.add(learningDay);
         learningDayList.add(result);
 
-        learningDayList = learningDayService.addTopics(topicIds, learningDay, learningDayList);
+        if(topicIds.size() > 0) {
+            learningDayList = learningDayService.addTopics(topicIds, learningDay, learningDayList);
+
+        }
 
         return learningDayList;
     }

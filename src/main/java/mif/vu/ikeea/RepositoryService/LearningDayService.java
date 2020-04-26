@@ -22,6 +22,9 @@ public class LearningDayService {
     @Autowired
     private TopicService topicService;
 
+    //@Autowired
+    //private UserService userService;
+
     @Transactional
     public LearningDay add(LearningDay learningDay) {
         return learningDayRepository.save(learningDay);
@@ -40,17 +43,14 @@ public class LearningDayService {
     @Transactional
     public List<LearningDay> addTopics(List<Long> topicIds, LearningDay learningDay, List<LearningDay> learningDayList) {
 
-        topicIds.remove(0);
-        if(topicIds != null) {
-            for (Long topicId : topicIds) {
-                Topic additionalTopic = topicService.loadById(topicId);
+        for (Long topicId : topicIds) {
+            Topic additionalTopic = topicService.loadById(topicId);
 
-                learningDay.getTopics().add(additionalTopic);
-                additionalTopic.getLearningDays().add(learningDay);
+            learningDay.getTopics().add(additionalTopic);
+            additionalTopic.getLearningDays().add(learningDay);
 
-                LearningDay additionalResult = learningDayService.add(learningDay);
-                learningDayList.add(additionalResult);
-            }
+            LearningDay additionalResult = learningDayService.add(learningDay);
+            learningDayList.add(additionalResult);
         }
 
         return learningDayList;
@@ -94,4 +94,16 @@ public class LearningDayService {
 
         return learningDays;
     }
+
+    /*public List<LearningDay> getAllByManagerId(Long userId) {
+        List<ApplicationUser> applicationUsers = userService.getAllByManagerId(userId);
+        List<LearningDay> learningDays = new ArrayList<>();
+
+        for(ApplicationUser applicationUser : applicationUsers) {
+            Iterable<LearningDay> learningDayIterable = learningDayRepository.findAllByUserId(applicationUser.getId());
+            learningDayIterable.forEach(learningDays::add);
+        }
+
+        return learningDays;
+    }*/
 }
