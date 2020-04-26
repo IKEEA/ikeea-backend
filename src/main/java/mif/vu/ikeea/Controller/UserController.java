@@ -2,6 +2,8 @@ package mif.vu.ikeea.Controller;
 
 import mif.vu.ikeea.Entity.ApplicationUser;
 import mif.vu.ikeea.Exceptions.DuplicateResourceException;
+import mif.vu.ikeea.Exceptions.InvalidUserRoleException;
+import mif.vu.ikeea.Exceptions.PasswordMatchException;
 import mif.vu.ikeea.Factory.MessageFactory;
 import mif.vu.ikeea.Mailer.EmailService;
 import mif.vu.ikeea.Manager.UserManager;
@@ -37,7 +39,9 @@ public class UserController {
 
         ApplicationUser manager = (ApplicationUser) authentication.getPrincipal();
 
-        //TODO add check if this user has manager role
+        if(!userManager.checkIfValidRole(manager))
+            throw new InvalidUserRoleException("Invalid user role");
+
         ApplicationUser user = userManager.create(email, manager);
         String message = MessageFactory.verifyEmail(user.getToken());
         emailService.sendSimpleMessage(user.getEmail(), "Verify your account", message);

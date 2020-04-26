@@ -18,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Component
 public class UserManager
 {
@@ -107,5 +109,14 @@ public class UserManager
 
         String userPassword = passwordEncoder.encode(profileRequest.getPassword());
         user.setPassword(userPassword);
+    }
+
+    public boolean checkIfValidRole(ApplicationUser user){
+        List<ERole> roleNames = user.getRoleNames();
+        for (ERole role: roleNames){
+            if(role == ERole.LEADER)
+                return true;
+        }
+        return false;
     }
 }

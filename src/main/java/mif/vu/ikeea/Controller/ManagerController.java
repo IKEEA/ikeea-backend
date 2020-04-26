@@ -1,7 +1,9 @@
 package mif.vu.ikeea.Controller;
 
 import mif.vu.ikeea.Entity.ApplicationUser;
+import mif.vu.ikeea.Exceptions.InvalidUserRoleException;
 import mif.vu.ikeea.Factory.UserManagerResponseFactory;
+import mif.vu.ikeea.Manager.UserManager;
 import mif.vu.ikeea.RepositoryService.UserService;
 import mif.vu.ikeea.Responses.UserManagerResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +19,18 @@ public class ManagerController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    private UserManager userManager;
+
     @GetMapping(path = "/{id}/users")
     public @ResponseBody
     List<UserManagerResponse> list(@PathVariable Long id) {
 
-        //TODO add check if this user has manager role
-
         ApplicationUser manager = userService.loadById(id);
+
+        if(!userManager.checkIfValidRole(manager))
+            throw new InvalidUserRoleException("Invalid user role");
+
         List<ApplicationUser> childUsers = manager.getChildren();
         List<UserManagerResponse> userManagerResponses = new ArrayList<>();
 
