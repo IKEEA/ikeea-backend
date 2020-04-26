@@ -3,6 +3,7 @@ package mif.vu.ikeea.Controller;
 import mif.vu.ikeea.Entity.LearningDay;
 import mif.vu.ikeea.Manager.LearningDayManager;
 import mif.vu.ikeea.Payload.LearningDayRequest;
+import mif.vu.ikeea.Payload.UpdateLearningDayRequest;
 import mif.vu.ikeea.RepositoryService.LearningDayService;
 import mif.vu.ikeea.Responses.ApiResponse;
 import mif.vu.ikeea.Responses.LearningDayResponse;
@@ -59,10 +60,9 @@ public class LearningDayController {
     public @ResponseBody void delete(@PathVariable Long id) { learningDayService.delete(id); }
 
     @PutMapping(path = "/{id}/update")
-    public @ResponseBody ResponseEntity updateLearningDay(@PathVariable Long id, @RequestBody LearningDayRequest learningDayRequest) {
+    public @ResponseBody ResponseEntity updateLearningDay(@PathVariable Long id, @RequestBody UpdateLearningDayRequest updateLearningDayRequest) {
         LearningDay learningDay = learningDayService.loadById(id);
-        learningDay.setDate(learningDayRequest.getDate());
-        learningDayService.update(learningDay);
+        learningDayManager.update(learningDay, updateLearningDayRequest);
 
         return ResponseEntity.ok(new ApiResponse(true, "Learning day updated successfully"));
     }

@@ -2,6 +2,7 @@ package mif.vu.ikeea.RepositoryService;
 
 import mif.vu.ikeea.Entity.LearningDay;
 import mif.vu.ikeea.Entity.Repository.LearningDayRepository;
+import mif.vu.ikeea.Entity.Topic;
 import mif.vu.ikeea.Exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,12 @@ import java.util.List;
 public class LearningDayService {
     @Autowired
     private LearningDayRepository learningDayRepository;
+
+    @Autowired
+    private LearningDayService learningDayService;
+
+    @Autowired
+    private TopicService topicService;
 
     @Transactional
     public LearningDay add(LearningDay learningDay) {
@@ -28,6 +35,38 @@ public class LearningDayService {
     @Transactional
     public void update(LearningDay learningDay) {
         learningDayRepository.save(learningDay);
+    }
+
+    @Transactional
+    public List<LearningDay> addTopics(List<Long> topicIds, LearningDay learningDay, List<LearningDay> learningDayList) {
+
+        topicIds.remove(0);
+        if(topicIds != null) {
+            for (Long topicId : topicIds) {
+                Topic additionalTopic = topicService.loadById(topicId);
+
+                learningDay.getTopics().add(additionalTopic);
+                additionalTopic.getLearningDays().add(learningDay);
+
+                LearningDay additionalResult = learningDayService.add(learningDay);
+                learningDayList.add(additionalResult);
+            }
+        }
+
+        return learningDayList;
+    }
+
+    @Transactional
+    public void updateTopics(List<Long> topicIds, LearningDay learningDay) {
+
+        for (Long topicId : topicIds) {
+            Topic additionalTopic = topicService.loadById(topicId);
+
+            learningDay.getTopics().add(additionalTopic);
+            additionalTopic.getLearningDays().add(learningDay);
+
+            learningDayService.add(learningDay);
+        }
     }
 
     @Transactional
