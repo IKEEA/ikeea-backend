@@ -11,6 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 @Component
 public class TeamManager {
 
@@ -45,5 +49,21 @@ public class TeamManager {
         }
 
         teamService.update(team);
+    }
+
+    private final Set<Long> userIds = new HashSet<>();
+
+    public void updateRestrictionDay(List<ApplicationUser> users, Integer restrictionDays) {
+        Set<Long> userIds = collectUserIds(users);
+        userService.updateRestrictionDays(restrictionDays, userIds);
+    }
+
+    private Set<Long> collectUserIds(List<ApplicationUser> userList) {
+        for (ApplicationUser user : userList) {
+            userIds.add(user.getId());
+            collectUserIds(user.getChildren());
+        }
+
+        return userIds;
     }
 }

@@ -1,10 +1,12 @@
 package mif.vu.ikeea.Controller;
 
+import mif.vu.ikeea.Entity.ApplicationUser;
 import mif.vu.ikeea.Entity.Team;
 import mif.vu.ikeea.Manager.TeamManager;
 import mif.vu.ikeea.Payload.TeamRequest;
 import mif.vu.ikeea.Payload.UpdateTeamRequest;
 import mif.vu.ikeea.RepositoryService.TeamService;
+import mif.vu.ikeea.RepositoryService.UserService;
 import mif.vu.ikeea.Responses.ApiResponse;
 import mif.vu.ikeea.Responses.TeamResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +21,16 @@ import java.util.List;
 @RequestMapping(path="/api/team")
 public class TeamController {
 
+
     @Autowired
     TeamService teamService;
 
     @Autowired
     private TeamManager teamManager;
+
+    @Autowired
+    private UserService userService;
+
 
     @PostMapping("/add")
     public ResponseEntity<?> createTeam(@Valid @RequestBody TeamRequest teamRequest) {
@@ -75,4 +82,13 @@ public class TeamController {
 
         return new TeamResponse(team);
     }
+
+    @PostMapping(path = "/{managerId}/set-restriction-days")
+    public @ResponseBody ResponseEntity setRestrictionDays(@PathVariable Long managerId, @RequestParam Integer restrictionDays) {
+        ApplicationUser manager = userService.loadById(managerId);
+        teamManager.updateRestrictionDay(manager.getChildren(), restrictionDays);
+
+        return ResponseEntity.ok(new ApiResponse(true, "Team restriction days updated successfully"));
+    }
 }
+
