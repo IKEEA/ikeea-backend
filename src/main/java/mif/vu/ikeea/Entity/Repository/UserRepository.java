@@ -1,7 +1,6 @@
 package mif.vu.ikeea.Entity.Repository;
 
 import mif.vu.ikeea.Entity.ApplicationUser;
-import mif.vu.ikeea.Entity.LearningDay;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -19,7 +18,7 @@ public interface UserRepository extends CrudRepository<ApplicationUser, Long> {
 
     Boolean existsByEmail(String email);
 
-    //Iterable<ApplicationUser> findAllByUserId(Long userId);
+    Iterable<ApplicationUser> findAllByManagerId(Long userId);
 
     @Modifying
     @Query("UPDATE ApplicationUser u SET u.restrictionDays = :restrictionDays WHERE u.id IN (:ids)")

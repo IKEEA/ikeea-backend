@@ -1,5 +1,6 @@
 package mif.vu.ikeea.RepositoryService;
 
+import mif.vu.ikeea.Entity.ApplicationUser;
 import mif.vu.ikeea.Entity.LearningDay;
 import mif.vu.ikeea.Entity.Repository.LearningDayRepository;
 import mif.vu.ikeea.Entity.Topic;
@@ -22,8 +23,8 @@ public class LearningDayService {
     @Autowired
     private TopicService topicService;
 
-    //@Autowired
-    //private UserService userService;
+    @Autowired
+    private UserService userService;
 
     @Transactional
     public LearningDay add(LearningDay learningDay) {
@@ -92,7 +93,7 @@ public class LearningDayService {
         return learningDays;
     }
 
-    /*public List<LearningDay> getAllByManagerId(Long userId) {
+    public List<LearningDay> getAllByManagerId(Long userId) {
         List<ApplicationUser> applicationUsers = userService.getAllByManagerId(userId);
         List<LearningDay> learningDays = new ArrayList<>();
 
@@ -102,5 +103,5 @@ public class LearningDayService {
         }
 
         return learningDays;
-    }*/
+    }
 }

@@ -30,7 +30,7 @@ public class LearningDayManager {
 
     @Autowired
     private UserService userService;
-    
+
     @Autowired
     private LearningDayFactory learningDayFactory;
 
@@ -62,7 +62,7 @@ public class LearningDayManager {
             learningDay.setDate(updateLearningDayRequest.getDate());
         }
 
-        if (updateLearningDayRequest.getTopicIds() != null) {
+        if (updateLearningDayRequest.getTopicIds() != null && updateLearningDayRequest.getTopicIds().isEmpty()) {
             learningDayService.updateTopics(updateLearningDayRequest.getTopicIds(), learningDay);
         }
 
