@@ -41,7 +41,7 @@ public class LearningDayService {
     }
 
     @Transactional
-    public List<LearningDay> addTopics(List<Long> topicIds, LearningDay learningDay, List<LearningDay> learningDayList) {
+    public void addTopics(List<Long> topicIds, LearningDay learningDay) {
 
         for (Long topicId : topicIds) {
             Topic additionalTopic = topicService.loadById(topicId);
@@ -49,11 +49,8 @@ public class LearningDayService {
             learningDay.getTopics().add(additionalTopic);
             additionalTopic.getLearningDays().add(learningDay);
 
-            LearningDay additionalResult = learningDayService.add(learningDay);
-            learningDayList.add(additionalResult);
+            learningDayService.add(learningDay);
         }
-
-        return learningDayList;
     }
 
     @Transactional

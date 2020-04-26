@@ -30,31 +30,25 @@ public class LearningDayManager {
 
     @Autowired
     private UserService userService;
-
+    
     @Autowired
-    private TopicService topicService;
+    private LearningDayFactory learningDayFactory;
 
     @Transactional
-    public List<LearningDay> create(LearningDayRequest learningDayRequest) {
+    public LearningDay create(LearningDayRequest learningDayRequest) {
         ApplicationUser user = userService.loadById(learningDayRequest.getUserId());
         List<Long> topicIds = learningDayRequest.getTopicIds();
-        List<LearningDay> learningDayList = new ArrayList<>();
 
-        LearningDay learningDay = LearningDayFactory.createLearningDay(
+        LearningDay learningDay = learningDayFactory.createLearningDay(
                 learningDayRequest.getTitle(),
                 learningDayRequest.getDate(),
-                user
+                user,
+                topicIds
         );
 
         LearningDay result = learningDayService.add(learningDay);
-        learningDayList.add(result);
 
-        if(topicIds.size() > 0) {
-            learningDayList = learningDayService.addTopics(topicIds, learningDay, learningDayList);
-
-        }
-
-        return learningDayList;
+        return result;
     }
 
     @Transactional
