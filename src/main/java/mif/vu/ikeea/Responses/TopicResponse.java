@@ -13,12 +13,14 @@ public class TopicResponse {
     private Long id;
     private String title;
     private String description;
+    private Long parentId;
     private List<TopicResponse> children;
 
     public TopicResponse(Topic topic) {
         this.id = topic.getId();
         this.title = topic.getTitle();
         this.description = topic.getDescription();
+        this.parentId = topic.getParent().getId();
         this.children = getChildrenList(topic.getChildren());
     }
 
