@@ -18,6 +18,8 @@ public interface UserRepository extends CrudRepository<ApplicationUser, Long> {
 
     Boolean existsByEmail(String email);
 
+    Iterable<ApplicationUser> findAllByManagerId(Long userId);
+
     @Modifying
     @Query("UPDATE ApplicationUser u SET u.restrictionDays = :restrictionDays WHERE u.id IN (:ids)")
     Integer updateRestrictionDays(@Param("restrictionDays") Integer restrictionDays, @Param("ids") Set<Long> ids);

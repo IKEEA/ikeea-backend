@@ -109,4 +109,12 @@ public class UserService implements UserDetailsService {
 
         return applicationUsers;
     }
+
+    public List<ApplicationUser> getAllByManagerId(Long userId) {
+        Iterable<ApplicationUser> userIterable = userRepository.findAllByManagerId(userId);
+        List<ApplicationUser> applicationUsers = new ArrayList<>();
+        userIterable.forEach(applicationUsers::add);
+
+        return applicationUsers;
+    }
 }
