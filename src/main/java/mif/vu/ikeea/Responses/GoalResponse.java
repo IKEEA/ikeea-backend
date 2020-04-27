@@ -16,6 +16,8 @@ public class GoalResponse {
     private Long topicId;
     private String topicTitle;
     private Long userId;
+    private String firstName;
+    private String lastName;
 
     public GoalResponse(Goal goal) {
         this.id = goal.getId();
@@ -24,5 +26,7 @@ public class GoalResponse {
         this.topicId = goal.getTopic().getId();
         this.topicTitle = goal.getTopic().getTitle();
         this.userId = goal.getUser().getId();
+        this.firstName = goal.getUser().getFirstName();
+        this.lastName = goal.getUser().getLastName();
     }
 }
