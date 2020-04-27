@@ -13,13 +13,13 @@ public class TopicResponse {
     private Long id;
     private String title;
     private String description;
-    private List<TopicResponse> children;
+    private Long parentId;
 
     public TopicResponse(Topic topic) {
         this.id = topic.getId();
         this.title = topic.getTitle();
         this.description = topic.getDescription();
-        this.children = getChildrenList(topic.getChildren());
+        this.parentId = ((topic.getParent() == null) ? null : topic.getParent().getId());
     }
 
     private List<TopicResponse> getChildrenList(List<Topic> topics) {

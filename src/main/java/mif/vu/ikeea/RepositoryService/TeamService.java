@@ -1,11 +1,15 @@
 package mif.vu.ikeea.RepositoryService;
 
+import mif.vu.ikeea.Entity.ApplicationUser;
 import mif.vu.ikeea.Entity.Repository.TeamRepository;
 import mif.vu.ikeea.Entity.Team;
 import mif.vu.ikeea.Exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class TeamService {
@@ -46,5 +50,13 @@ public class TeamService {
                 );
 
         return team;
+    }
+
+    public List<Team> getAll() {
+        Iterable<Team> teamIterable = teamRepository.findAll();
+        List<Team> teams = new ArrayList<>();
+        teamIterable.forEach(teams::add);
+
+        return teams;
     }
 }
