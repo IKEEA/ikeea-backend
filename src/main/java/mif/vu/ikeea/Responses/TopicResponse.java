@@ -19,7 +19,7 @@ public class TopicResponse {
         this.id = topic.getId();
         this.title = topic.getTitle();
         this.description = topic.getDescription();
-        this.parentId = ((topic.getParent() == null) ? 0 : topic.getParent().getId());
+        this.parentId = ((topic.getParent() == null) ? null : topic.getParent().getId());
     }
 
     private List<TopicResponse> getChildrenList(List<Topic> topics) {
