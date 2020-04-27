@@ -16,12 +16,16 @@ public class LearningDayResponse {
     private String title;
     private List<TopicResponse> topics;
     private Long userId;
+    private String firstName;
+    private String lastName;
 
     public LearningDayResponse(LearningDay learningDay) {
         this.id = learningDay.getId();
         this.date = learningDay.getDate();
         this.title = learningDay.getTitle();
         this.userId = learningDay.getUser().getId();
+        this.firstName = learningDay.getUser().getFirstName();
+        this.lastName = learningDay.getUser().getLastName();
         this.topics = getTopics(learningDay.getTopics());
     }
 
