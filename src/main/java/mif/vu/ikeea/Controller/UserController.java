@@ -13,6 +13,7 @@ import mif.vu.ikeea.Responses.ApiResponse;
 import mif.vu.ikeea.Responses.UserProfileResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,6 +32,7 @@ public class UserController {
     @Autowired
     EmailService emailService;
 
+    @PreAuthorize("hasRole('LEADER')")
     @PostMapping("/invite")
     public ResponseEntity<?> inviteUser(@Valid @RequestParam String email, Authentication authentication) {
         if (userService.existsByEmail(email)) {

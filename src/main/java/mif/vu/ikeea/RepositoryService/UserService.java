@@ -3,6 +3,7 @@ package mif.vu.ikeea.RepositoryService;
 import mif.vu.ikeea.Entity.Repository.UserRepository;
 import mif.vu.ikeea.Entity.ApplicationUser;
 import mif.vu.ikeea.Exceptions.ResourceNotFoundException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -47,7 +45,7 @@ public class UserService implements UserDetailsService {
                         new UsernameNotFoundException("User not found with username or email : " + email)
                 );
 
-        return new User(user.getEmail(), user.getPassword(), Collections.emptyList());
+        return new User(user.getEmail(), user.getPassword(), getAuthority(user));
     }
 
     @Transactional
@@ -117,4 +115,13 @@ public class UserService implements UserDetailsService {
 
         return applicationUsers;
     }
+
+    private Set getAuthority(ApplicationUser user) {
+        Set authorities = new HashSet<>();
+        user.getRoles().forEach(role -> {
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
+        });
+        return authorities;
+    }
+
 }
