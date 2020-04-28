@@ -7,6 +7,7 @@ import mif.vu.ikeea.Manager.UserManager;
 import mif.vu.ikeea.RepositoryService.UserService;
 import mif.vu.ikeea.Responses.UserManagerResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class ManagerController {
     @Autowired
     private UserManager userManager;
 
+    @PreAuthorize("hasRole('LEADER')")
     @GetMapping(path = "/{id}/users")
     public @ResponseBody
     List<UserManagerResponse> list(@PathVariable Long id) {

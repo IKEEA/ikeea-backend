@@ -65,6 +65,7 @@ public class UserController {
         return new UserProfileResponse(user);
     }
 
+    @PreAuthorize("hasRole('LEADER')")
     @DeleteMapping(path = "/{id}/delete")
     public @ResponseBody ResponseEntity delete(@PathVariable Long id) {
         userService.delete(id);
@@ -79,6 +80,7 @@ public class UserController {
         return userManager.update(user, updateProfileRequest);
     }
 
+    @PreAuthorize("hasRole('LEADER')")
     @PutMapping(path = "/{id}/update-restriction-days")
     public @ResponseBody ResponseEntity updateRestrictionDays(@PathVariable Long id, @RequestParam Integer restrictionDays) {
         ApplicationUser user = userService.loadById(id);
