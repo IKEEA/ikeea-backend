@@ -11,6 +11,7 @@ import mif.vu.ikeea.Responses.ApiResponse;
 import mif.vu.ikeea.Responses.TeamResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -83,6 +84,7 @@ public class TeamController {
         return new TeamResponse(team);
     }
 
+    @PreAuthorize("hasRole('LEADER')")
     @PostMapping(path = "/{managerId}/set-restriction-days")
     public @ResponseBody ResponseEntity setRestrictionDays(@PathVariable Long managerId, @RequestParam Integer restrictionDays) {
         ApplicationUser manager = userService.loadById(managerId);

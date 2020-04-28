@@ -11,6 +11,7 @@ import mif.vu.ikeea.Responses.ApiResponse;
 import mif.vu.ikeea.Responses.UserProfileResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +30,7 @@ public class UserController {
     @Autowired
     EmailService emailService;
 
+    @PreAuthorize("hasRole('LEADER')")
     @PostMapping("/invite")
     public ResponseEntity<?> inviteUser(@Valid @RequestParam String email, Authentication authentication) {
         if (userService.existsByEmail(email)) {
@@ -37,7 +39,6 @@ public class UserController {
 
         ApplicationUser manager = (ApplicationUser) authentication.getPrincipal();
 
-        //TODO add check if this user has manager role
         ApplicationUser user = userManager.create(email, manager);
         String message = MessageFactory.verifyEmail(user.getToken());
         emailService.sendSimpleMessage(user.getEmail(), "Verify your account", message);
@@ -59,6 +60,7 @@ public class UserController {
         return new UserProfileResponse(user);
     }
 
+    @PreAuthorize("hasRole('LEADER')")
     @DeleteMapping(path = "/{id}/delete")
     public @ResponseBody ResponseEntity delete(@PathVariable Long id) {
         userService.delete(id);
@@ -73,6 +75,7 @@ public class UserController {
         return userManager.update(user, updateProfileRequest);
     }
 
+    @PreAuthorize("hasRole('LEADER')")
     @PutMapping(path = "/{id}/update-restriction-days")
     public @ResponseBody ResponseEntity updateRestrictionDays(@PathVariable Long id, @RequestParam Integer restrictionDays) {
         ApplicationUser user = userService.loadById(id);
