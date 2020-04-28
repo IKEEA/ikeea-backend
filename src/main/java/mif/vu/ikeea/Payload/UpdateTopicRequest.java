@@ -16,6 +16,4 @@ public class UpdateTopicRequest {
     private String description;
 
     private Long parent;
-
-    private List<Long> children;
 }
