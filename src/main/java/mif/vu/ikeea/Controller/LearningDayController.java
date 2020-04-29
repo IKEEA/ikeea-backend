@@ -57,7 +57,10 @@ public class LearningDayController {
     }
 
     @DeleteMapping(path = "/{id}/delete")
-    public @ResponseBody void delete(@PathVariable Long id) { learningDayService.delete(id); }
+    public @ResponseBody ResponseEntity delete(@PathVariable Long id) {
+        learningDayService.delete(id);
+        return ResponseEntity.ok(new ApiResponse(true, "Learning day deleted successfully"));
+    }
 
     @PutMapping(path = "/{id}/update")
     public @ResponseBody ResponseEntity updateLearningDay(@PathVariable Long id, @RequestBody UpdateLearningDayRequest updateLearningDayRequest) {

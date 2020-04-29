@@ -22,7 +22,7 @@ public class LearningDayFactory {
         learningDay.setTitle(title);
         learningDay.setDate(date);
         learningDay.setUser(user);
-        learningDayService.updateTopics(topicIds, learningDay);
+        learningDayService.addTopics(topicIds, learningDay);
 
         return learningDay;
     }

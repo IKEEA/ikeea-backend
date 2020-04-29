@@ -62,7 +62,7 @@ public class LearningDayManager {
             learningDay.setDate(updateLearningDayRequest.getDate());
         }
 
-        if (updateLearningDayRequest.getTopicIds() != null && !updateLearningDayRequest.getTopicIds().isEmpty()) {
+        if (updateLearningDayRequest.getTopicIds() != null) {
             learningDayService.updateTopics(updateLearningDayRequest.getTopicIds(), learningDay);
         }
 
