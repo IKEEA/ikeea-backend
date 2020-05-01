@@ -16,6 +16,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping(path="/api/user")
@@ -84,4 +86,19 @@ public class UserController {
 
         return ResponseEntity.ok(new ApiResponse(true, "User restriction days updated successfully"));
     }
+
+    @PreAuthorize("hasRole('LEADER')")
+    @GetMapping(path = "/list")
+    public @ResponseBody
+    List<UserProfileResponse> list(){
+        List<ApplicationUser> users = userService.getAll();
+        List<UserProfileResponse> userProfileResponses = new ArrayList<>();
+
+        for (ApplicationUser applicationUser : users) {
+            userProfileResponses.add(new UserProfileResponse(applicationUser));
+        }
+
+        return userProfileResponses;
+    }
+
 }
