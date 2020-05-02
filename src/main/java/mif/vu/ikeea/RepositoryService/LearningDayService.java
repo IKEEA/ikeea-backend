@@ -58,7 +58,6 @@ public class LearningDayService {
 
     @Transactional
     public void updateTopics(List<Long> topicIds, LearningDay learningDay) {
-
         deleteTopics(learningDay);
 
         for (Long topicId : topicIds) {
@@ -73,9 +72,7 @@ public class LearningDayService {
 
     @Transactional
     public void deleteTopics(LearningDay learningDay) {
-
         List<Topic> topics = topicService.findByLearningDayId(learningDay);
-        if(topics.isEmpty()) { return; }
 
         for (Topic topic : topics) {
             learningDay.getTopics().remove(topic);

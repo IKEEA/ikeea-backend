@@ -41,8 +41,8 @@ public class CommentService {
         return comment;
     }
 
-    public List<Comment> getAll() {
-        Iterable<Comment> commentIterable = commentRepository.findAll();
+    public List<Comment> getAllByLearningDay(Long learningDayId) {
+        Iterable<Comment> commentIterable = commentRepository.findAllByLearningDayId(learningDayId);
         List<Comment> comments = new ArrayList<>();
         commentIterable.forEach(comments::add);
 
