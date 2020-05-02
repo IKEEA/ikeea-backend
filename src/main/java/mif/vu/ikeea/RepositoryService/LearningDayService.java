@@ -75,14 +75,14 @@ public class LearningDayService {
     public void deleteTopics(LearningDay learningDay) {
 
         List<Topic> topics = topicService.findByLearningDayId(learningDay);
-        if(!topics.isEmpty()) {
-            for (Topic topic : topics) {
-                learningDay.getTopics().remove(topic);
-                topic.getLearningDays().remove(learningDay);
+        if(topics.isEmpty()) { return; }
 
-                learningDayService.add(learningDay);
-                topicService.update(topic);
-            }
+        for (Topic topic : topics) {
+            learningDay.getTopics().remove(topic);
+            topic.getLearningDays().remove(learningDay);
+
+            learningDayService.add(learningDay);
+            topicService.update(topic);
         }
     }
 
