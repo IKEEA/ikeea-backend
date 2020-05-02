@@ -144,6 +144,12 @@ public class UserService implements UserDetailsService {
             userService.update(user);
         }
 
-    }
+        for (Role role : user.getRoles()) {
+            if (!role.getName().equals(ERole.DEVELOPER)) {
+                continue;
+            }
 
+            //TODO something here
+        }
+    }
 }
