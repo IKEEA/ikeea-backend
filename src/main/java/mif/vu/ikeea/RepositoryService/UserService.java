@@ -2,6 +2,8 @@ package mif.vu.ikeea.RepositoryService;
 
 import mif.vu.ikeea.Entity.Repository.UserRepository;
 import mif.vu.ikeea.Entity.ApplicationUser;
+import mif.vu.ikeea.Entity.Role;
+import mif.vu.ikeea.Enums.ERole;
 import mif.vu.ikeea.Exceptions.ResourceNotFoundException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -18,6 +20,9 @@ import java.util.*;
 public class UserService implements UserDetailsService {
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    UserService userService;
 
     @Transactional
     public ApplicationUser add(ApplicationUser user) {
@@ -122,6 +127,23 @@ public class UserService implements UserDetailsService {
             authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
         });
         return authorities;
+    }
+
+    public static <T extends Enum<T>> T getInstance(final String value, final Class<T> ERole) {
+        return Enum.valueOf(ERole, value);
+    }
+
+    public void checkToPromote(ApplicationUser user) {
+        //ERole[] roles = ERole.valueOf();
+        ERole role = getInstance("DEVELOPER", ERole.class);
+        if(user.getRoles().equals(role)) { //user.getRoles().equals(ERole.values()[0]), user.getRoles().equals(roles[0]), Enum.valueOf(ERole.class, "DEVELOPER")
+            Role role1 = new Role();
+            role1.setId(1);
+            role1.setName(ERole.LEADER);
+            user.setRoles(Collections.singleton(role1));
+            userService.update(user);
+        }
+
     }
 
 }

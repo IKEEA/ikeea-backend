@@ -5,6 +5,7 @@ import mif.vu.ikeea.Exceptions.DuplicateResourceException;
 import mif.vu.ikeea.Factory.MessageFactory;
 import mif.vu.ikeea.Mailer.EmailService;
 import mif.vu.ikeea.Manager.UserManager;
+import mif.vu.ikeea.Payload.UpdateForLeaderRequest;
 import mif.vu.ikeea.Payload.UpdateProfileRequest;
 import mif.vu.ikeea.RepositoryService.UserService;
 import mif.vu.ikeea.Responses.ApiResponse;
@@ -78,13 +79,12 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('LEADER')")
-    @PutMapping(path = "/{id}/update-restriction-days")
-    public @ResponseBody ResponseEntity updateRestrictionDays(@PathVariable Long id, @RequestParam Integer restrictionDays) {
+    @PutMapping(path = "/{id}/update-for-leader")
+    public @ResponseBody ResponseEntity updateForLeader(@PathVariable Long id, @Valid @RequestBody UpdateForLeaderRequest updateForLeaderRequest) {
         ApplicationUser user = userService.loadById(id);
-        user.setRestrictionDays(restrictionDays);
-        userService.update(user);
+        userManager.updateforleader(user, updateForLeaderRequest);
 
-        return ResponseEntity.ok(new ApiResponse(true, "User restriction days updated successfully"));
+        return ResponseEntity.ok(new ApiResponse(true, "User updated successfully"));
     }
 
     @PreAuthorize("hasRole('LEADER')")

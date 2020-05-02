@@ -10,6 +10,7 @@ import mif.vu.ikeea.Factory.UserFactory;
 import mif.vu.ikeea.Generator.TokenValueGenerator;
 import mif.vu.ikeea.Helper.RestrictionDaysHelper;
 import mif.vu.ikeea.Payload.RegistrationRequest;
+import mif.vu.ikeea.Payload.UpdateForLeaderRequest;
 import mif.vu.ikeea.Payload.UpdateProfileRequest;
 import mif.vu.ikeea.RepositoryService.UserService;
 import mif.vu.ikeea.Responses.UserProfileResponse;
@@ -90,6 +91,36 @@ public class UserManager
         if (userProfileRequest.getPassword() != null && userProfileRequest.getOldPassword() != null) {
             updatePassword(user, userProfileRequest);
         }
+
+        userService.update(user);
+
+        return new UserProfileResponse(user);
+    }
+
+    @Transactional
+    public UserProfileResponse updateforleader(ApplicationUser user, UpdateForLeaderRequest updateForLeaderRequest) {
+
+        if (updateForLeaderRequest.getRestrictionDays() != null) {
+            user.setRestrictionDays(updateForLeaderRequest.getRestrictionDays());
+        }
+
+        if (updateForLeaderRequest.getManagerId() != null) {
+            ApplicationUser manager = userService.loadById(updateForLeaderRequest.getManagerId());
+            userService.checkToPromote(manager);
+            user.setManager(manager);
+            userService.update(user);
+            //userService.checkToDemote(user.getManager().getId());
+        }
+
+        /*if (userProfileRequest.getManagerId() != null) {
+            ApplicationUser manager = userService.loadById(userProfileRequest.getManagerId());
+            Role role = new Role();
+            role.setId(1);
+            role.setName(ERole.LEADER);
+            manager.setRoles(Collections.singleton(role));
+            user.setManager(manager);
+        }*/
+
 
         userService.update(user);
 
