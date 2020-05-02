@@ -32,10 +32,9 @@ public class CommentController {
         return ResponseEntity.ok(new ApiResponse(true, "Comment added successfully"));
     }
 
-    @GetMapping(path = "/list")
-    public @ResponseBody
-    List<CommentResponse> list() {
-        List<Comment> comments = commentService.getAll();
+    @GetMapping(path = "/{learningDayId}/list")
+    public @ResponseBody List<CommentResponse> list(@PathVariable Long learningDayId) {
+        List<Comment> comments = commentService.getAllByLearningDay(learningDayId);
         List<CommentResponse> commentResponses = new ArrayList<>();
 
         for (Comment comment : comments) {
