@@ -1,5 +1,6 @@
 package mif.vu.ikeea.RepositoryService;
 
+import mif.vu.ikeea.Entity.LearningDay;
 import mif.vu.ikeea.Entity.Repository.TopicRepository;
 import mif.vu.ikeea.Entity.Topic;
 import mif.vu.ikeea.Exceptions.ResourceNotFoundException;
@@ -42,6 +43,14 @@ public class TopicService {
 
     public List<Topic> getAll() {
         Iterable<Topic> topicIterable = topicRepository.findAll();
+        List<Topic> topics = new ArrayList<>();
+        topicIterable.forEach(topics::add);
+
+        return topics;
+    }
+
+    public List<Topic> findByLearningDayId(LearningDay learningDay) {
+        Iterable<Topic> topicIterable = topicRepository.findAllByLearningDays(learningDay);
         List<Topic> topics = new ArrayList<>();
         topicIterable.forEach(topics::add);
 

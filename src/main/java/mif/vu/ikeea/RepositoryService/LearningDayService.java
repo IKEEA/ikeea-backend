@@ -33,6 +33,8 @@ public class LearningDayService {
 
     @Transactional
     public void delete(Long id) {
+        LearningDay learningDay = learningDayService.loadById(id);
+        deleteTopics(learningDay);
         learningDayRepository.deleteById(id);
     }
 
@@ -42,7 +44,7 @@ public class LearningDayService {
     }
 
     @Transactional
-    public void updateTopics(List<Long> topicIds, LearningDay learningDay) {
+    public void addTopics(List<Long> topicIds, LearningDay learningDay) {
 
         for (Long topicId : topicIds) {
             Topic additionalTopic = topicService.loadById(topicId);
@@ -51,6 +53,36 @@ public class LearningDayService {
             additionalTopic.getLearningDays().add(learningDay);
 
             learningDayService.add(learningDay);
+        }
+    }
+
+    @Transactional
+    public void updateTopics(List<Long> topicIds, LearningDay learningDay) {
+
+        deleteTopics(learningDay);
+
+        for (Long topicId : topicIds) {
+            Topic additionalTopic = topicService.loadById(topicId);
+
+            learningDay.getTopics().add(additionalTopic);
+            additionalTopic.getLearningDays().add(learningDay);
+
+            learningDayService.add(learningDay);
+        }
+    }
+
+    @Transactional
+    public void deleteTopics(LearningDay learningDay) {
+
+        List<Topic> topics = topicService.findByLearningDayId(learningDay);
+        if(topics.isEmpty()) { return; }
+
+        for (Topic topic : topics) {
+            learningDay.getTopics().remove(topic);
+            topic.getLearningDays().remove(learningDay);
+
+            learningDayService.add(learningDay);
+            topicService.update(topic);
         }
     }
 
