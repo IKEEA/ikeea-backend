@@ -1,5 +1,6 @@
 package mif.vu.ikeea.Manager;
 
+import mif.vu.ikeea.Checker.PasswordChecker;
 import mif.vu.ikeea.Entity.Repository.RoleRepository;
 import mif.vu.ikeea.Entity.Role;
 import mif.vu.ikeea.Entity.ApplicationUser;
@@ -7,6 +8,7 @@ import mif.vu.ikeea.Enums.ERole;
 import mif.vu.ikeea.Exceptions.*;
 import mif.vu.ikeea.Factory.UserFactory;
 import mif.vu.ikeea.Generator.TokenValueGenerator;
+import mif.vu.ikeea.Helper.RestrictionDaysHelper;
 import mif.vu.ikeea.Payload.RegistrationRequest;
 import mif.vu.ikeea.Payload.UpdateProfileRequest;
 import mif.vu.ikeea.RepositoryService.UserService;
@@ -15,6 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Set;
 
 @Component
 public class UserManager
@@ -26,7 +31,13 @@ public class UserManager
     private RoleRepository roleRepository;
 
     @Autowired
-    PasswordEncoder passwordEncoder;
+    private PasswordChecker passwordChecker;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private RestrictionDaysHelper restrictionDaysHelper;
 
     @Transactional
     public ApplicationUser create(String email, ApplicationUser manager) {
@@ -85,16 +96,17 @@ public class UserManager
         return new UserProfileResponse(user);
     }
 
-    private boolean checkIfValidPassword(ApplicationUser user, String password) {
-        return passwordEncoder.matches(password, user.getPassword());
+    public void updateRestrictionDay(List<ApplicationUser> managersChildren, Integer restrictionDays) {
+        Set<Long> userIds = restrictionDaysHelper.collectUserIds(managersChildren);
+        userService.updateRestrictionDays(restrictionDays, userIds);
     }
 
     private void updatePassword(ApplicationUser user, UpdateProfileRequest profileRequest) {
-        if (!checkIfValidPassword(user, profileRequest.getOldPassword())) {
+        if (!passwordChecker.checkIfValidPassword(user, profileRequest.getOldPassword())) {
             throw new PasswordDoesNotMatchException("Your old password doesn't match!");
         }
 
-        if (checkIfValidPassword(user, profileRequest.getPassword())) {
+        if (passwordChecker.checkIfValidPassword(user, profileRequest.getPassword())) {
             throw new PasswordMatchException("You can't use old password!");
         }
 

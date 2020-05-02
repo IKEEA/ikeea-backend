@@ -101,4 +101,12 @@ public class UserController {
         return userProfileResponses;
     }
 
+    @PreAuthorize("hasRole('LEADER')")
+    @PostMapping(path = "/{managerId}/set-restriction-days")
+    public @ResponseBody ResponseEntity setRestrictionDays(@PathVariable Long managerId, @RequestParam Integer restrictionDays) {
+        ApplicationUser manager = userService.loadById(managerId);
+        userManager.updateRestrictionDay(manager.getChildren(), restrictionDays);
+
+        return ResponseEntity.ok(new ApiResponse(true, "Users restriction days updated successfully"));
+    }
 }
