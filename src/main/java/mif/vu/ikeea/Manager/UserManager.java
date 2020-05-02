@@ -1,6 +1,7 @@
 package mif.vu.ikeea.Manager;
 
 import mif.vu.ikeea.Checker.PasswordChecker;
+import mif.vu.ikeea.Checker.RoleChecker;
 import mif.vu.ikeea.Entity.Repository.RoleRepository;
 import mif.vu.ikeea.Entity.Role;
 import mif.vu.ikeea.Entity.ApplicationUser;
@@ -39,6 +40,9 @@ public class UserManager
 
     @Autowired
     private RestrictionDaysHelper restrictionDaysHelper;
+
+    @Autowired
+    private RoleChecker roleChecker;
 
     @Transactional
     public ApplicationUser create(String email, ApplicationUser manager) {
@@ -105,22 +109,12 @@ public class UserManager
         }
 
         if (updateForLeaderRequest.getManagerId() != null) {
+            ApplicationUser previousManager = user.getManager();
             ApplicationUser manager = userService.loadById(updateForLeaderRequest.getManagerId());
-            userService.checkToPromote(manager);
+            roleChecker.checkToPromote(manager);
             user.setManager(manager);
-            userService.update(user);
-            //userService.checkToDemote(user.getManager().getId());
+            if(previousManager != null) roleChecker.checkToDemote(previousManager);
         }
-
-        /*if (userProfileRequest.getManagerId() != null) {
-            ApplicationUser manager = userService.loadById(userProfileRequest.getManagerId());
-            Role role = new Role();
-            role.setId(1);
-            role.setName(ERole.LEADER);
-            manager.setRoles(Collections.singleton(role));
-            user.setManager(manager);
-        }*/
-
 
         userService.update(user);
 
