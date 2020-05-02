@@ -15,7 +15,6 @@ public class UserProfileResponse {
     private String email;
     private Boolean enabled;
     private List<ERole> roles;
-    private Long teamId;
     private String managerFirstName = null;
     private String managerLastName = null;
     private String managerEmail = null;
@@ -28,7 +27,6 @@ public class UserProfileResponse {
         this.email = user.getEmail();
         this.enabled = user.getEnabled();
         this.roles = user.getRoleNames();
-        this.teamId = user.getTeam().getId();
         this.restrictionDays = user.getRestrictionDays();
 
         if (user.getManager() != null) {
