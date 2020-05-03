@@ -1,7 +1,6 @@
 package mif.vu.ikeea.Manager;
 
 import mif.vu.ikeea.Checker.PasswordChecker;
-import mif.vu.ikeea.Checker.RoleChecker;
 import mif.vu.ikeea.Entity.Repository.RoleRepository;
 import mif.vu.ikeea.Entity.Role;
 import mif.vu.ikeea.Entity.ApplicationUser;
@@ -13,6 +12,7 @@ import mif.vu.ikeea.Helper.RestrictionDaysHelper;
 import mif.vu.ikeea.Payload.RegistrationRequest;
 import mif.vu.ikeea.Payload.UpdateForLeaderRequest;
 import mif.vu.ikeea.Payload.UpdateProfileRequest;
+import mif.vu.ikeea.RepositoryService.RoleService;
 import mif.vu.ikeea.RepositoryService.UserService;
 import mif.vu.ikeea.Responses.UserProfileResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +42,7 @@ public class UserManager
     private RestrictionDaysHelper restrictionDaysHelper;
 
     @Autowired
-    private RoleChecker roleChecker;
+    private RoleService roleService;
 
     @Transactional
     public ApplicationUser create(String email, ApplicationUser manager) {
@@ -109,11 +109,7 @@ public class UserManager
         }
 
         if (updateForLeaderRequest.getManagerId() != null) {
-            ApplicationUser previousManager = user.getManager();
-            ApplicationUser manager = userService.loadById(updateForLeaderRequest.getManagerId());
-            roleChecker.checkToPromote(manager);
-            user.setManager(manager);
-            if(previousManager != null) roleChecker.checkToDemote(previousManager);
+            roleService.updateRoles(user, updateForLeaderRequest);
         }
 
         userService.update(user);
