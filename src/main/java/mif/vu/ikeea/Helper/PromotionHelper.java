@@ -9,7 +9,6 @@ import mif.vu.ikeea.RepositoryService.RoleService;
 import mif.vu.ikeea.RepositoryService.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -25,7 +24,6 @@ public class PromotionHelper {
     @Autowired
     private RoleService roleService;
 
-    @Transactional
     public void updateRoles(ApplicationUser user, UpdateForLeaderRequest updateForLeaderRequest) {
         ApplicationUser previousManager = user.getManager();
         ApplicationUser manager = userService.loadById(updateForLeaderRequest.getManagerId());
@@ -36,12 +34,10 @@ public class PromotionHelper {
         }
     }
 
-    @Transactional
     public void changeRole(ApplicationUser user, ERole erole) {
         Set<Role> roles = new HashSet<>();
         Role role = roleService.findByName(erole);
         roles.add(role);
         user.setRoles(roles);
-        userService.update(user);
     }
 }
