@@ -8,11 +8,11 @@ import mif.vu.ikeea.Enums.ERole;
 import mif.vu.ikeea.Exceptions.*;
 import mif.vu.ikeea.Factory.UserFactory;
 import mif.vu.ikeea.Generator.TokenValueGenerator;
+import mif.vu.ikeea.Helper.PromotionHelper;
 import mif.vu.ikeea.Helper.RestrictionDaysHelper;
 import mif.vu.ikeea.Payload.RegistrationRequest;
 import mif.vu.ikeea.Payload.UpdateForLeaderRequest;
 import mif.vu.ikeea.Payload.UpdateProfileRequest;
-import mif.vu.ikeea.RepositoryService.RoleService;
 import mif.vu.ikeea.RepositoryService.UserService;
 import mif.vu.ikeea.Responses.UserProfileResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +42,7 @@ public class UserManager
     private RestrictionDaysHelper restrictionDaysHelper;
 
     @Autowired
-    private RoleService roleService;
+    private PromotionHelper promotionHelper;
 
     @Transactional
     public ApplicationUser create(String email, ApplicationUser manager) {
@@ -102,14 +102,14 @@ public class UserManager
     }
 
     @Transactional
-    public UserProfileResponse updateforleader(ApplicationUser user, UpdateForLeaderRequest updateForLeaderRequest) {
+    public UserProfileResponse updateForLeader(ApplicationUser user, UpdateForLeaderRequest updateForLeaderRequest) {
 
         if (updateForLeaderRequest.getRestrictionDays() != null) {
             user.setRestrictionDays(updateForLeaderRequest.getRestrictionDays());
         }
 
         if (updateForLeaderRequest.getManagerId() != null) {
-            roleService.updateRoles(user, updateForLeaderRequest);
+            promotionHelper.updateRoles(user, updateForLeaderRequest);
         }
 
         userService.update(user);

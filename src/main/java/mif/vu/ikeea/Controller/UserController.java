@@ -82,7 +82,7 @@ public class UserController {
     @PutMapping(path = "/{id}/update-for-leader")
     public @ResponseBody ResponseEntity updateForLeader(@PathVariable Long id, @Valid @RequestBody UpdateForLeaderRequest updateForLeaderRequest) {
         ApplicationUser user = userService.loadById(id);
-        userManager.updateforleader(user, updateForLeaderRequest);
+        userManager.updateForLeader(user, updateForLeaderRequest);
 
         return ResponseEntity.ok(new ApiResponse(true, "User updated successfully"));
     }

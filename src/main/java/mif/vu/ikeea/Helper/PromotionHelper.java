@@ -1,4 +1,4 @@
-package mif.vu.ikeea.RepositoryService;
+package mif.vu.ikeea.Helper;
 
 import mif.vu.ikeea.Checker.RoleChecker;
 import mif.vu.ikeea.Entity.ApplicationUser;
@@ -7,6 +7,7 @@ import mif.vu.ikeea.Entity.Role;
 import mif.vu.ikeea.Enums.ERole;
 import mif.vu.ikeea.Exceptions.ResourceNotFoundException;
 import mif.vu.ikeea.Payload.UpdateForLeaderRequest;
+import mif.vu.ikeea.RepositoryService.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,7 +16,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Service
-public class RoleService {
+public class PromotionHelper {
     @Autowired
     private UserService userService;
 
