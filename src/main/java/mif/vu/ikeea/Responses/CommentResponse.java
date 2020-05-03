@@ -14,6 +14,8 @@ public class CommentResponse {
     private Date date;
     private Long learningDayId;
     private Long userId;
+    private String firstName;
+    private String lastName;
 
     public CommentResponse(Comment comment) {
         this.id = comment.getId();
@@ -21,5 +23,7 @@ public class CommentResponse {
         this.date = comment.getDate();
         this.learningDayId = comment.getLearningDay().getId();
         this.userId = comment.getUser().getId();
+        this.firstName = comment.getUser().getFirstName();
+        this.lastName = comment.getUser().getLastName();
     }
 }

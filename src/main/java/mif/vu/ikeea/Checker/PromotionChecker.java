@@ -11,25 +11,30 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class RoleChecker {
+public class PromotionChecker {
     @Autowired
     private UserService userService;
 
     @Autowired
     private PromotionHelper promotionHelper;
 
-    public void checkToPromote(ApplicationUser user) {
+    public void isEligibleToPromote(ApplicationUser user) {
         for (Role role : user.getRoles()) {
             if (role.getName().equals(ERole.LEADER)) {
                 continue;
             }
+
             promotionHelper.changeRole(user, ERole.LEADER);
         }
     }
 
-    public void checkToDemote(ApplicationUser user) {
+    public void isEligibleToDemote(ApplicationUser user) {
         List<ApplicationUser> applicationUsers = userService.getAllByManagerId(user.getId());
-        if(!applicationUsers.isEmpty()) { return; }
+
+        if(!applicationUsers.isEmpty()) {
+            return;
+        }
+
         promotionHelper.changeRole(user, ERole.DEVELOPER);
     }
 }

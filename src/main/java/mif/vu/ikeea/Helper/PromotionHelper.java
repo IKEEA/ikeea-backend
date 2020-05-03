@@ -1,6 +1,6 @@
 package mif.vu.ikeea.Helper;
 
-import mif.vu.ikeea.Checker.RoleChecker;
+import mif.vu.ikeea.Checker.PromotionChecker;
 import mif.vu.ikeea.Entity.ApplicationUser;
 import mif.vu.ikeea.Entity.Role;
 import mif.vu.ikeea.Enums.ERole;
@@ -19,7 +19,7 @@ public class PromotionHelper {
     private UserService userService;
 
     @Autowired
-    private RoleChecker roleChecker;
+    private PromotionChecker promotionChecker;
 
     @Autowired
     private RoleService roleService;
@@ -27,10 +27,12 @@ public class PromotionHelper {
     public void updateRoles(ApplicationUser user, UpdateForLeaderRequest updateForLeaderRequest) {
         ApplicationUser previousManager = user.getManager();
         ApplicationUser manager = userService.loadById(updateForLeaderRequest.getManagerId());
-        roleChecker.checkToPromote(manager);
+
+        promotionChecker.isEligibleToPromote(manager);
         user.setManager(manager);
-        if(previousManager != null) {
-            roleChecker.checkToDemote(previousManager);
+
+        if (previousManager != null) {
+            promotionChecker.isEligibleToDemote(previousManager);
         }
     }
 
