@@ -8,8 +8,10 @@ import mif.vu.ikeea.Enums.ERole;
 import mif.vu.ikeea.Exceptions.*;
 import mif.vu.ikeea.Factory.UserFactory;
 import mif.vu.ikeea.Generator.TokenValueGenerator;
+import mif.vu.ikeea.Helper.PromotionHelper;
 import mif.vu.ikeea.Helper.RestrictionDaysHelper;
 import mif.vu.ikeea.Payload.RegistrationRequest;
+import mif.vu.ikeea.Payload.UpdateForLeaderRequest;
 import mif.vu.ikeea.Payload.UpdateProfileRequest;
 import mif.vu.ikeea.RepositoryService.UserService;
 import mif.vu.ikeea.Responses.UserProfileResponse;
@@ -38,6 +40,9 @@ public class UserManager
 
     @Autowired
     private RestrictionDaysHelper restrictionDaysHelper;
+
+    @Autowired
+    private PromotionHelper promotionHelper;
 
     @Transactional
     public ApplicationUser create(String email, ApplicationUser manager) {
@@ -89,6 +94,22 @@ public class UserManager
 
         if (userProfileRequest.getPassword() != null && userProfileRequest.getOldPassword() != null) {
             updatePassword(user, userProfileRequest);
+        }
+
+        userService.update(user);
+
+        return new UserProfileResponse(user);
+    }
+
+    @Transactional
+    public UserProfileResponse updateForLeader(ApplicationUser user, UpdateForLeaderRequest updateForLeaderRequest) {
+
+        if (updateForLeaderRequest.getRestrictionDays() != null) {
+            user.setRestrictionDays(updateForLeaderRequest.getRestrictionDays());
+        }
+
+        if (updateForLeaderRequest.getManagerId() != null) {
+            promotionHelper.updateRoles(user, updateForLeaderRequest);
         }
 
         userService.update(user);
