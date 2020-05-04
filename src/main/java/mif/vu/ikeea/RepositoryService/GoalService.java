@@ -1,5 +1,6 @@
 package mif.vu.ikeea.RepositoryService;
 
+import mif.vu.ikeea.Entity.ApplicationUser;
 import mif.vu.ikeea.Entity.Goal;
 import mif.vu.ikeea.Entity.Repository.GoalRepository;
 import mif.vu.ikeea.Exceptions.ResourceNotFoundException;
@@ -14,6 +15,9 @@ import java.util.List;
 public class GoalService {
     @Autowired
     private GoalRepository goalRepository;
+
+    @Autowired
+    private UserService userService;
 
     @Transactional
     public Goal add(Goal goal) {
@@ -53,6 +57,17 @@ public class GoalService {
         List<Goal> goals = new ArrayList<>();
         goalIterable.forEach(goals::add);
 
+        return goals;
+    }
+
+    public List<Goal> getAllByManagerId(Long userId){
+        List<ApplicationUser> applicationUsers = userService.getAllByManagerId(userId);
+        List<Goal> goals = new ArrayList<>();
+
+        for(ApplicationUser applicationUser : applicationUsers){
+            Iterable<Goal> goalIterable = goalRepository.findAllByUserId(applicationUser.getId());
+            goalIterable.forEach(goals::add);
+        }
         return goals;
     }
 }
