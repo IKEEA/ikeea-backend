@@ -32,9 +32,9 @@ public class GoalController {
         return ResponseEntity.ok(new ApiResponse(true, "Goal added successfully"));
     }
 
-    @GetMapping(path = "/list")
-    public @ResponseBody List<GoalResponse> list() {
-        List<Goal> goals = goalService.getAll();
+    @GetMapping(path = "/{managerId}/team-list")
+    public @ResponseBody List<GoalResponse> list(@PathVariable Long managerId)  {
+        List<Goal> goals = goalService.getAllByManagerId(managerId);
         List<GoalResponse> goalResponses = new ArrayList<>();
 
         for (Goal goal : goals) {
@@ -43,7 +43,7 @@ public class GoalController {
 
         return goalResponses;
     }
-
+    
     @GetMapping(path = "/{userId}/list")
     public @ResponseBody List<GoalResponse> getUserLearningDaysList(@PathVariable Long userId) {
         List<Goal> goals = goalService.getAllByUserId(userId);
