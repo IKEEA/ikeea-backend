@@ -15,6 +15,7 @@ public class UserProfileResponse {
     private String email;
     private Boolean enabled;
     private List<ERole> roles;
+    private Long managerId = null;
     private String managerFirstName = null;
     private String managerLastName = null;
     private String managerEmail = null;
@@ -30,6 +31,7 @@ public class UserProfileResponse {
         this.restrictionDays = user.getRestrictionDays();
 
         if (user.getManager() != null) {
+            this.managerId = user.getManager().getId();
             this.managerFirstName = user.getManager().getFirstName();
             this.managerLastName = user.getManager().getLastName();
             this.managerEmail = user.getManager().getEmail();
