@@ -6,6 +6,7 @@ import mif.vu.ikeea.Entity.Role;
 import mif.vu.ikeea.Entity.Topic;
 import mif.vu.ikeea.Enums.ERole;
 import mif.vu.ikeea.Exceptions.ResourceNotFoundException;
+import mif.vu.ikeea.Exceptions.RestrictionLimitUsedException;
 import mif.vu.ikeea.Factory.LearningDayFactory;
 import mif.vu.ikeea.Payload.LearningDayRequest;
 import mif.vu.ikeea.Payload.UpdateLearningDayRequest;
@@ -37,6 +38,13 @@ public class LearningDayManager {
     @Transactional
     public LearningDay create(LearningDayRequest learningDayRequest) {
         ApplicationUser user = userService.loadById(learningDayRequest.getUserId());
+
+        if(user.getRestrictionDays()-1 < 0){
+            throw new RestrictionLimitUsedException("User can't have more learning days in this quarter");
+        }
+        user.setRestrictionDays(user.getRestrictionDays()-1);
+        userService.update(user);
+
         List<Long> topicIds = learningDayRequest.getTopicIds();
 
         LearningDay learningDay = learningDayFactory.createLearningDay(
