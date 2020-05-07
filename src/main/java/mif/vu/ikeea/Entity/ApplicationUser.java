@@ -78,15 +78,17 @@ public class ApplicationUser {
         manager.getChildren().add(this);
     }
 
-    public void incrementRestrictionDays(int days){
-        this.setRestrictionDays(this.getRestrictionDays() + days);
+    public void incrementRestrictionDays() {
+        this.restrictionDays = restrictionDays++;
     }
 
-    public boolean decrementRestrictionDays(int days){
-        if ((this.getRestrictionDays() - days)<0){
+    public boolean decrementRestrictionDays() {
+        if (this.restrictionDays-- < 0) {
             return false;
         }
-        this.setRestrictionDays(this.getRestrictionDays() - days);
+
+        this.restrictionDays = restrictionDays--;
+
         return true;
     }
 }

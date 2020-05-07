@@ -36,7 +36,7 @@ public class LearningDayService {
         LearningDay learningDay = learningDayService.loadById(id);
 
         ApplicationUser user = learningDay.getUser();
-        user.incrementRestrictionDays(1);
+        user.incrementRestrictionDays();
         userService.update(user);
 
         deleteTopics(learningDay);
