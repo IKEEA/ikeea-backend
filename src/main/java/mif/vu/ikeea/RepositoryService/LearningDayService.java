@@ -34,6 +34,11 @@ public class LearningDayService {
     @Transactional
     public void delete(Long id) {
         LearningDay learningDay = learningDayService.loadById(id);
+
+        ApplicationUser user = learningDay.getUser();
+        user.incrementRestrictionDays();
+        userService.update(user);
+
         deleteTopics(learningDay);
         learningDayRepository.deleteById(id);
     }
