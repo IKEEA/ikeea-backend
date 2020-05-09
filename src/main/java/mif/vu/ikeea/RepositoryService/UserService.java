@@ -100,6 +100,13 @@ public class UserService implements UserDetailsService {
         return updatedRows;
     }
 
+    @Transactional
+    public Integer resetRestrictionDays(Integer restrictionDays) {
+        Integer updatedRows = userRepository.resetRestrictionDays(restrictionDays);
+
+        return updatedRows;
+    }
+
     public List<ApplicationUser> getAll() {
         Iterable<ApplicationUser> userIterable = userRepository.findAll();
         List<ApplicationUser> applicationUsers = new ArrayList<>();
