@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -121,6 +122,55 @@ public class LearningDayService {
         for(ApplicationUser applicationUser : applicationUsers) {
             Iterable<LearningDay> learningDayIterable = learningDayRepository.findAllByUserId(applicationUser.getId());
             learningDayIterable.forEach(learningDays::add);
+        }
+
+        return learningDays;
+    }
+
+    public List<LearningDay> getAllByManagerIdAndUserId(Long managerId, Long userId) {
+        List<ApplicationUser> applicationUsers = userService.getAllByManagerId(managerId);
+        ApplicationUser user = userService.loadById(userId);
+
+        List<LearningDay> learningDays = new ArrayList<>();
+
+        for(ApplicationUser applicationUser : applicationUsers) {
+            if(applicationUser.equals(user)){
+                Iterable<LearningDay> learningDayIterable = learningDayRepository.findAllByUserId(applicationUser.getId());
+                learningDayIterable.forEach(learningDays::add);
+            }
+        }
+
+        return learningDays;
+    }
+
+    public List<LearningDay> getAllByManagerIdAndDate(Long managerId, Date date) {
+        List<ApplicationUser> applicationUsers = userService.getAllByManagerId(managerId);
+
+        List<LearningDay> learningDays = new ArrayList<>();
+
+        for(ApplicationUser applicationUser : applicationUsers) {
+            Iterable<LearningDay> learningDayIterable = learningDayRepository.findAllByUserIdAndDate(applicationUser.getId(), date);
+            learningDayIterable.forEach(learningDays::add);
+        }
+
+        return learningDays;
+    }
+
+    public List<LearningDay> getAllByUserIdAndTopicId(Long managerId, Long topicId) {
+        List<ApplicationUser> applicationUsers = userService.getAllByManagerId(managerId);
+
+        List<LearningDay> learningDays = new ArrayList<>();
+
+        for(ApplicationUser applicationUser : applicationUsers) {
+            Iterable<LearningDay> learningDayIterable = learningDayRepository.findAllByUserId(applicationUser.getId());
+            for(LearningDay learningDay : learningDayIterable) {
+                List<Topic> topics = learningDay.getTopics();
+                for(Topic topic : topics) {
+                    if (topic.getId().equals(topicId)){
+                        learningDays.add(learningDay);
+                    }
+                }
+            }
         }
 
         return learningDays;
