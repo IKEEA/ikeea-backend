@@ -1,48 +1,43 @@
 package mif.vu.ikeea.Specifications;
 
-import lombok.Getter;
-import lombok.Setter;
 import mif.vu.ikeea.Entity.LearningDay;
+import mif.vu.ikeea.Entity.Topic;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
+import java.util.Date;
 
-@Getter
-@Setter
-public class LearningDaySpecification implements Specification<LearningDay> {
+public class LearningDaySpecification {
 
-    private SearchCriteria criteria;
-
-    public LearningDaySpecification(){
+    public static Specification<LearningDay> withDate(Date date) {
+        if (date == null) {
+            return null;
+        } else {
+            return (root, query, cb) -> cb.equal(root.get("date"), date);
+        }
     }
 
-    public LearningDaySpecification(SearchCriteria criteria){
-        this.criteria = criteria;
+    public static Specification<LearningDay> withTopic(Long topicId) {
+        if (topicId == null) {
+            return null;
+        } else {
+            return (root, query, cb) -> cb.equal(root.join("topics", JoinType.LEFT).get("id"), topicId);
+        }
     }
 
-    @Override
-    public Predicate toPredicate
-            (Root<LearningDay> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
+    public static Specification<LearningDay> withUser(Long userId) {
+        if (userId == null) {
+            return null;
+        } else {
+            return (root, query, cb) -> cb.equal(root.join("user", JoinType.LEFT).get("id"), userId);
+        }
+    }
 
-        if (criteria.getOperation().equalsIgnoreCase(">")) {
-            return builder.greaterThanOrEqualTo(
-                    root.<String> get(criteria.getKey()), criteria.getValue().toString());
+    public static Specification<LearningDay> withManager(Long managerId) {
+        if (managerId == null) {
+            return null;
+        } else {
+            return (root, query, cb) -> cb.equal(root.join("user", JoinType.LEFT).get("manager").get("id"), managerId);
         }
-        else if (criteria.getOperation().equalsIgnoreCase("<")) {
-            return builder.lessThanOrEqualTo(
-                    root.<String> get(criteria.getKey()), criteria.getValue().toString());
-        }
-        else if (criteria.getOperation().equalsIgnoreCase(":")) {
-            if (root.get(criteria.getKey()).getJavaType() == String.class) {
-                return builder.like(
-                        root.<String>get(criteria.getKey()), "%" + criteria.getValue() + "%");
-            } else {
-                return builder.equal(root.get(criteria.getKey()), criteria.getValue());
-            }
-        }
-        return null;
     }
 }
