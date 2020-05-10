@@ -9,15 +9,11 @@ import mif.vu.ikeea.Payload.UpdateLearningDayRequest;
 import mif.vu.ikeea.RepositoryService.LearningDayService;
 import mif.vu.ikeea.Responses.ApiResponse;
 import mif.vu.ikeea.Responses.LearningDayResponse;
-import mif.vu.ikeea.Specifications.LearningDaySpecification;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -40,9 +36,8 @@ public class LearningDayController {
         return ResponseEntity.ok(new ApiResponse(true, "Learning day added successfully"));
     }
 
-    @GetMapping(path = "/{managerId}/list")
+    @PostMapping(path = "/{managerId}/list")
     public List<LearningDayResponse> getLearningDaysListSearch(@PathVariable Long managerId, @RequestBody FilterLearningDayRequest filterLearningDayRequest){
-
         List<LearningDay> learningDays = learningDayService.getAll(managerId,filterLearningDayRequest);
 
         return learningDayListToResponse(learningDays);

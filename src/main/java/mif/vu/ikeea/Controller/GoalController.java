@@ -42,7 +42,7 @@ public class GoalController {
         return goalListToResponse(goals);
     }
     
-    @GetMapping(path = "/{userId}/list")
+    @PostMapping(path = "/{userId}/list")
     public @ResponseBody List<GoalResponse> getUserLearningDaysList(@PathVariable Long userId) {
         List<Goal> goals = goalService.getAllByUserId(userId);
 

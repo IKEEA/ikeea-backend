@@ -8,13 +8,11 @@ import mif.vu.ikeea.Exceptions.ResourceNotFoundException;
 import mif.vu.ikeea.Payload.FilterLearningDayRequest;
 import mif.vu.ikeea.Specifications.LearningDaySpecification;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service
