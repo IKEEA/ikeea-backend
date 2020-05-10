@@ -11,7 +11,7 @@ public class ResetRestrictionDaysScheduler {
     @Autowired
     private UserService userService;
 
-    @Scheduled(cron = "0 0 1 */3 *")
+    @Scheduled(cron = "0 0 1 */3 * ?")
     public void resetRestrictionDays() {
         Integer DEFAULT_RESTRICTION_DAYS = 3;
 
