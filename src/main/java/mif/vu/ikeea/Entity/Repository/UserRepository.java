@@ -23,4 +23,8 @@ public interface UserRepository extends CrudRepository<ApplicationUser, Long> {
     @Modifying
     @Query("UPDATE ApplicationUser u SET u.restrictionDays = :restrictionDays WHERE u.id IN (:ids)")
     Integer updateRestrictionDays(@Param("restrictionDays") Integer restrictionDays, @Param("ids") Set<Long> ids);
+
+    @Modifying
+    @Query("UPDATE ApplicationUser u SET u.restrictionDays = :restrictionDays")
+    Integer resetRestrictionDays(@Param("restrictionDays") Integer restrictionDay);
 }
