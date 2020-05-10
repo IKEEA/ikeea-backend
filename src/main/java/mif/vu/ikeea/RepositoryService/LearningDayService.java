@@ -5,7 +5,10 @@ import mif.vu.ikeea.Entity.LearningDay;
 import mif.vu.ikeea.Entity.Repository.LearningDayRepository;
 import mif.vu.ikeea.Entity.Topic;
 import mif.vu.ikeea.Exceptions.ResourceNotFoundException;
+import mif.vu.ikeea.Specifications.LearningDaySpecification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -99,10 +102,11 @@ public class LearningDayService {
         return learningDay;
     }
 
-    public List<LearningDay> getAll() {
-        Iterable<LearningDay> learningDayIterable = learningDayRepository.findAll();
-        List<LearningDay> learningDays = new ArrayList<>();
-        learningDayIterable.forEach(learningDays::add);
+    public List<LearningDay> getAll(Long managerId, Date date, Long userId, Long topicId) {
+
+        List<LearningDay> learningDays = learningDayRepository.findAll(Specification.where(LearningDaySpecification.withManager(managerId))
+                .and(Specification.where(LearningDaySpecification.withDate(date))).and(Specification.where(LearningDaySpecification.withTopic(topicId)))
+                .and(Specification.where(LearningDaySpecification.withUser(userId))));
 
         return learningDays;
     }
