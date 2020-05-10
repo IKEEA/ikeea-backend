@@ -44,10 +44,21 @@ public class LearningDayController {
                                                                @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)Date date,
                                                                @RequestParam(required = false) Long userId, @RequestParam(required = false) Long topicId){
 
-        List<LearningDay> learningDays = learningDayRepository.findAll(Specification.where(LearningDaySpecification.withManager(managerId))
-                .and(Specification.where(LearningDaySpecification.withDate(date)))
-                .and(Specification.where(LearningDaySpecification.withTopic(topicId)))
-                .and(Specification.where(LearningDaySpecification.withUser(userId))));
+        Specification<LearningDay> specification = Specification.where(LearningDaySpecification.withManager(managerId));
+
+        if (date != null) {
+             specification.and(Specification.where(LearningDaySpecification.withDate(date)));
+        }
+
+        if (topicId != null) {
+            specification.and(Specification.where(LearningDaySpecification.withTopic(topicId)));
+        }
+
+        if (userId != null) {
+            specification.and(Specification.where(LearningDaySpecification.withUser(userId)));
+        }
+
+        List<LearningDay> learningDays = learningDayRepository.findAll(specification);
         List<LearningDayResponse> learningDayResponses = new ArrayList<>();
 
         for (LearningDay learningDay : learningDays) {
