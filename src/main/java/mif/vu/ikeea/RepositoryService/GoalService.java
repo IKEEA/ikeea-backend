@@ -2,13 +2,19 @@ package mif.vu.ikeea.RepositoryService;
 
 import mif.vu.ikeea.Entity.ApplicationUser;
 import mif.vu.ikeea.Entity.Goal;
+import mif.vu.ikeea.Entity.LearningDay;
 import mif.vu.ikeea.Entity.Repository.GoalRepository;
 import mif.vu.ikeea.Exceptions.ResourceNotFoundException;
+import mif.vu.ikeea.Payload.FilterGoalRequest;
+import mif.vu.ikeea.Specifications.GoalSpecification;
+import mif.vu.ikeea.Specifications.LearningDaySpecification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -44,10 +50,10 @@ public class GoalService {
         return goal;
     }
 
-    public List<Goal> getAll() {
-        Iterable<Goal> goalIterable = goalRepository.findAll();
-        List<Goal> goals = new ArrayList<>();
-        goalIterable.forEach(goals::add);
+    public List<Goal> getAll(Long managerId, FilterGoalRequest filterGoalRequest) {
+        List<Goal> goals = goalRepository.findAll(Specification.where(GoalSpecification.withManager(managerId))
+                .and(Specification.where(GoalSpecification.withTopic(filterGoalRequest.getTopicId())))
+                .and(Specification.where(GoalSpecification.withUser(filterGoalRequest.getUserId()))));
 
         return goals;
     }

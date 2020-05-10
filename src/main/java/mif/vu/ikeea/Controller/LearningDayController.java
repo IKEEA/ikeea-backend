@@ -1,18 +1,23 @@
 package mif.vu.ikeea.Controller;
 
 import mif.vu.ikeea.Entity.LearningDay;
+import mif.vu.ikeea.Entity.Repository.LearningDayRepository;
 import mif.vu.ikeea.Manager.LearningDayManager;
+import mif.vu.ikeea.Payload.FilterLearningDayRequest;
 import mif.vu.ikeea.Payload.LearningDayRequest;
 import mif.vu.ikeea.Payload.UpdateLearningDayRequest;
 import mif.vu.ikeea.RepositoryService.LearningDayService;
 import mif.vu.ikeea.Responses.ApiResponse;
 import mif.vu.ikeea.Responses.LearningDayResponse;
+import mif.vu.ikeea.Specifications.LearningDaySpecification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -25,6 +30,9 @@ public class LearningDayController {
     @Autowired
     private LearningDayService learningDayService;
 
+    @Autowired
+    private LearningDayRepository learningDayRepository;
+
     @PostMapping("/add")
     public ResponseEntity<?> createLearningDay(@Valid @RequestBody LearningDayRequest learningDayRequest) {
         learningDayManager.create(learningDayRequest);
@@ -33,27 +41,18 @@ public class LearningDayController {
     }
 
     @GetMapping(path = "/{managerId}/list")
-    public @ResponseBody List<LearningDayResponse> getLearningDaysList(@PathVariable Long managerId) {
-        List<LearningDay> learningDays = learningDayService.getAllByManagerId(managerId);
-        List<LearningDayResponse> learningDayResponses = new ArrayList<>();
+    public List<LearningDayResponse> getLearningDaysListSearch(@PathVariable Long managerId, @RequestBody FilterLearningDayRequest filterLearningDayRequest){
 
-        for (LearningDay learningDay : learningDays) {
-            learningDayResponses.add(new LearningDayResponse(learningDay));
-        }
+        List<LearningDay> learningDays = learningDayService.getAll(managerId,filterLearningDayRequest);
 
-        return learningDayResponses;
+        return learningDayListToResponse(learningDays);
     }
 
     @GetMapping(path = "/{userId}/user-list")
     public @ResponseBody List<LearningDayResponse> getUserLearningDaysList(@PathVariable Long userId) {
         List<LearningDay> learningDays = learningDayService.getAllByUserId(userId);
-        List<LearningDayResponse> learningDayResponses = new ArrayList<>();
 
-        for (LearningDay learningDay : learningDays) {
-            learningDayResponses.add(new LearningDayResponse(learningDay));
-        }
-
-        return learningDayResponses;
+        return learningDayListToResponse(learningDays);
     }
 
     @DeleteMapping(path = "/{id}/delete")
@@ -76,5 +75,14 @@ public class LearningDayController {
         LearningDay learningDay = learningDayService.loadById(id);
 
         return new LearningDayResponse(learningDay);
+    }
+
+    private List<LearningDayResponse> learningDayListToResponse(List<LearningDay> learningDays){
+        List<LearningDayResponse> learningDayResponses = new ArrayList<>();
+        for (LearningDay learningDay : learningDays) {
+            learningDayResponses.add(new LearningDayResponse(learningDay));
+        }
+
+        return learningDayResponses;
     }
 }

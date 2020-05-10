@@ -1,7 +1,9 @@
 package mif.vu.ikeea.Controller;
 
+import jdk.jfr.DataAmount;
 import mif.vu.ikeea.Entity.Goal;
 import mif.vu.ikeea.Manager.GoalManager;
+import mif.vu.ikeea.Payload.FilterGoalRequest;
 import mif.vu.ikeea.Payload.GoalRequest;
 import mif.vu.ikeea.Payload.UpdateGoalRequest;
 import mif.vu.ikeea.RepositoryService.GoalService;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -33,27 +36,17 @@ public class GoalController {
     }
 
     @GetMapping(path = "/{managerId}/team-list")
-    public @ResponseBody List<GoalResponse> list(@PathVariable Long managerId)  {
-        List<Goal> goals = goalService.getAllByManagerId(managerId);
-        List<GoalResponse> goalResponses = new ArrayList<>();
+    public @ResponseBody List<GoalResponse> list(@PathVariable Long managerId, @RequestBody FilterGoalRequest filterGoalRequest)  {
+        List<Goal> goals = goalService.getAll(managerId, filterGoalRequest);
 
-        for (Goal goal : goals) {
-            goalResponses.add(new GoalResponse(goal));
-        }
-
-        return goalResponses;
+        return goalListToResponse(goals);
     }
     
     @GetMapping(path = "/{userId}/list")
     public @ResponseBody List<GoalResponse> getUserLearningDaysList(@PathVariable Long userId) {
         List<Goal> goals = goalService.getAllByUserId(userId);
-        List<GoalResponse> goalResponses = new ArrayList<>();
 
-        for (Goal goal : goals) {
-            goalResponses.add(new GoalResponse(goal));
-        }
-
-        return goalResponses;
+        return goalListToResponse(goals);
     }
 
     @DeleteMapping(path = "/{id}/delete")
@@ -75,5 +68,15 @@ public class GoalController {
         Goal goal = goalService.loadById(id);
 
         return new GoalResponse(goal);
+    }
+
+    private List<GoalResponse> goalListToResponse(List<Goal> goals){
+        List<GoalResponse> goalResponses = new ArrayList<>();
+
+        for (Goal goal : goals) {
+            goalResponses.add(new GoalResponse(goal));
+        }
+
+        return goalResponses;
     }
 }

@@ -5,11 +5,16 @@ import mif.vu.ikeea.Entity.LearningDay;
 import mif.vu.ikeea.Entity.Repository.LearningDayRepository;
 import mif.vu.ikeea.Entity.Topic;
 import mif.vu.ikeea.Exceptions.ResourceNotFoundException;
+import mif.vu.ikeea.Payload.FilterLearningDayRequest;
+import mif.vu.ikeea.Specifications.LearningDaySpecification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -98,10 +103,11 @@ public class LearningDayService {
         return learningDay;
     }
 
-    public List<LearningDay> getAll() {
-        Iterable<LearningDay> learningDayIterable = learningDayRepository.findAll();
-        List<LearningDay> learningDays = new ArrayList<>();
-        learningDayIterable.forEach(learningDays::add);
+    public List<LearningDay> getAll(Long managerId, FilterLearningDayRequest filterLearningDayRequest) {
+
+        List<LearningDay> learningDays = learningDayRepository.findAll(Specification.where(LearningDaySpecification.withManager(managerId))
+                .and(Specification.where(LearningDaySpecification.withDate(filterLearningDayRequest.getDate()))).and(Specification.where(LearningDaySpecification.withTopic(filterLearningDayRequest.getTopicId())))
+                .and(Specification.where(LearningDaySpecification.withUser(filterLearningDayRequest.getUserId()))));
 
         return learningDays;
     }
@@ -110,18 +116,6 @@ public class LearningDayService {
         Iterable<LearningDay> learningDayIterable = learningDayRepository.findAllByUserId(userId);
         List<LearningDay> learningDays = new ArrayList<>();
         learningDayIterable.forEach(learningDays::add);
-
-        return learningDays;
-    }
-
-    public List<LearningDay> getAllByManagerId(Long userId) {
-        List<ApplicationUser> applicationUsers = userService.getAllByManagerId(userId);
-        List<LearningDay> learningDays = new ArrayList<>();
-
-        for(ApplicationUser applicationUser : applicationUsers) {
-            Iterable<LearningDay> learningDayIterable = learningDayRepository.findAllByUserId(applicationUser.getId());
-            learningDayIterable.forEach(learningDays::add);
-        }
 
         return learningDays;
     }
