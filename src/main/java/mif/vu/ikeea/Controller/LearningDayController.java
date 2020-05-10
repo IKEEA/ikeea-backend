@@ -43,7 +43,7 @@ public class LearningDayController {
     @GetMapping(path = "/{managerId}/list")
     public List<LearningDayResponse> getLearningDaysListSearch(@PathVariable Long managerId, @RequestBody FilterLearningDayRequest filterLearningDayRequest){
 
-        List<LearningDay> learningDays = learningDayService.getAll(managerId,filterLearningDayRequest.getDate(), filterLearningDayRequest.getUserId(), filterLearningDayRequest.getUserId());
+        List<LearningDay> learningDays = learningDayService.getAll(managerId,filterLearningDayRequest);
 
         return learningDayListToResponse(learningDays);
     }

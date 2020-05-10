@@ -5,6 +5,7 @@ import mif.vu.ikeea.Entity.LearningDay;
 import mif.vu.ikeea.Entity.Repository.LearningDayRepository;
 import mif.vu.ikeea.Entity.Topic;
 import mif.vu.ikeea.Exceptions.ResourceNotFoundException;
+import mif.vu.ikeea.Payload.FilterLearningDayRequest;
 import mif.vu.ikeea.Specifications.LearningDaySpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -102,11 +103,11 @@ public class LearningDayService {
         return learningDay;
     }
 
-    public List<LearningDay> getAll(Long managerId, Date date, Long userId, Long topicId) {
+    public List<LearningDay> getAll(Long managerId, FilterLearningDayRequest filterLearningDayRequest) {
 
         List<LearningDay> learningDays = learningDayRepository.findAll(Specification.where(LearningDaySpecification.withManager(managerId))
-                .and(Specification.where(LearningDaySpecification.withDate(date))).and(Specification.where(LearningDaySpecification.withTopic(topicId)))
-                .and(Specification.where(LearningDaySpecification.withUser(userId))));
+                .and(Specification.where(LearningDaySpecification.withDate(filterLearningDayRequest.getDate()))).and(Specification.where(LearningDaySpecification.withTopic(filterLearningDayRequest.getTopicId())))
+                .and(Specification.where(LearningDaySpecification.withUser(filterLearningDayRequest.getUserId()))));
 
         return learningDays;
     }

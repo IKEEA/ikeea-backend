@@ -37,7 +37,7 @@ public class GoalController {
 
     @GetMapping(path = "/{managerId}/team-list")
     public @ResponseBody List<GoalResponse> list(@PathVariable Long managerId, @RequestBody FilterGoalRequest filterGoalRequest)  {
-        List<Goal> goals = goalService.getAll(managerId, filterGoalRequest.getUserId(), filterGoalRequest.getTopicId());
+        List<Goal> goals = goalService.getAll(managerId, filterGoalRequest);
 
         return goalListToResponse(goals);
     }

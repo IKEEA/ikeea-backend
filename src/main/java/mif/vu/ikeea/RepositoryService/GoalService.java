@@ -5,6 +5,7 @@ import mif.vu.ikeea.Entity.Goal;
 import mif.vu.ikeea.Entity.LearningDay;
 import mif.vu.ikeea.Entity.Repository.GoalRepository;
 import mif.vu.ikeea.Exceptions.ResourceNotFoundException;
+import mif.vu.ikeea.Payload.FilterGoalRequest;
 import mif.vu.ikeea.Specifications.GoalSpecification;
 import mif.vu.ikeea.Specifications.LearningDaySpecification;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,10 +50,10 @@ public class GoalService {
         return goal;
     }
 
-    public List<Goal> getAll(Long managerId, Long userId, Long topicId) {
+    public List<Goal> getAll(Long managerId, FilterGoalRequest filterGoalRequest) {
         List<Goal> goals = goalRepository.findAll(Specification.where(GoalSpecification.withManager(managerId))
-                .and(Specification.where(GoalSpecification.withTopic(topicId)))
-                .and(Specification.where(GoalSpecification.withUser(userId))));
+                .and(Specification.where(GoalSpecification.withTopic(filterGoalRequest.getTopicId())))
+                .and(Specification.where(GoalSpecification.withUser(filterGoalRequest.getUserId()))));
 
         return goals;
     }
