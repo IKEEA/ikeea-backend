@@ -53,5 +53,6 @@ public class GoalManager {
         }
 
         goal.setLastUpdate(new Date());
+        goalService.update(goal);
     }
 }
