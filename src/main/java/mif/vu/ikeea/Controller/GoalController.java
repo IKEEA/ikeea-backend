@@ -10,9 +10,11 @@ import mif.vu.ikeea.RepositoryService.GoalService;
 import mif.vu.ikeea.Responses.ApiResponse;
 import mif.vu.ikeea.Responses.GoalResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.OptimisticLockException;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Date;
@@ -58,7 +60,14 @@ public class GoalController {
     @PutMapping(path = "/{id}/update")
     public @ResponseBody ResponseEntity updateGoal(@PathVariable Long id, @Valid @RequestBody UpdateGoalRequest updateGoalRequest) {
         Goal goal = goalService.loadById(id);
-        goalManager.update(goal, updateGoalRequest);
+
+        try {
+            goalManager.update(goal, updateGoalRequest);
+        } catch (OptimisticLockException ex) {
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT)
+                    .body(new ApiResponse(false, "Goal was modified"));
+        }
 
         return ResponseEntity.ok(new ApiResponse(true, "Goal updated successfully"));
     }

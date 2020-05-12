@@ -104,7 +104,8 @@ public class LearningDayService {
     public List<LearningDay> getAll(Long managerId, FilterLearningDayRequest filterLearningDayRequest) {
 
         List<LearningDay> learningDays = learningDayRepository.findAll(Specification.where(LearningDaySpecification.withManager(managerId))
-                .and(Specification.where(LearningDaySpecification.withDate(filterLearningDayRequest.getDate()))).and(Specification.where(LearningDaySpecification.withTopic(filterLearningDayRequest.getTopicId())))
+                .and(Specification.where(LearningDaySpecification.withDate(filterLearningDayRequest.getDate())))
+                .and(Specification.where(LearningDaySpecification.withTopic(filterLearningDayRequest.getTopicId())))
                 .and(Specification.where(LearningDaySpecification.withUser(filterLearningDayRequest.getUserId()))));
 
         return learningDays;

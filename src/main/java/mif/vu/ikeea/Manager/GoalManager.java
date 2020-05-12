@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.OptimisticLockException;
 import java.util.Date;
 
 @Component
@@ -52,6 +53,5 @@ public class GoalManager {
         }
 
         goal.setLastUpdate(new Date());
-        goalService.update(goal);
     }
 }
