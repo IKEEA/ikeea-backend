@@ -66,7 +66,7 @@ public class GoalController {
         } catch (OptimisticLockException ex) {
             return ResponseEntity
                     .status(HttpStatus.CONFLICT)
-                    .body(new ApiResponse(false, "Goal was modified"));
+                    .body(new ApiResponse(false, "Goal was modified by other user"));
         }
 
         return ResponseEntity.ok(new ApiResponse(true, "Goal updated successfully"));
