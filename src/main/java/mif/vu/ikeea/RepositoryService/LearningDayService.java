@@ -5,11 +5,11 @@ import mif.vu.ikeea.Entity.LearningDay;
 import mif.vu.ikeea.Entity.Repository.LearningDayRepository;
 import mif.vu.ikeea.Entity.Topic;
 import mif.vu.ikeea.Exceptions.ResourceNotFoundException;
+import mif.vu.ikeea.Helper.PaginationHelper;
 import mif.vu.ikeea.Payload.FilterLearningDayRequest;
 import mif.vu.ikeea.Specifications.LearningDaySpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -31,6 +31,9 @@ public class LearningDayService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private PaginationHelper paginationHelper;
 
     @Transactional
     public LearningDay add(LearningDay learningDay) {
@@ -105,8 +108,7 @@ public class LearningDayService {
     }
 
     public List<LearningDay> getAll(Long managerId, FilterLearningDayRequest filterLearningDayRequest) {
-
-        Pageable pageable = PageRequest.of(filterLearningDayRequest.getPage(), filterLearningDayRequest.getSize());
+        Pageable pageable = paginationHelper.getPageableLearningDay(filterLearningDayRequest);
 
         Page<LearningDay> learningDaysAll = learningDayRepository.findAll(Specification.where(LearningDaySpecification.withManager(managerId))
                 .and(Specification.where(LearningDaySpecification.withDate(filterLearningDayRequest.getDate())))
