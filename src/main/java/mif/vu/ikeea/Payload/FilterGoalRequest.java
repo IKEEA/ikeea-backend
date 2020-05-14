@@ -10,4 +10,8 @@ public class FilterGoalRequest {
     private Long topicId;
 
     private Long userId;
+
+    private Integer page;
+
+    private Integer size;
 }
