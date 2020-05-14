@@ -8,39 +8,34 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PaginationHelper {
-
-    Integer page;
-    Integer size;
+    private final int DEFAULT_PAGE = 0;
+    private final int DEFAULT_SIZE = 10;
 
     public Pageable getPageableLearningDay(FilterLearningDayRequest filterLearningDayRequest) {
-        if(filterLearningDayRequest.getPage() == null) {
-            page = 0;
+        Integer page = filterLearningDayRequest.getPage();
+        Integer size = filterLearningDayRequest.getSize();
+
+        if (page == null) {
+            page = DEFAULT_PAGE;
         }
-        if (filterLearningDayRequest.getSize() == null) {
-            size = 10;
-        }
-        if(filterLearningDayRequest.getPage() != null) {
-            page = filterLearningDayRequest.getPage();
-        }
-        if(filterLearningDayRequest.getSize() != null) {
-            size = filterLearningDayRequest.getSize();
+
+        if (size == null) {
+            size = DEFAULT_SIZE;
         }
 
         return PageRequest.of(page, size);
     }
 
     public Pageable getPageableGoal(FilterGoalRequest filterGoalRequest) {
-        if(filterGoalRequest.getPage() == null) {
-            page = 0;
+        Integer page = filterGoalRequest.getPage();
+        Integer size = filterGoalRequest.getSize();
+
+        if (page == null) {
+            page = DEFAULT_PAGE;
         }
-        if (filterGoalRequest.getSize() == null) {
-            size = 10;
-        }
-        if(filterGoalRequest.getPage() != null) {
-            page = filterGoalRequest.getPage();
-        }
-        if(filterGoalRequest.getSize() != null) {
-            size = filterGoalRequest.getSize();
+
+        if (size == null) {
+            size = DEFAULT_SIZE;
         }
 
         return PageRequest.of(page, size);
