@@ -9,27 +9,40 @@ import org.springframework.stereotype.Service;
 @Service
 public class PaginationHelper {
 
-    Pageable pageable = PageRequest.of(0, 10);
+    Integer page;
+    Integer size;
 
     public Pageable getPageableLearningDay(FilterLearningDayRequest filterLearningDayRequest) {
+        if(filterLearningDayRequest.getPage() == null) {
+            page = 0;
+        }
+        if (filterLearningDayRequest.getSize() == null) {
+            size = 10;
+        }
+        if(filterLearningDayRequest.getPage() != null) {
+            page = filterLearningDayRequest.getPage();
+        }
+        if(filterLearningDayRequest.getSize() != null) {
+            size = filterLearningDayRequest.getSize();
+        }
 
-        if(filterLearningDayRequest.getPage() != null && filterLearningDayRequest.getSize() != null) {
-            pageable = PageRequest.of(filterLearningDayRequest.getPage(), filterLearningDayRequest.getSize());
-        }
-        else if(filterLearningDayRequest.getPage() != null) {
-            pageable = PageRequest.of(filterLearningDayRequest.getPage(), 10);
-        }
-        return pageable;
+        return PageRequest.of(page, size);
     }
 
     public Pageable getPageableGoal(FilterGoalRequest filterGoalRequest) {
+        if(filterGoalRequest.getPage() == null) {
+            page = 0;
+        }
+        if (filterGoalRequest.getSize() == null) {
+            size = 10;
+        }
+        if(filterGoalRequest.getPage() != null) {
+            page = filterGoalRequest.getPage();
+        }
+        if(filterGoalRequest.getSize() != null) {
+            size = filterGoalRequest.getSize();
+        }
 
-        if(filterGoalRequest.getPage() != null && filterGoalRequest.getSize() != null) {
-            pageable = PageRequest.of(filterGoalRequest.getPage(), filterGoalRequest.getSize());
-        }
-        else if(filterGoalRequest.getPage() != null) {
-            pageable = PageRequest.of(filterGoalRequest.getPage(), 10);
-        }
-        return pageable;
+        return PageRequest.of(page, size);
     }
 }
