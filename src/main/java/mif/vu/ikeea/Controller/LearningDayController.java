@@ -50,13 +50,13 @@ public class LearningDayController {
         return learningDayListToResponse(learningDays);
     }
 
-    @DeleteMapping(path = "/{id}/delete")
+    @DeleteMapping(path = "/{id}")
     public @ResponseBody ResponseEntity delete(@PathVariable Long id) {
         learningDayService.delete(id);
         return ResponseEntity.ok(new ApiResponse(true, "Learning day deleted successfully"));
     }
 
-    @PutMapping(path = "/{id}/update")
+    @PutMapping(path = "/{id}")
     public @ResponseBody ResponseEntity updateLearningDay(@PathVariable Long id, @RequestBody UpdateLearningDayRequest updateLearningDayRequest) {
         LearningDay learningDay = learningDayService.loadById(id);
         learningDayManager.update(learningDay, updateLearningDayRequest);
@@ -64,7 +64,7 @@ public class LearningDayController {
         return ResponseEntity.ok(new ApiResponse(true, "Learning day updated successfully"));
     }
 
-    @GetMapping(path = "/{id}/get")
+    @GetMapping(path = "/{id}")
     public @ResponseBody
     LearningDayResponse get(@PathVariable Long id){
         LearningDay learningDay = learningDayService.loadById(id);

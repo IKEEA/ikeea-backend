@@ -51,13 +51,13 @@ public class GoalController {
         return goalListToResponse(goals);
     }
 
-    @DeleteMapping(path = "/{id}/delete")
+    @DeleteMapping(path = "/{id}")
     public @ResponseBody ResponseEntity delete(@PathVariable Long id) {
         goalService.delete(id);
         return ResponseEntity.ok(new ApiResponse(true, "Goal deleted"));
     }
 
-    @PutMapping(path = "/{id}/update")
+    @PutMapping(path = "/{id}")
     public @ResponseBody ResponseEntity updateGoal(@PathVariable Long id, @Valid @RequestBody UpdateGoalRequest updateGoalRequest) {
         Goal goal = goalService.loadById(id);
 
@@ -72,7 +72,7 @@ public class GoalController {
         return ResponseEntity.ok(new ApiResponse(true, "Goal updated successfully"));
     }
 
-    @GetMapping(path = "/{id}/get")
+    @GetMapping(path = "/{id}")
     public @ResponseBody GoalResponse get(@PathVariable Long id){
         Goal goal = goalService.loadById(id);
 

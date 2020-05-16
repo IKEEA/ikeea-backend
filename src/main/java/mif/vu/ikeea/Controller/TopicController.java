@@ -43,13 +43,13 @@ public class TopicController {
         return topicResponses;
     }
 
-    @DeleteMapping(path = "/{id}/delete")
+    @DeleteMapping(path = "/{id}")
     public @ResponseBody ResponseEntity delete(@PathVariable Long id) {
         topicService.delete(id);
         return ResponseEntity.ok(new ApiResponse(true, "Topic deleted"));
     }
 
-    @PutMapping(path = "/{id}/update")
+    @PutMapping(path = "/{id}")
     public @ResponseBody ResponseEntity update(@PathVariable Long id, @Valid @RequestBody UpdateTopicRequest updateTopicRequest) {
         Topic topic = topicService.loadById(id);
         topicManager.update(topic, updateTopicRequest);
@@ -57,7 +57,7 @@ public class TopicController {
         return ResponseEntity.ok(new ApiResponse(true, "Topic updated successfully"));
     }
 
-    @GetMapping(path = "/{id}/get")
+    @GetMapping(path = "/{id}")
     public @ResponseBody TopicResponse get(@PathVariable Long id){
         Topic topic = topicService.loadById(id);
 
