@@ -82,13 +82,7 @@ public class ApplicationUser {
         this.restrictionDays = restrictionDays++;
     }
 
-    public boolean decrementRestrictionDays() {
-        if (this.restrictionDays-- < 0) {
-            return false;
-        }
-
+    public void decrementRestrictionDays() {
         this.restrictionDays = restrictionDays--;
-
-        return true;
     }
 }

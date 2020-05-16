@@ -39,10 +39,11 @@ public class LearningDayManager {
     public LearningDay create(LearningDayRequest learningDayRequest) {
         ApplicationUser user = userService.loadById(learningDayRequest.getUserId());
 
-        if(!user.decrementRestrictionDays()) {
+        if(user.getRestrictionDays() <= 0) {
             throw new RestrictionLimitUsedException("User can't have more learning days in this quarter");
         }
 
+        user.decrementRestrictionDays();
         userService.update(user);
 
         List<Long> topicIds = learningDayRequest.getTopicIds();
