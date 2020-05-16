@@ -79,10 +79,10 @@ public class ApplicationUser {
     }
 
     public void incrementRestrictionDays() {
-        this.restrictionDays = restrictionDays++;
+        this.restrictionDays++;
     }
 
     public void decrementRestrictionDays() {
-        this.restrictionDays = restrictionDays--;
+        this.restrictionDays--;
     }
 }
