@@ -2,7 +2,6 @@ package mif.vu.ikeea.Controller;
 
 import mif.vu.ikeea.Entity.ApplicationUser;
 import mif.vu.ikeea.Exceptions.DuplicateResourceException;
-import mif.vu.ikeea.Logger.RequestLoggingFilterConfig;
 import mif.vu.ikeea.Manager.UserManager;
 import mif.vu.ikeea.Payload.RegistrationRequest;
 import mif.vu.ikeea.RepositoryService.UserService;
@@ -10,8 +9,6 @@ import mif.vu.ikeea.Responses.ApiResponse;
 import mif.vu.ikeea.Responses.JwtAuthenticationResponse;
 import mif.vu.ikeea.Payload.LoginRequest;
 import mif.vu.ikeea.Security.JwtTokenProvider;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
