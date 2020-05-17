@@ -6,8 +6,9 @@ import mif.vu.ikeea.Responses.UserManagerResponse;
 import java.util.List;
 
 public class UserManagerResponseFactory {
-    public static UserManagerResponse create(ApplicationUser user, List<ApplicationUser> childUsers) {
+    public static UserManagerResponse create(ApplicationUser user, List<ApplicationUser> childUsers, List<UserManagerResponse> responses) {
         UserManagerResponse response = new UserManagerResponse();
+
         response.setId(user.getId());
         response.setFirstName(user.getFirstName());
         response.setLastName(user.getLastName());
@@ -17,7 +18,7 @@ public class UserManagerResponseFactory {
         response.setRestrictionDays(user.getRestrictionDays());
 
         for (ApplicationUser childrenUser : childUsers) {
-            response.getChildren().add(create(childrenUser, childrenUser.getChildren()));
+            responses.add(create(childrenUser, childrenUser.getChildren(), responses));
         }
 
         return response;

@@ -20,8 +20,7 @@ public class ManagerController {
 
     @PreAuthorize("hasRole('LEADER')")
     @GetMapping(path = "/{id}/users")
-    public @ResponseBody
-    List<UserManagerResponse> list(@PathVariable Long id) {
+    public @ResponseBody List<UserManagerResponse> list(@PathVariable Long id) {
 
         ApplicationUser manager = userService.loadById(id);
 
@@ -29,7 +28,7 @@ public class ManagerController {
         List<UserManagerResponse> userManagerResponses = new ArrayList<>();
 
         for (ApplicationUser user : childUsers) {
-            UserManagerResponse response = UserManagerResponseFactory.create(user, user.getChildren());
+            UserManagerResponse response = UserManagerResponseFactory.create(user, user.getChildren(), userManagerResponses);
             userManagerResponses.add(response);
         }
 

@@ -1,7 +1,6 @@
 package mif.vu.ikeea.Controller;
 
 import mif.vu.ikeea.Entity.LearningDay;
-import mif.vu.ikeea.Entity.Repository.LearningDayRepository;
 import mif.vu.ikeea.Manager.LearningDayManager;
 import mif.vu.ikeea.Payload.FilterLearningDayRequest;
 import mif.vu.ikeea.Payload.LearningDayRequest;
@@ -25,9 +24,6 @@ public class LearningDayController {
 
     @Autowired
     private LearningDayService learningDayService;
-
-    @Autowired
-    private LearningDayRepository learningDayRepository;
 
     @PostMapping("/add")
     public ResponseEntity<?> createLearningDay(@Valid @RequestBody LearningDayRequest learningDayRequest) {
@@ -65,8 +61,7 @@ public class LearningDayController {
     }
 
     @GetMapping(path = "/{id}")
-    public @ResponseBody
-    LearningDayResponse get(@PathVariable Long id){
+    public @ResponseBody LearningDayResponse get(@PathVariable Long id){
         LearningDay learningDay = learningDayService.loadById(id);
 
         return new LearningDayResponse(learningDay);

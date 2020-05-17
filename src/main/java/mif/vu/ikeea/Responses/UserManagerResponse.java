@@ -17,5 +17,4 @@ public class UserManagerResponse {
     private Integer restrictionDays;
     private Boolean enabled;
     private List<ERole> roles;
-    private List<UserManagerResponse> children = new ArrayList<>();
 }
