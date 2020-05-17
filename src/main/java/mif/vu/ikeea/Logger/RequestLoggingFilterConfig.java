@@ -1,33 +1,18 @@
 package mif.vu.ikeea.Logger;
-import com.sun.security.auth.UserPrincipal;
 import mif.vu.ikeea.Entity.ApplicationUser;
-import mif.vu.ikeea.FileHandling.Writer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.AbstractRequestLoggingFilter;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
-import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.util.ContentCachingRequestWrapper;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.ObjectInputFilter;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Configuration
 public class RequestLoggingFilterConfig extends AbstractRequestLoggingFilter {
-
-    @Value("${log.file.enabled}")
-    private boolean logFile;
-
-    @Value("${log.file.name}")
-    private String logFileName;
 
     @Bean
     public AbstractRequestLoggingFilter logFilter() {
@@ -44,9 +29,6 @@ public class RequestLoggingFilterConfig extends AbstractRequestLoggingFilter {
     protected void beforeRequest(HttpServletRequest httpServletRequest, String message) {
 
         logger.info(formMessage(httpServletRequest, message));
-
-        if(logFile)
-            Writer.writeUsingOutputStream(logFileName, formMessage(httpServletRequest, message));
     }
 
     @Override
@@ -67,8 +49,7 @@ public class RequestLoggingFilterConfig extends AbstractRequestLoggingFilter {
         if (principal instanceof ApplicationUser) {
             applicationUser = ((ApplicationUser) principal);
             message += " " + httpServletRequest.getMethod() + " " + getCurrentDateTime() + " " + applicationUser.getFirstName() + " " + applicationUser.getLastName() +  " " + auth.getAuthorities();
-        }
-        else {
+        } else {
             message += " " + httpServletRequest.getMethod() + " " + getCurrentDateTime() + " " + auth.getAuthorities();
         }
 
