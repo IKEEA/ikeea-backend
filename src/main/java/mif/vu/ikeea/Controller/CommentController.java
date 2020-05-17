@@ -44,13 +44,13 @@ public class CommentController {
         return commentResponses;
     }
 
-    @DeleteMapping(path = "/{id}/delete")
+    @DeleteMapping(path = "/{id}")
     public @ResponseBody ResponseEntity delete(@PathVariable Long id) {
         commentService.delete(id);
         return ResponseEntity.ok(new ApiResponse(true, "Comment deleted"));
     }
 
-    @PutMapping(path = "/{id}/update")
+    @PutMapping(path = "/{id}")
     public @ResponseBody ResponseEntity update(@PathVariable Long id, @Valid @RequestBody UpdateCommentRequest updateCommentRequest) {
         Comment comment = commentService.loadById(id);
         commentManager.update(comment, updateCommentRequest);
@@ -58,7 +58,7 @@ public class CommentController {
         return ResponseEntity.ok(new ApiResponse(true, "Comment updated successfully"));
     }
 
-    @GetMapping(path = "/{id}/get")
+    @GetMapping(path = "/{id}")
     public @ResponseBody CommentResponse get(@PathVariable Long id){
         Comment comment = commentService.loadById(id);
 

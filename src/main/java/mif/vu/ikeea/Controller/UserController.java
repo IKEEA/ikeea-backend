@@ -56,7 +56,7 @@ public class UserController {
         return new UserProfileResponse(user);
     }
 
-    @GetMapping(path = "/{id}/get")
+    @GetMapping(path = "/{id}")
     public @ResponseBody UserProfileResponse get(@PathVariable Long id) {
         ApplicationUser user = userService.loadById(id);
 
@@ -64,14 +64,14 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('LEADER')")
-    @DeleteMapping(path = "/{id}/delete")
+    @DeleteMapping(path = "/{id}")
     public @ResponseBody ResponseEntity delete(@PathVariable Long id) {
         userService.delete(id);
 
         return ResponseEntity.ok(new ApiResponse(true,"User deleted successfully"));
     }
 
-    @PutMapping(path = "/{id}/update")
+    @PutMapping(path = "/{id}")
     public @ResponseBody UserProfileResponse update(@PathVariable Long id, @Valid @RequestBody UpdateProfileRequest updateProfileRequest) {
         ApplicationUser user = userService.loadById(id);
 
