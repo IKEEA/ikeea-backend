@@ -32,14 +32,14 @@ public class LearningDayController {
         return ResponseEntity.ok(new ApiResponse(true, "Learning day added successfully"));
     }
 
-    @PostMapping(path = "/{managerId}/list")
+    @PostMapping(path = "/{managerId}/team-list")
     public List<LearningDayResponse> getLearningDaysListSearch(@PathVariable Long managerId, @RequestBody FilterLearningDayRequest filterLearningDayRequest){
         List<LearningDay> learningDays = learningDayService.getAll(managerId,filterLearningDayRequest);
 
         return learningDayListToResponse(learningDays);
     }
 
-    @GetMapping(path = "/{userId}/user-list")
+    @GetMapping(path = "/{userId}/list")
     public @ResponseBody List<LearningDayResponse> getUserLearningDaysList(@PathVariable Long userId) {
         List<LearningDay> learningDays = learningDayService.getAllByUserId(userId);
 
