@@ -22,6 +22,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/api/")
 public class AuthController {
+
     @Autowired
     AuthenticationManager authenticationManager;
 
@@ -47,6 +48,7 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String jwt = tokenProvider.generateToken(authentication);
+
         return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
     }
 
