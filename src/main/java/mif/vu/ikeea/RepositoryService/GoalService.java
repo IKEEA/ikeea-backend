@@ -78,9 +78,15 @@ public class GoalService {
         int start = (int) pageable.getOffset();
         int end = (start + pageable.getPageSize()) > goalsAll.size() ? goalsAll.size() : (start + pageable.getPageSize());
 
+        List<Goal> goals = new ArrayList<>();
+
+        if (start > end) {
+            return goals;
+        }
+
         Page<Goal> goalsAllPage = new PageImpl<Goal>(goalsAll.subList(start, end), pageable, goalsAll.size());
 
-        List<Goal> goals = goalsAllPage.getContent();
+        goals = goalsAllPage.getContent();
 
         return goals;
     }
