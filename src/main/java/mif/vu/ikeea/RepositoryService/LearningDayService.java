@@ -136,7 +136,7 @@ public class LearningDayService {
 
         List<LearningDay> learningDays = new ArrayList<>();
 
-        if(start>end){
+        if (start > end) {
             return learningDays;
         }
 

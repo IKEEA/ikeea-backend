@@ -80,7 +80,7 @@ public class GoalService {
 
         List<Goal> goals = new ArrayList<>();
 
-        if(start>end){
+        if (start > end) {
             return goals;
         }
 
