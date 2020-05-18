@@ -134,9 +134,15 @@ public class LearningDayService {
         int start = (int) pageable.getOffset();
         int end = (start + pageable.getPageSize()) > learningDaysAll.size() ? learningDaysAll.size() : (start + pageable.getPageSize());
 
+        List<LearningDay> learningDays = new ArrayList<>();
+
+        if(start>end){
+            return learningDays;
+        }
+
         Page<LearningDay> learningDaysAllPage = new PageImpl<LearningDay>(learningDaysAll.subList(start, end), pageable, learningDaysAll.size());
 
-        List<LearningDay> learningDays = learningDaysAllPage.getContent();
+        learningDays = learningDaysAllPage.getContent();
 
         return learningDays;
     }
