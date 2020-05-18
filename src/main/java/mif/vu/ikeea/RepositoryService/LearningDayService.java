@@ -10,6 +10,7 @@ import mif.vu.ikeea.Payload.FilterLearningDayRequest;
 import mif.vu.ikeea.Specifications.LearningDaySpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -110,12 +111,32 @@ public class LearningDayService {
     public List<LearningDay> getAll(Long managerId, FilterLearningDayRequest filterLearningDayRequest) {
         Pageable pageable = paginationHelper.getPageableLearningDay(filterLearningDayRequest);
 
-        Page<LearningDay> learningDaysAll = learningDayRepository.findAll(Specification.where(LearningDaySpecification.withManager(managerId))
+        List<LearningDay> learningDaysAll = learningDayRepository.findAll(Specification.where(LearningDaySpecification.withManager(managerId))
                 .and(Specification.where(LearningDaySpecification.withDate(filterLearningDayRequest.getDate())))
                 .and(Specification.where(LearningDaySpecification.withTopic(filterLearningDayRequest.getTopicId())))
-                .and(Specification.where(LearningDaySpecification.withUser(filterLearningDayRequest.getUserId()))), pageable);
+                .and(Specification.where(LearningDaySpecification.withUser(filterLearningDayRequest.getUserId()))));
 
-        List<LearningDay> learningDays = learningDaysAll.getContent();
+        ApplicationUser manager = userService.loadById(managerId);
+        List<ApplicationUser> childUsers = manager.getChildren();
+
+        for (ApplicationUser applicationUser : childUsers) {
+            List<LearningDay> learningDaysAllUser = learningDayRepository.findAll(Specification.where(LearningDaySpecification.withManager(applicationUser.getId()))
+                    .and(Specification.where(LearningDaySpecification.withDate(filterLearningDayRequest.getDate())))
+                    .and(Specification.where(LearningDaySpecification.withTopic(filterLearningDayRequest.getTopicId())))
+                    .and(Specification.where(LearningDaySpecification.withUser(filterLearningDayRequest.getUserId()))));
+
+            for (LearningDay learningDay : learningDaysAllUser) {
+                learningDaysAll.add(learningDay);
+            }
+
+        }
+
+        int start = (int) pageable.getOffset();
+        int end = (start + pageable.getPageSize()) > learningDaysAll.size() ? learningDaysAll.size() : (start + pageable.getPageSize());
+
+        Page<LearningDay> learningDaysAllPage = new PageImpl<LearningDay>(learningDaysAll.subList(start, end), pageable, learningDaysAll.size());
+
+        List<LearningDay> learningDays = learningDaysAllPage.getContent();
 
         return learningDays;
     }
