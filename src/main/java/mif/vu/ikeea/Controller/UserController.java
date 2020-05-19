@@ -39,12 +39,7 @@ public class UserController {
         if (userService.existsByEmail(email)) {
             throw new DuplicateResourceException("User with this email exist!");
         }
-
-        ApplicationUser manager = (ApplicationUser) authentication.getPrincipal();
-
-        ApplicationUser user = userManager.create(email, manager);
-        String message = MessageFactory.verifyEmail(user.getToken());
-        emailService.sendSimpleMessage(user.getEmail(), "Verify your account", message);
+        emailService.createMessage(email, authentication);
 
         return ResponseEntity.ok(new ApiResponse(true, "User invited successfully"));
     }
