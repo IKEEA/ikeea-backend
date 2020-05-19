@@ -23,7 +23,6 @@ public class PromotionChecker {
             if (role.getName().equals(ERole.LEADER)) {
                 continue;
             }
-
             promotionHelper.changeRole(user, ERole.LEADER);
         }
     }
@@ -34,7 +33,6 @@ public class PromotionChecker {
         if(!applicationUsers.isEmpty()) {
             return;
         }
-
         promotionHelper.changeRole(user, ERole.DEVELOPER);
     }
 }

@@ -79,7 +79,6 @@ public class UserManager
 
     @Transactional
     public UserProfileResponse update(ApplicationUser user, UpdateProfileRequest userProfileRequest) {
-
         if (userProfileRequest.getEmail() != null) {
             user.setEmail(userProfileRequest.getEmail());
         }
@@ -95,7 +94,6 @@ public class UserManager
         if (userProfileRequest.getPassword() != null && userProfileRequest.getOldPassword() != null) {
             updatePassword(user, userProfileRequest);
         }
-
         userService.update(user);
 
         return new UserProfileResponse(user);
@@ -103,7 +101,6 @@ public class UserManager
 
     @Transactional
     public UserProfileResponse updateForLeader(ApplicationUser user, UpdateForLeaderRequest updateForLeaderRequest) {
-
         if (updateForLeaderRequest.getRestrictionDays() != null) {
             user.setRestrictionDays(updateForLeaderRequest.getRestrictionDays());
         }
@@ -111,8 +108,17 @@ public class UserManager
         if (updateForLeaderRequest.getManagerId() != null) {
             promotionHelper.updateRoles(user, updateForLeaderRequest);
         }
-
         userService.update(user);
+
+        return new UserProfileResponse(user);
+    }
+
+    @Transactional
+    public UserProfileResponse safeDeleteUser(Long id) {
+        ApplicationUser user = userService.loadById(id);
+        ApplicationUser previousManager = user.getManager();
+        userService.delete(id);
+        promotionHelper.checkForDemotion(previousManager);
 
         return new UserProfileResponse(user);
     }
