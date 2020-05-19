@@ -3,6 +3,7 @@ package mif.vu.ikeea.RepositoryService;
 import mif.vu.ikeea.Entity.LearningDay;
 import mif.vu.ikeea.Entity.Repository.TopicRepository;
 import mif.vu.ikeea.Entity.Topic;
+import mif.vu.ikeea.Exceptions.DuplicateResourceException;
 import mif.vu.ikeea.Exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TopicService {
@@ -39,6 +41,15 @@ public class TopicService {
                 );
 
         return topic;
+    }
+
+    @Transactional
+    public void checkTopicTitle(String title) throws ResourceNotFoundException {
+        Boolean topicExists = topicRepository.existsByTitle(title);
+
+        if (topicExists) {
+            throw new DuplicateResourceException("Topic with this title already exist");
+        }
     }
 
     public List<Topic> getAll() {

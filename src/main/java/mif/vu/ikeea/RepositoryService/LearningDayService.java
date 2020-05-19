@@ -108,7 +108,7 @@ public class LearningDayService {
     }
 
     public List<LearningDay> getAll(Long managerId, FilterLearningDayRequest filterLearningDayRequest) {
-        Pageable pageable = paginationHelper.getPageableLearningDay(filterLearningDayRequest);
+        Pageable pageable = paginationHelper.getPageable(filterLearningDayRequest);
 
         Page<LearningDay> learningDaysAll = learningDayRepository.findAll(Specification.where(LearningDaySpecification.withManager(managerId))
                 .and(Specification.where(LearningDaySpecification.withDate(filterLearningDayRequest.getDate())))

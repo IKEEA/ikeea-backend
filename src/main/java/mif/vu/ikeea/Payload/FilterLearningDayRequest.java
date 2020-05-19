@@ -8,8 +8,7 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class FilterLearningDayRequest {
-
+public class FilterLearningDayRequest implements FilterRequestInterface {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date date;
 
@@ -20,5 +19,4 @@ public class FilterLearningDayRequest {
     private Integer page;
 
     private Integer size;
-
 }
