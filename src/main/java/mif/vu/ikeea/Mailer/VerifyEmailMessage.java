@@ -13,18 +13,19 @@ import java.net.URL;
 
 @Slf4j
 @Decorator
-public class VerifyEmailMessage {
+public class VerifyEmailMessage implements EmailMessageInterface{
 
     @Inject
     @Delegate
     @Any
-    MessageFactory emailMessage;
+    EmailMessage emailMessage;
 
     @Value("${app.front-end.url}")
     public String frontEndUrl;
 
     private static String FRONT_END_URL;
 
+    @Override
     public String message(String token) {
         try {
             URL baseUrl = new URL(FRONT_END_URL);
