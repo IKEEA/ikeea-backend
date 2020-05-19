@@ -6,4 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface TopicRepository extends CrudRepository<Topic, Long>{
     Iterable<Topic> findAllByLearningDays(LearningDay learningDays);
+
+    Boolean existsByTitle(String title);
 }

@@ -16,6 +16,8 @@ public class TopicManager {
 
     @Transactional
     public Topic create(TopicRequest topicRequest) {
+        topicService.checkTopicTitle(topicRequest.getTitle());
+
         Topic parent = null;
 
         if (topicRequest.getParent() != null) {
@@ -31,6 +33,7 @@ public class TopicManager {
     @Transactional
     public void update(Topic topic, UpdateTopicRequest updateTopicRequest) {
         if (updateTopicRequest.getTitle() != null) {
+            topicService.checkTopicTitle(updateTopicRequest.getTitle());
             topic.setTitle(updateTopicRequest.getTitle());
         }
 

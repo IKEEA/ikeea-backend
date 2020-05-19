@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class FilterGoalRequest {
+public class FilterGoalRequest implements FilterRequestInterface {
 
     private Long topicId;
 

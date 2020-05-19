@@ -89,8 +89,7 @@ public class UserController {
 
     @PreAuthorize("hasRole('LEADER')")
     @GetMapping(path = "/list")
-    public @ResponseBody
-    List<UserProfileResponse> list(){
+    public @ResponseBody List<UserProfileResponse> list(){
         List<ApplicationUser> users = userService.getAll();
         List<UserProfileResponse> userProfileResponses = new ArrayList<>();
 

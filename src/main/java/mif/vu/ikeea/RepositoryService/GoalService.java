@@ -55,7 +55,7 @@ public class GoalService {
     }
 
     public List<Goal> getAll(Long managerId, FilterGoalRequest filterGoalRequest) {
-        Pageable pageable = paginationHelper.getPageableGoal(filterGoalRequest);
+        Pageable pageable = paginationHelper.getPageable(filterGoalRequest);
 
         List<Goal> goalsAll = goalRepository.findAll(Specification.where(GoalSpecification.withManager(managerId))
                 .and(Specification.where(GoalSpecification.withTopic(filterGoalRequest.getTopicId())))
