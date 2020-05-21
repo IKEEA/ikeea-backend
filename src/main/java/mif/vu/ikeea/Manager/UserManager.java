@@ -94,6 +94,7 @@ public class UserManager
         if (userProfileRequest.getPassword() != null && userProfileRequest.getOldPassword() != null) {
             updatePassword(user, userProfileRequest);
         }
+
         userService.update(user);
 
         return new UserProfileResponse(user);
@@ -108,6 +109,7 @@ public class UserManager
         if (updateForLeaderRequest.getManagerId() != null) {
             promotionHelper.updateRoles(user, updateForLeaderRequest);
         }
+
         userService.update(user);
 
         return new UserProfileResponse(user);
@@ -116,9 +118,9 @@ public class UserManager
     @Transactional
     public UserProfileResponse safeDeleteUser(Long id) {
         ApplicationUser user = userService.loadById(id);
-        ApplicationUser previousManager = user.getManager();
+        ApplicationUser manager = user.getManager();
         userService.delete(id);
-        promotionHelper.checkForDemotion(previousManager);
+        promotionHelper.demoteUser(manager);
 
         return new UserProfileResponse(user);
     }

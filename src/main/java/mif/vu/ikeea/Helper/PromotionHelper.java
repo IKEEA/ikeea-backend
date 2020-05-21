@@ -43,9 +43,10 @@ public class PromotionHelper {
         user.setRoles(roles);
     }
 
-    public void checkForDemotion(ApplicationUser user) {
-        if (user != null) {
-            promotionChecker.isEligibleToDemote(user);
+    public void demoteUser(ApplicationUser user) {
+        if (user == null) {
+            return;
         }
+        promotionChecker.isEligibleToDemote(user);
     }
 }
