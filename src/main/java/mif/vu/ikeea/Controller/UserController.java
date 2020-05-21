@@ -66,7 +66,7 @@ public class UserController {
     @PreAuthorize("hasRole('LEADER')")
     @DeleteMapping(path = "/{id}")
     public @ResponseBody ResponseEntity delete(@PathVariable Long id) {
-        userService.delete(id);
+        userManager.safeDeleteUser(id);
 
         return ResponseEntity.ok(new ApiResponse(true,"User deleted successfully"));
     }

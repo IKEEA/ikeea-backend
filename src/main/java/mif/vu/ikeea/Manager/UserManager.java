@@ -79,7 +79,6 @@ public class UserManager
 
     @Transactional
     public UserProfileResponse update(ApplicationUser user, UpdateProfileRequest userProfileRequest) {
-
         if (userProfileRequest.getEmail() != null) {
             user.setEmail(userProfileRequest.getEmail());
         }
@@ -103,7 +102,6 @@ public class UserManager
 
     @Transactional
     public UserProfileResponse updateForLeader(ApplicationUser user, UpdateForLeaderRequest updateForLeaderRequest) {
-
         if (updateForLeaderRequest.getRestrictionDays() != null) {
             user.setRestrictionDays(updateForLeaderRequest.getRestrictionDays());
         }
@@ -113,6 +111,16 @@ public class UserManager
         }
 
         userService.update(user);
+
+        return new UserProfileResponse(user);
+    }
+
+    @Transactional
+    public UserProfileResponse safeDeleteUser(Long id) {
+        ApplicationUser user = userService.loadById(id);
+        ApplicationUser manager = user.getManager();
+        userService.delete(id);
+        promotionHelper.demoteUser(manager);
 
         return new UserProfileResponse(user);
     }
