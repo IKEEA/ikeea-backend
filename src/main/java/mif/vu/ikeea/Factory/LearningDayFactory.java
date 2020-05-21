@@ -2,7 +2,6 @@ package mif.vu.ikeea.Factory;
 
 import mif.vu.ikeea.Entity.ApplicationUser;
 import mif.vu.ikeea.Entity.LearningDay;
-import mif.vu.ikeea.Entity.Topic;
 import mif.vu.ikeea.RepositoryService.LearningDayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

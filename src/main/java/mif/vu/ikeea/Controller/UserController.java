@@ -2,15 +2,16 @@ package mif.vu.ikeea.Controller;
 
 import mif.vu.ikeea.Entity.ApplicationUser;
 import mif.vu.ikeea.Exceptions.DuplicateResourceException;
-import mif.vu.ikeea.Factory.MessageFactory;
 import mif.vu.ikeea.Mailer.EmailService;
 import mif.vu.ikeea.Manager.UserManager;
+import mif.vu.ikeea.Messages.IMessage;
 import mif.vu.ikeea.Payload.UpdateForLeaderRequest;
 import mif.vu.ikeea.Payload.UpdateProfileRequest;
 import mif.vu.ikeea.RepositoryService.UserService;
 import mif.vu.ikeea.Responses.ApiResponse;
 import mif.vu.ikeea.Responses.UserProfileResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -33,6 +34,10 @@ public class UserController {
     @Autowired
     EmailService emailService;
 
+    @Autowired
+    @Qualifier("invitation_message")
+    IMessage message;
+
     @PreAuthorize("hasRole('LEADER')")
     @PostMapping("/invite")
     public ResponseEntity<?> inviteUser(@Valid @RequestParam String email, Authentication authentication) {
@@ -41,10 +46,8 @@ public class UserController {
         }
 
         ApplicationUser manager = (ApplicationUser) authentication.getPrincipal();
-
         ApplicationUser user = userManager.create(email, manager);
-        String message = MessageFactory.verifyEmail(user.getToken());
-        emailService.sendSimpleMessage(user.getEmail(), "Verify your account", message);
+        sendEmailMessage(user);
 
         return ResponseEntity.ok(new ApiResponse(true, "User invited successfully"));
     }
@@ -107,5 +110,11 @@ public class UserController {
         userManager.updateRestrictionDay(manager.getChildren(), restrictionDays);
 
         return ResponseEntity.ok(new ApiResponse(true, "Users restriction days updated successfully"));
+    }
+
+    private void sendEmailMessage(ApplicationUser user) {
+        message.setParameter(user.getToken());
+        String emailMessage = message.createMessage();
+        emailService.sendSimpleMessage(user.getEmail(), "Verify your account", emailMessage);
     }
 }
