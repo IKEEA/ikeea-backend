@@ -3,6 +3,8 @@ package mif.vu.ikeea.RepositoryService;
 import mif.vu.ikeea.Entity.Repository.UserRepository;
 import mif.vu.ikeea.Entity.ApplicationUser;
 import mif.vu.ikeea.Exceptions.ResourceNotFoundException;
+import mif.vu.ikeea.Exceptions.RestrictionLimitUsedException;
+import mif.vu.ikeea.Exceptions.UserDeleteException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,6 +29,9 @@ public class UserService implements UserDetailsService {
     @Transactional
     public void delete(Long id) {
         ApplicationUser user = loadById(id);
+        if(!user.getChildren().isEmpty()) {
+            throw new UserDeleteException("Leader can't be deleted.");
+        }
         ApplicationUser manager = user.getManager();
         manager.getChildren().remove(user);
         userRepository.deleteById(id);
