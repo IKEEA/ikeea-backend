@@ -13,6 +13,6 @@ public class BaseMessage implements IMessage {
 
     @Override
     public String createMessage() {
-        return "New information from IKEEA application for the user: ";
+        return "New information from Learning Days Tracker application for the user: ";
     }
 }
