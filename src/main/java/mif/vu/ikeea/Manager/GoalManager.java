@@ -5,16 +5,18 @@ import mif.vu.ikeea.Entity.Goal;
 import mif.vu.ikeea.Entity.Topic;
 import mif.vu.ikeea.Enums.EGoalStatus;
 import mif.vu.ikeea.Factory.GoalFactory;
+import mif.vu.ikeea.Mailer.EmailService;
+import mif.vu.ikeea.Messages.IMessage;
 import mif.vu.ikeea.Payload.GoalRequest;
 import mif.vu.ikeea.Payload.UpdateGoalRequest;
 import mif.vu.ikeea.RepositoryService.GoalService;
 import mif.vu.ikeea.RepositoryService.TopicService;
 import mif.vu.ikeea.RepositoryService.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.OptimisticLockException;
 import java.util.Date;
 
 @Component
@@ -29,6 +31,13 @@ public class GoalManager {
     @Autowired
     private GoalService goalService;
 
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    @Qualifier("goal_added_message")
+    private IMessage message;
+
     @Transactional
     public Goal create(GoalRequest goalRequest) {
         ApplicationUser user = userService.loadById(goalRequest.getUserId());
@@ -40,6 +49,8 @@ public class GoalManager {
                 topic,
                 user
         );
+
+        notifyUser(user);
 
         Goal result = goalService.add(goal);
 
@@ -54,5 +65,10 @@ public class GoalManager {
 
         goal.setLastUpdate(new Date());
         goalService.update(goal);
+    }
+
+    private void notifyUser(ApplicationUser user) {
+        String emailMessage = message.createMessage();
+        emailService.sendSimpleMessage(user.getEmail(), "New goal", emailMessage);
     }
 }

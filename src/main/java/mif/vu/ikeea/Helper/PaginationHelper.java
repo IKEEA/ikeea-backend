@@ -1,6 +1,6 @@
 package mif.vu.ikeea.Helper;
 
-import mif.vu.ikeea.Payload.FilterRequestInterface;
+import mif.vu.ikeea.Payload.IFilterRequest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class PaginationHelper {
 
-    public Pageable getPageable(FilterRequestInterface filterRequest) {
+    public Pageable getPageable(IFilterRequest filterRequest) {
         Integer page = filterRequest.getPage();
         Integer size = filterRequest.getSize();
 

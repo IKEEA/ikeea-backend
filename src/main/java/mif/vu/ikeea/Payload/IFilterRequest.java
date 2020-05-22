@@ -1,6 +1,6 @@
 package mif.vu.ikeea.Payload;
 
-public interface FilterRequestInterface {
+public interface IFilterRequest {
     Integer getPage();
 
     void setPage(Integer page);

@@ -7,8 +7,6 @@ import mif.vu.ikeea.Payload.UpdateTopicRequest;
 import mif.vu.ikeea.RepositoryService.TopicService;
 import mif.vu.ikeea.Responses.ApiResponse;
 import mif.vu.ikeea.Responses.TopicResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

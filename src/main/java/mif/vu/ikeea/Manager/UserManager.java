@@ -116,13 +116,11 @@ public class UserManager
     }
 
     @Transactional
-    public UserProfileResponse safeDeleteUser(Long id) {
+    public void safeDeleteUser(Long id) {
         ApplicationUser user = userService.loadById(id);
         ApplicationUser manager = user.getManager();
         userService.delete(id);
         promotionHelper.demoteUser(manager);
-
-        return new UserProfileResponse(user);
     }
 
     public void updateRestrictionDay(List<ApplicationUser> managersChildren, Integer restrictionDays) {
