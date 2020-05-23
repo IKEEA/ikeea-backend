@@ -32,8 +32,11 @@ public class TopicManager {
 
     @Transactional
     public void update(Topic topic, UpdateTopicRequest updateTopicRequest) {
-        if (updateTopicRequest.getTitle() != null) {
+        if (updateTopicRequest.getTitle() != null && !updateTopicRequest.getTitle().equals(topic.getTitle())) {
             topicService.checkTopicTitle(updateTopicRequest.getTitle());
+        }
+
+        if (updateTopicRequest.getTitle() != null) {
             topic.setTitle(updateTopicRequest.getTitle());
         }
 
