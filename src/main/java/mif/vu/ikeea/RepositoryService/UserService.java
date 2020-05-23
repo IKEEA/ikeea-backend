@@ -1,9 +1,8 @@
 package mif.vu.ikeea.RepositoryService;
 
+import mif.vu.ikeea.Entity.*;
 import mif.vu.ikeea.Entity.Repository.UserRepository;
-import mif.vu.ikeea.Entity.ApplicationUser;
 import mif.vu.ikeea.Exceptions.ResourceNotFoundException;
-import mif.vu.ikeea.Exceptions.RestrictionLimitUsedException;
 import mif.vu.ikeea.Exceptions.UserDeleteException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -21,6 +20,15 @@ public class UserService implements UserDetailsService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    private LearningDayService learningDayService;
+
+    @Autowired
+    private GoalService goalService;
+
+    @Autowired
+    private CommentService commentService;
+
     @Transactional
     public ApplicationUser add(ApplicationUser user) {
         return userRepository.save(user);
@@ -28,12 +36,7 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public void delete(Long id) {
-        ApplicationUser user = loadById(id);
-        if(!user.getChildren().isEmpty()) {
-            throw new UserDeleteException("Leader can't be deleted.");
-        }
-        ApplicationUser manager = user.getManager();
-        manager.getChildren().remove(user);
+        deleteUserData(id);
         userRepository.deleteById(id);
     }
 
@@ -134,5 +137,32 @@ public class UserService implements UserDetailsService {
             authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
         });
         return authorities;
+    }
+
+    public void deleteUserData(Long id) {
+        ApplicationUser user = loadById(id);
+        if(!user.getChildren().isEmpty()) {
+            throw new UserDeleteException("Leader can't be deleted.");
+        }
+        List<LearningDay> learningDays = learningDayService.getAllByUserId(id);
+        if(!learningDays.isEmpty()) {
+            for (LearningDay learningDay : learningDays) {
+                learningDayService.delete(learningDay.getId());
+            }
+        }
+        List<Goal> goals = goalService.getAllByUserId(id);
+        if(!goals.isEmpty()) {
+            for (Goal goal : goals) {
+                goalService.delete(goal.getId());
+            }
+        }
+        List<Comment> comments = commentService.getAllByUserId(id);
+        if(!comments.isEmpty()) {
+            for (Comment comment : comments) {
+                commentService.delete(comment.getId());
+            }
+        }
+        ApplicationUser manager = user.getManager();
+        manager.getChildren().remove(user);
     }
 }

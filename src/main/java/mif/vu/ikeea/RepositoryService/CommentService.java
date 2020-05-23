@@ -1,6 +1,7 @@
 package mif.vu.ikeea.RepositoryService;
 
 import mif.vu.ikeea.Entity.Comment;
+import mif.vu.ikeea.Entity.Goal;
 import mif.vu.ikeea.Entity.Repository.CommentRepository;
 import mif.vu.ikeea.Exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,14 @@ public class CommentService {
 
     public List<Comment> getAllByLearningDay(Long learningDayId) {
         Iterable<Comment> commentIterable = commentRepository.findAllByLearningDayId(learningDayId);
+        List<Comment> comments = new ArrayList<>();
+        commentIterable.forEach(comments::add);
+
+        return comments;
+    }
+
+    public List<Comment> getAllByUserId(Long userId) {
+        Iterable<Comment> commentIterable = commentRepository.findAllByUserId(userId);
         List<Comment> comments = new ArrayList<>();
         commentIterable.forEach(comments::add);
 
