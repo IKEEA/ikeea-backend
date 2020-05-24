@@ -2,7 +2,6 @@ package mif.vu.ikeea.Entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.*;
@@ -20,7 +19,10 @@ public class LearningDay {
     @Column(name = "date", nullable = false)
     private Date date;
 
-    @ManyToMany(mappedBy = "learningDays")
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "topic_learning_day",
+            joinColumns = {@JoinColumn(name = "learning_day_id")},
+            inverseJoinColumns = {@JoinColumn(name = "topic_id")})
     private List<Topic> topics = new ArrayList<>();
 
     @ManyToOne
