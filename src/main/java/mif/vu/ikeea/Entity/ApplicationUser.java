@@ -7,10 +7,7 @@ import mif.vu.ikeea.Enums.ERole;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "user")
@@ -54,11 +51,15 @@ public class ApplicationUser {
     @JoinColumn(name = "manager_id")
     private ApplicationUser manager;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
-    private List<Goal> goals = new ArrayList<>();
+    //@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
+    //private List<Goal> goals = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private Set<Goal> goals = new LinkedHashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
-    private List<LearningDay> learningDays = new ArrayList<>();
+    //@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
+    //private List<LearningDay> learningDays = new ArrayList<>();
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private Set<LearningDay> learningDays = new LinkedHashSet<>();
 
     @OneToMany(mappedBy="manager", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval=true)
     private List<ApplicationUser> children = new ArrayList<>();

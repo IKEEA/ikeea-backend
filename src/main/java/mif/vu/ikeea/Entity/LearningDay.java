@@ -5,9 +5,7 @@ import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Getter @Setter
@@ -28,4 +26,7 @@ public class LearningDay {
     @ManyToOne
     @JoinColumn(name="user_id", nullable = false)
     private ApplicationUser user;
+
+    @OneToMany(mappedBy = "learningDay", cascade = CascadeType.REMOVE)
+    private Set<Comment> comments = new LinkedHashSet<>();
 }
