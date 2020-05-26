@@ -50,8 +50,6 @@ public class GoalManager {
                 user
         );
 
-        notifyUser(user);
-
         Goal result = goalService.add(goal);
 
         return result;
@@ -67,7 +65,8 @@ public class GoalManager {
         goalService.update(goal);
     }
 
-    private void notifyUser(ApplicationUser user) {
+    public void notifyUser(GoalRequest goalRequest) {
+        ApplicationUser user = userService.loadById(goalRequest.getUserId());
         String emailMessage = message.createMessage();
         emailService.sendSimpleMessage(user.getEmail(), "New goal", emailMessage);
     }
