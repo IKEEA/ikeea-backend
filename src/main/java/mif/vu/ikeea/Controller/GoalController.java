@@ -11,6 +11,7 @@ import mif.vu.ikeea.Responses.GoalResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailSendException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.OptimisticLockException;
@@ -31,6 +32,14 @@ public class GoalController {
     @PostMapping("/add")
     public ResponseEntity<?> createGoal(@Valid @RequestBody GoalRequest goalRequest) {
         goalManager.create(goalRequest);
+
+        try {
+            goalManager.notifyUser(goalRequest);
+        } catch (MailSendException ex){
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiResponse(false, "Goal added but failed to notify user"));
+        }
 
         return ResponseEntity.ok(new ApiResponse(true, "Goal added successfully"));
     }
