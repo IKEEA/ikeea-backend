@@ -55,9 +55,6 @@ public class ApplicationUser {
     private ApplicationUser manager;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
-    private List<Goal> goals = new ArrayList<>();
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user")
     private List<LearningDay> learningDays = new ArrayList<>();
 
     @OneToMany(mappedBy="manager", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval=true)

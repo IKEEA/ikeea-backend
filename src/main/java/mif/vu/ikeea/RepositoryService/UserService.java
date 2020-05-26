@@ -1,7 +1,9 @@
 package mif.vu.ikeea.RepositoryService;
 
+import mif.vu.ikeea.Entity.LearningDay;
 import mif.vu.ikeea.Entity.Repository.UserRepository;
 import mif.vu.ikeea.Entity.ApplicationUser;
+import mif.vu.ikeea.Exceptions.LeaderDeleteException;
 import mif.vu.ikeea.Exceptions.ResourceNotFoundException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -27,8 +29,18 @@ public class UserService implements UserDetailsService {
     @Transactional
     public void delete(Long id) {
         ApplicationUser user = loadById(id);
+
+        if(!user.getChildren().isEmpty()) {
+            throw new LeaderDeleteException("Leader can't be deleted.");
+        }
+
         ApplicationUser manager = user.getManager();
         manager.getChildren().remove(user);
+
+        for (LearningDay day : user.getLearningDays()) {
+            day.getTopics().clear();
+        }
+
         userRepository.deleteById(id);
     }
 
