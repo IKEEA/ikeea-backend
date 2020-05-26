@@ -32,8 +32,4 @@ public class Goal {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name="topic_id", nullable = false)
     private Topic topic;
-
-//    @Version
-//    @Column(name = "OPT_LOCK_VERSION")
-//    private Integer version;
 }

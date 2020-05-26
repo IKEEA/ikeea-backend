@@ -8,9 +8,11 @@ import mif.vu.ikeea.RepositoryService.TopicService;
 import mif.vu.ikeea.Responses.ApiResponse;
 import mif.vu.ikeea.Responses.TopicResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.OptimisticLockException;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +55,14 @@ public class TopicController {
     @PutMapping(path = "/{id}")
     public @ResponseBody ResponseEntity update(@PathVariable Long id, @Valid @RequestBody UpdateTopicRequest updateTopicRequest) {
         Topic topic = topicService.loadById(id);
-        topicManager.update(topic, updateTopicRequest);
+
+        try {
+            topicManager.update(topic, updateTopicRequest);
+        } catch (OptimisticLockException ex) {
+            return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(new ApiResponse(false, "Topic was modified by other user"));
+        }
 
         return ResponseEntity.ok(new ApiResponse(true, "Topic updated successfully"));
     }

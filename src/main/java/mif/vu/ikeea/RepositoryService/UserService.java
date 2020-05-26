@@ -37,8 +37,8 @@ public class UserService implements UserDetailsService {
         ApplicationUser manager = user.getManager();
         manager.getChildren().remove(user);
 
-        for (LearningDay day : user.getLearningDays()) {
-            day.getTopics().clear();
+        for (LearningDay learningDay : user.getLearningDays()) {
+            learningDay.getTopics().clear();
         }
 
         userRepository.deleteById(id);

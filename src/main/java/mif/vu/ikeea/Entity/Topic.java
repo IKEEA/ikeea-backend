@@ -28,4 +28,8 @@ public class Topic {
 
     @ManyToMany(mappedBy = "topics")
     private List<LearningDay> learningDays = new ArrayList<>();
+
+    @Version
+    @Column(name = "OPT_LOCK_VERSION")
+    private Integer version;
 }
